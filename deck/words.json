@@ -2,5 +2,645 @@
   "variety": "ms-MY",
   "orthography": "standard-malaysian",
   "speech": "peninsular",
-  "words": []
+  "words": [
+    {
+      "id": "selamat",
+      "lemma": "selamat",
+      "root": "selamat",
+      "gloss": "peace; greeting",
+      "sentence": "Selamat.",
+      "register": "neutral",
+      "requires": []
+    },
+    {
+      "id": "pagi",
+      "lemma": "pagi",
+      "root": "pagi",
+      "gloss": "morning",
+      "sentence": "Selamat pagi.",
+      "register": "neutral",
+      "requires": ["selamat"]
+    },
+    {
+      "id": "saya",
+      "lemma": "saya",
+      "root": "saya",
+      "gloss": "I",
+      "sentence": "Saya.",
+      "register": "neutral",
+      "requires": []
+    },
+    {
+      "id": "mahu",
+      "lemma": "mahu",
+      "root": "mahu",
+      "gloss": "want",
+      "sentence": "Saya mahu.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "air",
+      "lemma": "air",
+      "root": "air",
+      "gloss": "water",
+      "sentence": "Saya mahu air.",
+      "register": "neutral",
+      "requires": ["saya", "mahu"]
+    },
+    {
+      "id": "kopi",
+      "lemma": "kopi",
+      "root": "kopi",
+      "gloss": "coffee",
+      "sentence": "Saya mahu kopi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu"]
+    },
+    {
+      "id": "minum",
+      "lemma": "minum",
+      "root": "minum",
+      "gloss": "drink",
+      "sentence": "Saya mahu minum air.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "air"]
+    },
+    {
+      "id": "tidak",
+      "lemma": "tidak",
+      "root": "tidak",
+      "gloss": "not, before a verb",
+      "sentence": "Saya tidak mahu kopi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "kopi"]
+    },
+    {
+      "id": "sudah",
+      "lemma": "sudah",
+      "root": "sudah",
+      "gloss": "already",
+      "sentence": "Saya sudah minum air.",
+      "register": "neutral",
+      "requires": ["saya", "minum", "air"]
+    },
+    {
+      "id": "belum",
+      "lemma": "belum",
+      "root": "belum",
+      "gloss": "not yet",
+      "sentence": "Saya belum minum kopi.",
+      "register": "neutral",
+      "requires": ["saya", "minum", "kopi"]
+    },
+    {
+      "id": "makan",
+      "lemma": "makan",
+      "root": "makan",
+      "gloss": "eat",
+      "sentence": "Saya mahu makan.",
+      "register": "neutral",
+      "requires": ["saya", "mahu"]
+    },
+    {
+      "id": "roti",
+      "lemma": "roti",
+      "root": "roti",
+      "gloss": "bread",
+      "sentence": "Saya mahu makan roti.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "makan"]
+    },
+    {
+      "id": "nasi",
+      "lemma": "nasi",
+      "root": "nasi",
+      "gloss": "rice",
+      "sentence": "Saya mahu makan nasi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "makan"]
+    },
+    {
+      "id": "lapar",
+      "lemma": "lapar",
+      "root": "lapar",
+      "gloss": "hungry",
+      "sentence": "Saya lapar.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "dahaga",
+      "lemma": "dahaga",
+      "root": "dahaga",
+      "gloss": "thirsty",
+      "sentence": "Saya dahaga.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "baik",
+      "lemma": "baik",
+      "root": "baik",
+      "gloss": "fine; good",
+      "sentence": "Saya baik.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "apa",
+      "lemma": "apa",
+      "root": "apa",
+      "gloss": "what",
+      "sentence": "Apa?",
+      "register": "neutral",
+      "requires": []
+    },
+    {
+      "id": "ini",
+      "lemma": "ini",
+      "root": "ini",
+      "gloss": "this",
+      "sentence": "Apa ini?",
+      "register": "neutral",
+      "requires": ["apa"]
+    },
+    {
+      "id": "bukan",
+      "lemma": "bukan",
+      "root": "bukan",
+      "gloss": "not, before a noun",
+      "sentence": "Ini bukan kopi.",
+      "register": "neutral",
+      "requires": ["ini", "kopi"]
+    },
+    {
+      "id": "ada",
+      "lemma": "ada",
+      "root": "ada",
+      "gloss": "have; there is",
+      "sentence": "Saya ada kopi.",
+      "register": "neutral",
+      "requires": ["saya", "kopi"]
+    },
+    {
+      "id": "dan",
+      "lemma": "dan",
+      "root": "dan",
+      "gloss": "and",
+      "sentence": "Saya mahu air dan kopi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "air", "kopi"]
+    },
+    {
+      "id": "juga",
+      "lemma": "juga",
+      "root": "juga",
+      "gloss": "also",
+      "sentence": "Saya mahu air juga.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "air"]
+    },
+    {
+      "id": "sekarang",
+      "lemma": "sekarang",
+      "root": "sekarang",
+      "gloss": "now",
+      "sentence": "Saya mahu minum sekarang.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "minum"]
+    },
+    {
+      "id": "khabar",
+      "lemma": "khabar",
+      "root": "khabar",
+      "gloss": "news",
+      "sentence": "Apa khabar?",
+      "register": "neutral",
+      "requires": ["apa"]
+    },
+    {
+      "id": "ya",
+      "lemma": "ya",
+      "root": "ya",
+      "gloss": "yes",
+      "sentence": "Ya, saya baik.",
+      "register": "neutral",
+      "requires": ["saya", "baik"]
+    },
+    {
+      "id": "awak",
+      "lemma": "awak",
+      "root": "awak",
+      "gloss": "you",
+      "sentence": "Awak mahu kopi?",
+      "register": "neutral",
+      "requires": ["mahu", "kopi"]
+    },
+    {
+      "id": "tolong",
+      "lemma": "tolong",
+      "root": "tolong",
+      "gloss": "please; help",
+      "sentence": "Tolong saya.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "terima-kasih",
+      "lemma": "terima kasih",
+      "root": "terima",
+      "gloss": "thank you",
+      "sentence": "Terima kasih.",
+      "register": "neutral",
+      "requires": []
+    },
+    {
+      "id": "sama-sama",
+      "lemma": "sama-sama",
+      "root": "sama",
+      "gloss": "you're welcome",
+      "sentence": "Sama-sama.",
+      "register": "neutral",
+      "requires": []
+    },
+    {
+      "id": "nama",
+      "lemma": "nama",
+      "root": "nama",
+      "gloss": "name",
+      "sentence": "Apa nama awak?",
+      "register": "neutral",
+      "requires": ["apa", "awak"]
+    },
+    {
+      "id": "hari",
+      "lemma": "hari",
+      "root": "hari",
+      "gloss": "day",
+      "sentence": "Apa hari ini?",
+      "register": "neutral",
+      "requires": ["apa", "ini"]
+    },
+    {
+      "id": "esok",
+      "lemma": "esok",
+      "root": "esok",
+      "gloss": "tomorrow",
+      "sentence": "Esok saya mahu makan nasi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "makan", "nasi"]
+    },
+    {
+      "id": "semalam",
+      "lemma": "semalam",
+      "root": "semalam",
+      "gloss": "yesterday; last night",
+      "sentence": "Saya makan nasi semalam.",
+      "register": "neutral",
+      "requires": ["saya", "makan", "nasi"]
+    },
+    {
+      "id": "bangun",
+      "lemma": "bangun",
+      "root": "bangun",
+      "gloss": "get up",
+      "sentence": "Saya sudah bangun.",
+      "register": "neutral",
+      "requires": ["saya", "sudah"]
+    },
+    {
+      "id": "mandi",
+      "lemma": "mandi",
+      "root": "mandi",
+      "gloss": "shower",
+      "sentence": "Saya belum mandi.",
+      "register": "neutral",
+      "requires": ["saya", "belum"]
+    },
+    {
+      "id": "rumah",
+      "lemma": "rumah",
+      "root": "rumah",
+      "gloss": "home",
+      "sentence": "Ini rumah.",
+      "register": "neutral",
+      "requires": ["ini"]
+    },
+    {
+      "id": "di",
+      "lemma": "di",
+      "root": "di",
+      "gloss": "at; in",
+      "sentence": "Saya di rumah.",
+      "register": "neutral",
+      "requires": ["saya", "rumah"]
+    },
+    {
+      "id": "pergi",
+      "lemma": "pergi",
+      "root": "pergi",
+      "gloss": "go",
+      "sentence": "Saya mahu pergi.",
+      "register": "neutral",
+      "requires": ["saya", "mahu"]
+    },
+    {
+      "id": "kerja",
+      "lemma": "kerja",
+      "root": "kerja",
+      "gloss": "work",
+      "sentence": "Saya ada kerja.",
+      "register": "neutral",
+      "requires": ["saya", "ada"]
+    },
+    {
+      "id": "pejabat",
+      "lemma": "pejabat",
+      "root": "pejabat",
+      "gloss": "office",
+      "sentence": "Ini pejabat.",
+      "register": "neutral",
+      "requires": ["ini"]
+    },
+    {
+      "id": "ke",
+      "lemma": "ke",
+      "root": "ke",
+      "gloss": "to",
+      "sentence": "Saya pergi ke pejabat.",
+      "register": "neutral",
+      "requires": ["saya", "pergi", "pejabat"]
+    },
+    {
+      "id": "dari",
+      "lemma": "dari",
+      "root": "dari",
+      "gloss": "from",
+      "sentence": "Saya pergi dari rumah.",
+      "register": "neutral",
+      "requires": ["saya", "pergi", "rumah"]
+    },
+    {
+      "id": "komputer",
+      "lemma": "komputer",
+      "root": "komputer",
+      "gloss": "computer",
+      "sentence": "Saya ada komputer.",
+      "register": "neutral",
+      "requires": ["saya", "ada"]
+    },
+    {
+      "id": "komputer-riba",
+      "lemma": "komputer riba",
+      "root": "komputer",
+      "gloss": "laptop",
+      "sentence": "Ini komputer riba.",
+      "register": "neutral",
+      "requires": ["ini", "komputer"]
+    },
+    {
+      "id": "skrin",
+      "lemma": "skrin",
+      "root": "skrin",
+      "gloss": "screen",
+      "sentence": "Ini skrin.",
+      "register": "neutral",
+      "requires": ["ini"]
+    },
+    {
+      "id": "buka",
+      "lemma": "buka",
+      "root": "buka",
+      "gloss": "open",
+      "sentence": "Saya buka komputer.",
+      "register": "neutral",
+      "requires": ["saya", "komputer"]
+    },
+    {
+      "id": "e-mel",
+      "lemma": "e-mel",
+      "root": "e-mel",
+      "gloss": "email",
+      "sentence": "Saya ada e-mel.",
+      "register": "neutral",
+      "requires": ["saya", "ada"]
+    },
+    {
+      "id": "baca",
+      "lemma": "baca",
+      "root": "baca",
+      "gloss": "read",
+      "sentence": "Saya mahu baca e-mel.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "e-mel"]
+    },
+    {
+      "id": "tulis",
+      "lemma": "tulis",
+      "root": "tulis",
+      "gloss": "write",
+      "sentence": "Saya mahu tulis e-mel.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "e-mel"]
+    },
+    {
+      "id": "boleh",
+      "lemma": "boleh",
+      "root": "boleh",
+      "gloss": "can",
+      "sentence": "Saya boleh baca.",
+      "register": "neutral",
+      "requires": ["saya", "baca"]
+    },
+    {
+      "id": "perlu",
+      "lemma": "perlu",
+      "root": "perlu",
+      "gloss": "need",
+      "sentence": "Saya perlu pergi ke pejabat.",
+      "register": "neutral",
+      "requires": ["saya", "pergi", "ke", "pejabat"]
+    },
+    {
+      "id": "penat",
+      "lemma": "penat",
+      "root": "penat",
+      "gloss": "tired",
+      "sentence": "Saya penat.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "sibuk",
+      "lemma": "sibuk",
+      "root": "sibuk",
+      "gloss": "busy",
+      "sentence": "Saya sibuk sekarang.",
+      "register": "neutral",
+      "requires": ["saya", "sekarang"]
+    },
+    {
+      "id": "meja",
+      "lemma": "meja",
+      "root": "meja",
+      "gloss": "desk",
+      "sentence": "Komputer di meja.",
+      "register": "neutral",
+      "requires": ["komputer", "di"]
+    },
+    {
+      "id": "duduk",
+      "lemma": "duduk",
+      "root": "duduk",
+      "gloss": "sit",
+      "sentence": "Saya duduk.",
+      "register": "neutral",
+      "requires": ["saya"]
+    },
+    {
+      "id": "kerusi",
+      "lemma": "kerusi",
+      "root": "kerusi",
+      "gloss": "chair",
+      "sentence": "Saya duduk di kerusi.",
+      "register": "neutral",
+      "requires": ["saya", "duduk", "di"]
+    },
+    {
+      "id": "panas",
+      "lemma": "panas",
+      "root": "panas",
+      "gloss": "hot",
+      "sentence": "Kopi ini panas.",
+      "register": "neutral",
+      "requires": ["kopi", "ini"]
+    },
+    {
+      "id": "sejuk",
+      "lemma": "sejuk",
+      "root": "sejuk",
+      "gloss": "cold",
+      "sentence": "Air ini sejuk.",
+      "register": "neutral",
+      "requires": ["air", "ini"]
+    },
+    {
+      "id": "gula",
+      "lemma": "gula",
+      "root": "gula",
+      "gloss": "sugar",
+      "sentence": "Saya mahu gula.",
+      "register": "neutral",
+      "requires": ["saya", "mahu"]
+    },
+    {
+      "id": "susu",
+      "lemma": "susu",
+      "root": "susu",
+      "gloss": "milk",
+      "sentence": "Saya mahu kopi dan susu.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "kopi", "dan"]
+    },
+    {
+      "id": "sedikit",
+      "lemma": "sedikit",
+      "root": "sedikit",
+      "gloss": "a little",
+      "sentence": "Saya mahu sedikit gula.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "gula"]
+    },
+    {
+      "id": "banyak",
+      "lemma": "banyak",
+      "root": "banyak",
+      "gloss": "a lot",
+      "sentence": "Saya ada banyak kerja.",
+      "register": "neutral",
+      "requires": ["saya", "ada", "kerja"]
+    },
+    {
+      "id": "petang",
+      "lemma": "petang",
+      "root": "petang",
+      "gloss": "afternoon; evening",
+      "sentence": "Selamat petang.",
+      "register": "neutral",
+      "requires": ["selamat"]
+    },
+    {
+      "id": "malam",
+      "lemma": "malam",
+      "root": "malam",
+      "gloss": "night",
+      "sentence": "Selamat malam.",
+      "register": "neutral",
+      "requires": ["selamat"]
+    },
+    {
+      "id": "tengah-hari",
+      "lemma": "tengah hari",
+      "root": "tengah",
+      "gloss": "midday",
+      "sentence": "Selamat tengah hari.",
+      "register": "neutral",
+      "requires": ["selamat", "hari"]
+    },
+    {
+      "id": "siap",
+      "lemma": "siap",
+      "root": "siap",
+      "gloss": "ready; done",
+      "sentence": "Saya sudah siap.",
+      "register": "neutral",
+      "requires": ["saya", "sudah"]
+    },
+    {
+      "id": "mula",
+      "lemma": "mula",
+      "root": "mula",
+      "gloss": "start",
+      "sentence": "Saya mahu mula kerja.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "kerja"]
+    },
+    {
+      "id": "tunggu",
+      "lemma": "tunggu",
+      "root": "tunggu",
+      "gloss": "wait",
+      "sentence": "Saya tunggu awak.",
+      "register": "neutral",
+      "requires": ["saya", "awak"]
+    },
+    {
+      "id": "sebentar",
+      "lemma": "sebentar",
+      "root": "sebentar",
+      "gloss": "a moment",
+      "sentence": "Tunggu sebentar.",
+      "register": "neutral",
+      "requires": ["tunggu"]
+    },
+    {
+      "id": "nanti",
+      "lemma": "nanti",
+      "root": "nanti",
+      "gloss": "later",
+      "sentence": "Saya makan nanti.",
+      "register": "neutral",
+      "requires": ["saya", "makan"]
+    },
+    {
+      "id": "tadi",
+      "lemma": "tadi",
+      "root": "tadi",
+      "gloss": "earlier",
+      "sentence": "Saya minum kopi tadi.",
+      "register": "neutral",
+      "requires": ["saya", "minum", "kopi"]
+    }
+  ]
 }

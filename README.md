@@ -56,13 +56,21 @@ Ratings:
 
 A new word is due the next day, at index 0, before any rating. Revealing the gloss is a glance. Only a rating moves the schedule. Settled words stay in the log and leave the daily cap.
 
+## First deck
+
+`deck/words.json` holds 71 neutral words, one morning in teaching order. At two new words a day that is about five weeks before any later chapter.
+
+The arc runs from `Selamat pagi` through breakfast, the time of day, getting ready, the office, and the laptop on the desk. Sentences stay inside words already listed. `tidak` is the not that stands before a verb. `bukan` is the not that stands before a noun. Tomorrow is `esok`. `semalam` is yesterday, and in Peninsular speech it can also mean last night. Email is `e-mel`. The laptop is `komputer riba`. Verbs are the plain form (`baca`, `minum`), which is how they sound after `mahu` and `sudah`.
+
+`Apa khabar?` is the how-are-you greeting. The gloss of `khabar` stays "news", which is what the word itself means.
+
 ## Build order
 
-1. Fill `deck/words.json` with the first morning words.
+1. First morning words in `deck/words.json`. Done.
 2. Add the `tepi` command that introduces a word, records a rating, and prints the log.
 3. Add the `manny.tepi` bar widget. Its source will live in this repo and be linked from `~/.config/omarchy/plugins/manny.tepi/`.
 4. After the log has real days in it: root cousins, a sentence built only from settled words, and a prompt that follows the workspace.
 
 ## Status
 
-Scaffold only. The deck is empty. There is no command and no chip yet.
+The first deck is in place. There is no command and no chip yet.
