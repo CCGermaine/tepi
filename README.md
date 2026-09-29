@@ -12,7 +12,8 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | `deck/words.schema.json` | The deck contract. |
 | `config.json` | Daily caps and the recall ladder. |
 | `tepi/` | The `tepi` command. |
-| `~/.local/share/tepi/tepi.sqlite` | Progress. Created by the command, never committed. |
+| `plugin/` | The `manny.tepi` bar widget. Linked from `~/.config/omarchy/plugins/manny.tepi`. |
+| `~/.local/share/tepi/tepi.sqlite` | Progress. Created on the first real day, never committed. |
 
 The vault note at `Tepi/Tepi.md` in the Obsidian vault is the resume page. This repo wins if the two disagree.
 
@@ -80,6 +81,16 @@ tepi log
 python3 -m unittest discover -s tests
 ```
 
+## Chip
+
+The widget in `plugin/` is linked into `~/.config/omarchy/plugins/manny.tepi` and sits on the left of the bar, after the workspaces.
+
+It shows the lemma. Rest is dimmer. A click opens the meaning and the sentence. A review offers Known, Fuzzy, and Missed, and the card stays open afterward with the meaning and the next due date.
+
+The widget calls `tepi today --json` when it appears and about once a minute. The command decides the schedule. The first time the chip loads, that call starts the deck.
+
+After an edit in this repo, run `omarchy-shell shell rescanPlugins`. The shell watches the plugin directory, and the install there is a link.
+
 ## First deck
 
 `deck/words.json` holds 71 neutral words, one morning in teaching order. At two new words a day that is about five weeks before any later chapter.
@@ -92,9 +103,9 @@ The arc runs from `Selamat pagi` through breakfast, the time of day, getting rea
 
 1. First morning words in `deck/words.json`. Done.
 2. The `tepi` command: introduce, rate, log. Done.
-3. Add the `manny.tepi` bar widget. Its source will live in this repo and be linked from `~/.config/omarchy/plugins/manny.tepi/`.
+3. The `manny.tepi` bar widget. Done. Source in `plugin/`, linked into the shell.
 4. After the log has real days in it: root cousins, a sentence built only from settled words, and a prompt that follows the workspace.
 
 ## Status
 
-The command can introduce a day, record a rating, and print the log. There is no chip yet. The first real `tepi today` starts the deck.
+The chip is on the bar. It shows one lemma. A click reveals the meaning, and a review can be rated from the card. The first time the chip loads, it runs `tepi today` and that starts the deck.

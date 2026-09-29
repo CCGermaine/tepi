@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "manny.tepi",
+  "name": "Tepi",
+  "version": "1.0.0",
+  "author": "Manny",
+  "license": "MIT",
+  "description": "One Bahasa Melayu word on the bar.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Tepi",
+    "description": "Today's Malay word. A click reveals the meaning. A review can be rated.",
+    "category": "Info",
+    "allowMultiple": false,
+    "defaultSection": "left"
+  }
+}
