@@ -11,6 +11,7 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | `deck/words.json` | The curriculum. Order in the array is teaching order. |
 | `deck/words.schema.json` | The deck contract. |
 | `config.json` | Daily caps and the recall ladder. |
+| `tepi/` | The `tepi` command. |
 | `~/.local/share/tepi/tepi.sqlite` | Progress. Created by the command, never committed. |
 
 The vault note at `Tepi/Tepi.md` in the Obsidian vault is the resume page. This repo wins if the two disagree.
@@ -54,7 +55,30 @@ Ratings:
 | `fuzzy` | The index stays. Due again in `fuzzyDays` (2). |
 | `missed` | The index returns to 0. Due again in `missedDays` (1). |
 
-A new word is due the next day, at index 0, before any rating. Revealing the gloss is a glance. Only a rating moves the schedule. Settled words stay in the log and leave the daily cap.
+A new word is due the next day, at index 0, before any rating. Revealing the gloss is a glance. Only a rating moves the schedule. The `known` rating that comes after the 30-day gap settles the word. Settled words stay in the log and leave the daily cap.
+
+## Command
+
+`tepi` is on the path via `~/.local/bin/tepi`. The first run of a local day writes that day's plan into `~/.local/share/tepi/tepi.sqlite` and that is what introduces the new words.
+
+```
+tepi today
+tepi reveal
+tepi rate known
+tepi rate fuzzy
+tepi rate missed
+tepi log
+```
+
+`today` shows one word and hides the gloss on a new word or a review. `reveal` shows the meaning. `rate` is for a review, and it shows the meaning either way. A new word waits until tomorrow. `log` lists settled words, words still in play, and the last seven days. `log --all` prints the whole diary.
+
+`today --json`, `reveal --json`, `rate known --json`, and `log --json` print the same facts for the bar chip.
+
+`TEPI_DATA_DIR` and `TEPI_TODAY` override the log location and the date. The tests use them.
+
+```
+python3 -m unittest discover -s tests
+```
 
 ## First deck
 
@@ -67,10 +91,10 @@ The arc runs from `Selamat pagi` through breakfast, the time of day, getting rea
 ## Build order
 
 1. First morning words in `deck/words.json`. Done.
-2. Add the `tepi` command that introduces a word, records a rating, and prints the log.
+2. The `tepi` command: introduce, rate, log. Done.
 3. Add the `manny.tepi` bar widget. Its source will live in this repo and be linked from `~/.config/omarchy/plugins/manny.tepi/`.
 4. After the log has real days in it: root cousins, a sentence built only from settled words, and a prompt that follows the workspace.
 
 ## Status
 
-The first deck is in place. There is no command and no chip yet.
+The command can introduce a day, record a rating, and print the log. There is no chip yet. The first real `tepi today` starts the deck.
