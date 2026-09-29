@@ -1,0 +1,7 @@
+{
+  "newPerDay": 2,
+  "reviewCap": 4,
+  "knownIntervals": [1, 3, 7, 16, 30],
+  "fuzzyDays": 2,
+  "missedDays": 1
+}

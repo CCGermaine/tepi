@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tepi deck",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["variety", "orthography", "speech", "words"],
+  "properties": {
+    "variety": { "const": "ms-MY" },
+    "orthography": { "const": "standard-malaysian" },
+    "speech": { "const": "peninsular" },
+    "words": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/word" }
+    }
+  },
+  "$defs": {
+    "word": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "lemma", "root", "gloss", "sentence", "register", "requires"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "lemma": { "type": "string", "minLength": 1 },
+        "root": { "type": "string", "minLength": 1 },
+        "gloss": { "type": "string", "minLength": 1 },
+        "sentence": { "type": "string", "minLength": 1 },
+        "register": { "enum": ["neutral", "casual", "formal"] },
+        "requires": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}
