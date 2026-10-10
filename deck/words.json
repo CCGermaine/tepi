@@ -7,7 +7,7 @@
       "id": "selamat",
       "lemma": "selamat",
       "root": "selamat",
-      "gloss": "peace; greeting",
+      "gloss": "safe; well",
       "sentence": "Selamat.",
       "register": "neutral",
       "requires": []
@@ -313,7 +313,7 @@
       "id": "mandi",
       "lemma": "mandi",
       "root": "mandi",
-      "gloss": "shower",
+      "gloss": "bathe",
       "sentence": "Saya belum mandi.",
       "register": "neutral",
       "requires": ["saya", "belum"]
@@ -322,7 +322,7 @@
       "id": "rumah",
       "lemma": "rumah",
       "root": "rumah",
-      "gloss": "home",
+      "gloss": "house",
       "sentence": "Ini rumah.",
       "register": "neutral",
       "requires": ["ini"]
@@ -357,7 +357,7 @@
     {
       "id": "pejabat",
       "lemma": "pejabat",
-      "root": "pejabat",
+      "root": "jabat",
       "gloss": "office",
       "sentence": "Ini pejabat.",
       "register": "neutral",
@@ -484,7 +484,7 @@
       "id": "meja",
       "lemma": "meja",
       "root": "meja",
-      "gloss": "desk",
+      "gloss": "table",
       "sentence": "Komputer di meja.",
       "register": "neutral",
       "requires": ["komputer", "di"]
@@ -565,7 +565,7 @@
       "id": "petang",
       "lemma": "petang",
       "root": "petang",
-      "gloss": "afternoon; evening",
+      "gloss": "afternoon",
       "sentence": "Selamat petang.",
       "register": "neutral",
       "requires": ["selamat"]
@@ -618,7 +618,7 @@
     {
       "id": "sebentar",
       "lemma": "sebentar",
-      "root": "sebentar",
+      "root": "bentar",
       "gloss": "a moment",
       "sentence": "Tunggu sebentar.",
       "register": "neutral",

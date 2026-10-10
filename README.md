@@ -10,12 +10,34 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | --- | --- |
 | `deck/words.json` | The curriculum. Order in the array is teaching order. |
 | `deck/words.schema.json` | The deck contract. |
+| `deck/kamus.json` | The last spelling check. One status per deck word. |
+| `dictionary/kamus-dewan-perdana.json` | Which dictionary that check asks. |
+| `deck/tesaurus.json` | The last thesaurus check. One status per deck word. |
+| `dictionary/tesaurus-bahasa-melayu-dewan.json` | Which thesaurus that check asks. |
 | `config.json` | Daily caps and the recall ladder. |
 | `tepi/` | The `tepi` command. |
 | `plugin/` | The `manny.tepi` bar widget. Linked from `~/.config/omarchy/plugins/manny.tepi`. |
 | `~/.local/share/tepi/tepi.sqlite` | Progress. Created on the first real day, never committed. |
 
 The vault note at `Tepi/Tepi.md` in the Obsidian vault is the resume page. This repo wins if the two disagree.
+
+## Dictionary
+
+The spelling authority is Kamus Dewan Perdana, Dewan Bahasa dan Pustaka, 2020. It is the current Bahasa Melayu dictionary: more than 120,000 entries and subentries, and the successor in scope to Kamus Dewan. The same work has been on the web at `https://kamus.dbp.gov.my` since 10 April 2026.
+
+`tepi check` asks that portal about every lemma and rewrites `deck/kamus.json`. Words of three letters or more are read from the public suggestion list. A shorter word is read from the search page, because that list starts at three letters. A word is `headword` when the spelling is a Kata Entri, `phrase` when it is a Frasa Kata Entri, and `derivative` when it is only a Kata Terbitan or a Frasa Kata Terbitan. `missing` means the spelling is not an entry of its own. The command fails when any word is missing. An entry page that asks for a sign-in is left alone.
+
+The portal's own terms keep the entry text there. Tepi stores the status, not the definition, the citation, or the Jawi. The English gloss in the deck is Tepi's, written so it agrees with the entry that was read.
+
+`tepi dict selamat` asks about one spelling and does not write the check file.
+
+## Thesaurus
+
+The thesaurus is Tesaurus Bahasa Melayu Dewan Edisi Baharu, Dewan Bahasa dan Pustaka, 2015, ISBN 9789836285584. It has about 5,400 main entries and 18,000 subentries. DBP's catalogue dates this edition to 2015, and in 2026 DBP still names Tesaurus Bahasa Melayu Dewan, at `https://prpm.dbp.gov.my`, as the thesaurus in its general database.
+
+`tepi thesaurus rumah` asks about one lemma. `tepi thesaurus --deck` asks about every lemma and rewrites `deck/tesaurus.json`. The lookup is the Tesaurus panel on the portal's Cari1 search. That panel does not print the edition title. A row is `listed` when the panel's headword is the lemma. Tepi then stores the word class when the panel prints one: `noun`, `verb`, `adjective`, `adverb`, `particle`, and the other classes the book uses. A panel that opens on a different headword is `unlisted`, and so is a page that says the thesaurus has no entry. The command still succeeds when words are unlisted. The thesaurus is much smaller than the dictionary, so an unlisted row is not a spelling error. `tepi check` stays the spelling check.
+
+The portal keeps the synonym lists. Tepi stores the status and the class.
 
 ## A word
 
@@ -69,11 +91,15 @@ tepi rate known
 tepi rate fuzzy
 tepi rate missed
 tepi log
+tepi dict selamat
+tepi check
+tepi thesaurus rumah
+tepi thesaurus --deck
 ```
 
 `today` shows one word and hides the gloss on a new word or a review. `reveal` shows the meaning. `rate` is for a review, and it shows the meaning either way. A new word waits until tomorrow. `log` lists settled words, words still in play, and the last seven days. `log --all` prints the whole diary.
 
-`today --json`, `reveal --json`, `rate known --json`, and `log --json` print the same facts for the bar chip.
+`today --json`, `reveal --json`, `rate known --json`, and `log --json` print the same facts for the bar chip. `dict --json` and `check --json` print the spelling status. `check` needs the network, pauses briefly between words, and writes `deck/kamus.json`. `thesaurus --json` prints the thesaurus status for one lemma. `thesaurus --deck` needs the network, pauses briefly between words, and writes `deck/tesaurus.json`. An unlisted lemma does not fail that command.
 
 `TEPI_DATA_DIR` and `TEPI_TODAY` override the log location and the date. The tests use them.
 
@@ -95,9 +121,11 @@ After an edit in this repo, run `omarchy-shell shell rescanPlugins`. The shell w
 
 `deck/words.json` holds 71 neutral words, one morning in teaching order. At two new words a day that is about five weeks before any later chapter.
 
-The arc runs from `Selamat pagi` through breakfast, the time of day, getting ready, the office, and the laptop on the desk. Sentences stay inside words already listed. `tidak` is the not that stands before a verb. `bukan` is the not that stands before a noun. Tomorrow is `esok`. `semalam` is yesterday, and in Peninsular speech it can also mean last night. Email is `e-mel`. The laptop is `komputer riba`. Verbs are the plain form (`baca`, `minum`), which is how they sound after `mahu` and `sudah`.
+The arc runs from `Selamat pagi` through breakfast, the time of day, getting ready, the office, and the laptop on the desk. Sentences stay inside words already listed. `tidak` is the not that stands before a verb. `bukan` is the not that stands before a noun. Tomorrow is `esok`. `semalam` is yesterday, and in Peninsular speech it can also mean last night. Email is `e-mel`. The laptop is `komputer riba`, a phrase in the dictionary. Verbs are the plain form (`baca`, `minum`), which is how they sound after `mahu` and `sudah`. `buka` in `Saya buka komputer` is that plain form of `membuka`. The headword `buka` is also an expanse, the length and width of something. `pejabat` and `sebentar` are derivatives, of `jabat` and `bentar`. `petang` runs from after midday until sunset.
 
-`Apa khabar?` is the how-are-you greeting. The gloss of `khabar` stays "news", which is what the word itself means.
+`Apa khabar?` is the how-are-you greeting. The gloss of `khabar` stays "news", which is what the word itself means. `makan` is a noun in the thesaurus. `Saya mahu makan` uses the verb, so the gloss stays "eat".
+
+Every lemma in this deck has a row in `deck/kamus.json` from the last `tepi check`, and a row in `deck/tesaurus.json` from the last `tepi thesaurus --deck`. A word the thesaurus does not list stays in the deck.
 
 ## Build order
 

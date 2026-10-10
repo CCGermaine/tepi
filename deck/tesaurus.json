@@ -1,0 +1,384 @@
+{
+  "authority": "tesaurus-bahasa-melayu-dewan",
+  "checked": "2026-09-30",
+  "words": [
+    {
+      "id": "selamat",
+      "lemma": "selamat",
+      "status": "unlisted"
+    },
+    {
+      "id": "pagi",
+      "lemma": "pagi",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "saya",
+      "lemma": "saya",
+      "status": "unlisted"
+    },
+    {
+      "id": "mahu",
+      "lemma": "mahu",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "air",
+      "lemma": "air",
+      "status": "unlisted"
+    },
+    {
+      "id": "kopi",
+      "lemma": "kopi",
+      "status": "unlisted"
+    },
+    {
+      "id": "minum",
+      "lemma": "minum",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "tidak",
+      "lemma": "tidak",
+      "status": "listed",
+      "class": "particle"
+    },
+    {
+      "id": "sudah",
+      "lemma": "sudah",
+      "status": "listed",
+      "class": "particle"
+    },
+    {
+      "id": "belum",
+      "lemma": "belum",
+      "status": "unlisted"
+    },
+    {
+      "id": "makan",
+      "lemma": "makan",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "roti",
+      "lemma": "roti",
+      "status": "unlisted"
+    },
+    {
+      "id": "nasi",
+      "lemma": "nasi",
+      "status": "unlisted"
+    },
+    {
+      "id": "lapar",
+      "lemma": "lapar",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "dahaga",
+      "lemma": "dahaga",
+      "status": "unlisted"
+    },
+    {
+      "id": "baik",
+      "lemma": "baik",
+      "status": "unlisted"
+    },
+    {
+      "id": "apa",
+      "lemma": "apa",
+      "status": "unlisted"
+    },
+    {
+      "id": "ini",
+      "lemma": "ini",
+      "status": "unlisted"
+    },
+    {
+      "id": "bukan",
+      "lemma": "bukan",
+      "status": "unlisted"
+    },
+    {
+      "id": "ada",
+      "lemma": "ada",
+      "status": "unlisted"
+    },
+    {
+      "id": "dan",
+      "lemma": "dan",
+      "status": "unlisted"
+    },
+    {
+      "id": "juga",
+      "lemma": "juga",
+      "status": "unlisted"
+    },
+    {
+      "id": "sekarang",
+      "lemma": "sekarang",
+      "status": "unlisted"
+    },
+    {
+      "id": "khabar",
+      "lemma": "khabar",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "ya",
+      "lemma": "ya",
+      "status": "unlisted"
+    },
+    {
+      "id": "awak",
+      "lemma": "awak",
+      "status": "unlisted"
+    },
+    {
+      "id": "tolong",
+      "lemma": "tolong",
+      "status": "listed"
+    },
+    {
+      "id": "terima-kasih",
+      "lemma": "terima kasih",
+      "status": "unlisted"
+    },
+    {
+      "id": "sama-sama",
+      "lemma": "sama-sama",
+      "status": "unlisted"
+    },
+    {
+      "id": "nama",
+      "lemma": "nama",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "hari",
+      "lemma": "hari",
+      "status": "listed"
+    },
+    {
+      "id": "esok",
+      "lemma": "esok",
+      "status": "unlisted"
+    },
+    {
+      "id": "semalam",
+      "lemma": "semalam",
+      "status": "unlisted"
+    },
+    {
+      "id": "bangun",
+      "lemma": "bangun",
+      "status": "unlisted"
+    },
+    {
+      "id": "mandi",
+      "lemma": "mandi",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "rumah",
+      "lemma": "rumah",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "di",
+      "lemma": "di",
+      "status": "unlisted"
+    },
+    {
+      "id": "pergi",
+      "lemma": "pergi",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "kerja",
+      "lemma": "kerja",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "pejabat",
+      "lemma": "pejabat",
+      "status": "unlisted"
+    },
+    {
+      "id": "ke",
+      "lemma": "ke",
+      "status": "unlisted"
+    },
+    {
+      "id": "dari",
+      "lemma": "dari",
+      "status": "unlisted"
+    },
+    {
+      "id": "komputer",
+      "lemma": "komputer",
+      "status": "unlisted"
+    },
+    {
+      "id": "komputer-riba",
+      "lemma": "komputer riba",
+      "status": "unlisted"
+    },
+    {
+      "id": "skrin",
+      "lemma": "skrin",
+      "status": "unlisted"
+    },
+    {
+      "id": "buka",
+      "lemma": "buka",
+      "status": "unlisted"
+    },
+    {
+      "id": "e-mel",
+      "lemma": "e-mel",
+      "status": "unlisted"
+    },
+    {
+      "id": "baca",
+      "lemma": "baca",
+      "status": "unlisted"
+    },
+    {
+      "id": "tulis",
+      "lemma": "tulis",
+      "status": "listed"
+    },
+    {
+      "id": "boleh",
+      "lemma": "boleh",
+      "status": "unlisted"
+    },
+    {
+      "id": "perlu",
+      "lemma": "perlu",
+      "status": "listed",
+      "class": "particle"
+    },
+    {
+      "id": "penat",
+      "lemma": "penat",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "sibuk",
+      "lemma": "sibuk",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "meja",
+      "lemma": "meja",
+      "status": "unlisted"
+    },
+    {
+      "id": "duduk",
+      "lemma": "duduk",
+      "status": "unlisted"
+    },
+    {
+      "id": "kerusi",
+      "lemma": "kerusi",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "panas",
+      "lemma": "panas",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "sejuk",
+      "lemma": "sejuk",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "gula",
+      "lemma": "gula",
+      "status": "unlisted"
+    },
+    {
+      "id": "susu",
+      "lemma": "susu",
+      "status": "unlisted"
+    },
+    {
+      "id": "sedikit",
+      "lemma": "sedikit",
+      "status": "unlisted"
+    },
+    {
+      "id": "banyak",
+      "lemma": "banyak",
+      "status": "unlisted"
+    },
+    {
+      "id": "petang",
+      "lemma": "petang",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "malam",
+      "lemma": "malam",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "tengah-hari",
+      "lemma": "tengah hari",
+      "status": "unlisted"
+    },
+    {
+      "id": "siap",
+      "lemma": "siap",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "mula",
+      "lemma": "mula",
+      "status": "listed"
+    },
+    {
+      "id": "tunggu",
+      "lemma": "tunggu",
+      "status": "listed"
+    },
+    {
+      "id": "sebentar",
+      "lemma": "sebentar",
+      "status": "unlisted"
+    },
+    {
+      "id": "nanti",
+      "lemma": "nanti",
+      "status": "unlisted"
+    },
+    {
+      "id": "tadi",
+      "lemma": "tadi",
+      "status": "listed",
+      "class": "adverb"
+    }
+  ]
+}

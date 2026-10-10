@@ -1,0 +1,361 @@
+{
+  "authority": "kamus-dewan-perdana",
+  "checked": "2026-09-30",
+  "words": [
+    {
+      "id": "selamat",
+      "lemma": "selamat",
+      "status": "headword"
+    },
+    {
+      "id": "pagi",
+      "lemma": "pagi",
+      "status": "headword"
+    },
+    {
+      "id": "saya",
+      "lemma": "saya",
+      "status": "headword"
+    },
+    {
+      "id": "mahu",
+      "lemma": "mahu",
+      "status": "headword"
+    },
+    {
+      "id": "air",
+      "lemma": "air",
+      "status": "headword"
+    },
+    {
+      "id": "kopi",
+      "lemma": "kopi",
+      "status": "headword"
+    },
+    {
+      "id": "minum",
+      "lemma": "minum",
+      "status": "headword"
+    },
+    {
+      "id": "tidak",
+      "lemma": "tidak",
+      "status": "headword"
+    },
+    {
+      "id": "sudah",
+      "lemma": "sudah",
+      "status": "headword"
+    },
+    {
+      "id": "belum",
+      "lemma": "belum",
+      "status": "headword"
+    },
+    {
+      "id": "makan",
+      "lemma": "makan",
+      "status": "headword"
+    },
+    {
+      "id": "roti",
+      "lemma": "roti",
+      "status": "headword"
+    },
+    {
+      "id": "nasi",
+      "lemma": "nasi",
+      "status": "headword"
+    },
+    {
+      "id": "lapar",
+      "lemma": "lapar",
+      "status": "headword"
+    },
+    {
+      "id": "dahaga",
+      "lemma": "dahaga",
+      "status": "headword"
+    },
+    {
+      "id": "baik",
+      "lemma": "baik",
+      "status": "headword"
+    },
+    {
+      "id": "apa",
+      "lemma": "apa",
+      "status": "headword"
+    },
+    {
+      "id": "ini",
+      "lemma": "ini",
+      "status": "headword"
+    },
+    {
+      "id": "bukan",
+      "lemma": "bukan",
+      "status": "headword"
+    },
+    {
+      "id": "ada",
+      "lemma": "ada",
+      "status": "headword"
+    },
+    {
+      "id": "dan",
+      "lemma": "dan",
+      "status": "headword"
+    },
+    {
+      "id": "juga",
+      "lemma": "juga",
+      "status": "headword"
+    },
+    {
+      "id": "sekarang",
+      "lemma": "sekarang",
+      "status": "headword"
+    },
+    {
+      "id": "khabar",
+      "lemma": "khabar",
+      "status": "headword"
+    },
+    {
+      "id": "ya",
+      "lemma": "ya",
+      "status": "headword"
+    },
+    {
+      "id": "awak",
+      "lemma": "awak",
+      "status": "headword"
+    },
+    {
+      "id": "tolong",
+      "lemma": "tolong",
+      "status": "headword"
+    },
+    {
+      "id": "terima-kasih",
+      "lemma": "terima kasih",
+      "status": "headword"
+    },
+    {
+      "id": "sama-sama",
+      "lemma": "sama-sama",
+      "status": "derivative"
+    },
+    {
+      "id": "nama",
+      "lemma": "nama",
+      "status": "headword"
+    },
+    {
+      "id": "hari",
+      "lemma": "hari",
+      "status": "headword"
+    },
+    {
+      "id": "esok",
+      "lemma": "esok",
+      "status": "headword"
+    },
+    {
+      "id": "semalam",
+      "lemma": "semalam",
+      "status": "headword"
+    },
+    {
+      "id": "bangun",
+      "lemma": "bangun",
+      "status": "headword"
+    },
+    {
+      "id": "mandi",
+      "lemma": "mandi",
+      "status": "headword"
+    },
+    {
+      "id": "rumah",
+      "lemma": "rumah",
+      "status": "headword"
+    },
+    {
+      "id": "di",
+      "lemma": "di",
+      "status": "headword"
+    },
+    {
+      "id": "pergi",
+      "lemma": "pergi",
+      "status": "headword"
+    },
+    {
+      "id": "kerja",
+      "lemma": "kerja",
+      "status": "headword"
+    },
+    {
+      "id": "pejabat",
+      "lemma": "pejabat",
+      "status": "derivative"
+    },
+    {
+      "id": "ke",
+      "lemma": "ke",
+      "status": "headword"
+    },
+    {
+      "id": "dari",
+      "lemma": "dari",
+      "status": "headword"
+    },
+    {
+      "id": "komputer",
+      "lemma": "komputer",
+      "status": "headword"
+    },
+    {
+      "id": "komputer-riba",
+      "lemma": "komputer riba",
+      "status": "phrase"
+    },
+    {
+      "id": "skrin",
+      "lemma": "skrin",
+      "status": "headword"
+    },
+    {
+      "id": "buka",
+      "lemma": "buka",
+      "status": "headword"
+    },
+    {
+      "id": "e-mel",
+      "lemma": "e-mel",
+      "status": "headword"
+    },
+    {
+      "id": "baca",
+      "lemma": "baca",
+      "status": "headword"
+    },
+    {
+      "id": "tulis",
+      "lemma": "tulis",
+      "status": "headword"
+    },
+    {
+      "id": "boleh",
+      "lemma": "boleh",
+      "status": "headword"
+    },
+    {
+      "id": "perlu",
+      "lemma": "perlu",
+      "status": "headword"
+    },
+    {
+      "id": "penat",
+      "lemma": "penat",
+      "status": "headword"
+    },
+    {
+      "id": "sibuk",
+      "lemma": "sibuk",
+      "status": "headword"
+    },
+    {
+      "id": "meja",
+      "lemma": "meja",
+      "status": "headword"
+    },
+    {
+      "id": "duduk",
+      "lemma": "duduk",
+      "status": "headword"
+    },
+    {
+      "id": "kerusi",
+      "lemma": "kerusi",
+      "status": "headword"
+    },
+    {
+      "id": "panas",
+      "lemma": "panas",
+      "status": "headword"
+    },
+    {
+      "id": "sejuk",
+      "lemma": "sejuk",
+      "status": "headword"
+    },
+    {
+      "id": "gula",
+      "lemma": "gula",
+      "status": "headword"
+    },
+    {
+      "id": "susu",
+      "lemma": "susu",
+      "status": "headword"
+    },
+    {
+      "id": "sedikit",
+      "lemma": "sedikit",
+      "status": "headword"
+    },
+    {
+      "id": "banyak",
+      "lemma": "banyak",
+      "status": "headword"
+    },
+    {
+      "id": "petang",
+      "lemma": "petang",
+      "status": "headword"
+    },
+    {
+      "id": "malam",
+      "lemma": "malam",
+      "status": "headword"
+    },
+    {
+      "id": "tengah-hari",
+      "lemma": "tengah hari",
+      "status": "phrase"
+    },
+    {
+      "id": "siap",
+      "lemma": "siap",
+      "status": "headword"
+    },
+    {
+      "id": "mula",
+      "lemma": "mula",
+      "status": "headword"
+    },
+    {
+      "id": "tunggu",
+      "lemma": "tunggu",
+      "status": "headword"
+    },
+    {
+      "id": "sebentar",
+      "lemma": "sebentar",
+      "status": "derivative"
+    },
+    {
+      "id": "nanti",
+      "lemma": "nanti",
+      "status": "headword"
+    },
+    {
+      "id": "tadi",
+      "lemma": "tadi",
+      "status": "headword"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "kamus-dewan-perdana",
+  "title": "Kamus Dewan Perdana",
+  "publisher": "Dewan Bahasa dan Pustaka",
+  "published": "2020",
+  "portal": "https://kamus.dbp.gov.my",
+  "portalSince": "2026-04-10",
+  "note": "The current Dewan Bahasa dan Pustaka dictionary of Bahasa Melayu. The book was published in 2020, with more than 120,000 entries and subentries drawn from the DBP corpus. The same work opened on the web on 10 April 2026. Tepi asks the portal whether a spelling is a headword, a phrase, or a derivative, and stores that status only. The entry text stays on the portal."
+}

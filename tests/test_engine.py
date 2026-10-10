@@ -202,7 +202,7 @@ class EngineTest(unittest.TestCase):
         self.assertEqual(today["word"]["lemma"], "selamat")
         self.assertIsNone(today["word"]["gloss"])
         revealed = _run(["reveal", "--json"], env)
-        self.assertEqual(revealed["word"]["gloss"], "peace; greeting")
+        self.assertEqual(revealed["word"]["gloss"], "safe; well")
         self.assertEqual(revealed["word"]["sentence"], "Selamat.")
         log = _run(["log"], env)
         self.assertIn("selamat", log)

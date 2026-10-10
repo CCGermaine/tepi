@@ -3,17 +3,35 @@ import json
 import os
 import sqlite3
 import sys
+import time
 from datetime import date
 from pathlib import Path
 
 from tepi.deck import TepiError, load_config, load_deck
 from tepi.engine import LearningLog, Presentation, Rated, Session
+from tepi.kamus import MISSING, Kamus, build_attestation, classify, load_authority, write_attestation
+from tepi.tesaurus import (
+    Tesaurus,
+    build_attestation as build_thesaurus,
+    classify as classify_thesaurus,
+    load_authority as load_thesaurus,
+    write_attestation as write_thesaurus,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
+AUTHORITY_PATH = ROOT / "dictionary" / "kamus-dewan-perdana.json"
+ATTESTATION_PATH = ROOT / "deck" / "kamus.json"
+THESAURUS_PATH = ROOT / "dictionary" / "tesaurus-bahasa-melayu-dewan.json"
+THESAURUS_ATTESTATION_PATH = ROOT / "deck" / "tesaurus.json"
+CHECK_PAUSE = 0.4
 
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    if args.cmd in ("dict", "check"):
+        return _dictionary(args)
+    if args.cmd == "thesaurus":
+        return _thesaurus(args)
     try:
         session = _session()
     except TepiError as err:
@@ -105,7 +123,137 @@ def _parser() -> argparse.ArgumentParser:
     rate = commands.add_parser("rate", help="Record a review of the current word")
     rate.add_argument("rating", choices=("known", "fuzzy", "missed"))
     rate.add_argument("--json", action="store_true")
+    lookup = commands.add_parser("dict", help="Ask Kamus Dewan Perdana about one spelling")
+    lookup.add_argument("words", nargs="+")
+    lookup.add_argument("--json", action="store_true")
+    check = commands.add_parser("check", help="Check every deck spelling against Kamus Dewan Perdana")
+    check.add_argument("--json", action="store_true")
+    thesaurus = commands.add_parser(
+        "thesaurus",
+        help="Ask Tesaurus Bahasa Melayu Dewan whether a lemma is listed",
+    )
+    thesaurus.add_argument("words", nargs="*")
+    thesaurus.add_argument("--deck", action="store_true", help="Check every deck lemma and write deck/tesaurus.json")
+    thesaurus.add_argument("--json", action="store_true")
     return parser
+
+
+def _dictionary(args) -> int:
+    try:
+        authority = load_authority(AUTHORITY_PATH)
+        kamus = Kamus(authority)
+        if args.cmd == "dict":
+            lemma = " ".join(args.words)
+            status = classify(lemma, kamus.search(lemma))
+            payload = {"lemma": lemma, "status": status, "authority": authority.id, "title": authority.title}
+            _emit(payload if args.json else _format_dict(lemma, status, authority.title), args.json)
+            return 1 if status == MISSING else 0
+        deck = load_deck(ROOT / "deck" / "words.json")
+        by_lemma: dict[str, str] = {}
+        for entry in deck.entries:
+            if entry.lemma in by_lemma:
+                continue
+            if by_lemma:
+                time.sleep(CHECK_PAUSE)
+            by_lemma[entry.lemma] = classify(entry.lemma, kamus.search(entry.lemma))
+        payload = build_attestation(deck, by_lemma, date.today().isoformat())
+        write_attestation(ATTESTATION_PATH, payload)
+        _emit(payload if args.json else _format_check(payload, authority.title), args.json)
+        return 1 if any(row["status"] == MISSING for row in payload["words"]) else 0
+    except TepiError as err:
+        print(err, file=sys.stderr)
+        return 2
+
+
+def _thesaurus(args) -> int:
+    if args.deck == bool(args.words):
+        print("Give a word, or pass --deck.", file=sys.stderr)
+        return 2
+    try:
+        authority = load_thesaurus(THESAURUS_PATH)
+        book = Tesaurus(authority)
+        if not args.deck:
+            lemma = " ".join(args.words)
+            place = classify_thesaurus(lemma, book.search(lemma))
+            payload = {
+                "lemma": lemma,
+                "status": place.status,
+                "authority": authority.id,
+                "title": authority.title,
+            }
+            if place.word_class:
+                payload["class"] = place.word_class
+            _emit(payload if args.json else _format_thesaurus(lemma, place, authority.title), args.json)
+            return 0
+        deck = load_deck(ROOT / "deck" / "words.json")
+        by_lemma = {}
+        for entry in deck.entries:
+            if entry.lemma in by_lemma:
+                continue
+            if by_lemma:
+                time.sleep(CHECK_PAUSE)
+            by_lemma[entry.lemma] = classify_thesaurus(entry.lemma, book.search(entry.lemma))
+        payload = build_thesaurus(deck, by_lemma, date.today().isoformat())
+        write_thesaurus(THESAURUS_ATTESTATION_PATH, payload)
+        _emit(payload if args.json else _format_thesaurus_deck(payload, authority.title), args.json)
+        return 0
+    except TepiError as err:
+        print(err, file=sys.stderr)
+        return 2
+
+
+def _format_thesaurus(lemma: str, place, title: str) -> str:
+    lines = [lemma, place.status]
+    if place.word_class:
+        lines.append(place.word_class)
+    lines.append(title)
+    return "\n".join(lines) + "\n"
+
+
+def _format_thesaurus_deck(payload: dict, title: str) -> str:
+    listed = [row for row in payload["words"] if row["status"] == "listed"]
+    unlisted = [row for row in payload["words"] if row["status"] != "listed"]
+    lines = [
+        f"{title}  ·  {payload['checked']}  ·  {len(payload['words'])} words",
+        f"listed {len(listed)}  ·  unlisted {len(unlisted)}",
+    ]
+    if unlisted:
+        lines.append("")
+        width = max(len(row["lemma"]) for row in unlisted)
+        for row in unlisted:
+            lines.append(f"  {row['lemma']:<{width}}  unlisted")
+    if listed:
+        lines.append("")
+        width = max(len(row["lemma"]) for row in listed)
+        for row in listed:
+            lines.append(f"  {row['lemma']:<{width}}  {row.get('class', '')}".rstrip())
+    return "\n".join(lines) + "\n"
+
+
+def _format_dict(lemma: str, status: str, title: str) -> str:
+    return f"{lemma}\n{status}\n{title}\n"
+
+
+def _format_check(payload: dict, title: str) -> str:
+    counts: dict[str, int] = {}
+    for row in payload["words"]:
+        counts[row["status"]] = counts.get(row["status"], 0) + 1
+    lines = [
+        f"{title}  ·  {payload['checked']}  ·  {len(payload['words'])} words",
+        (
+            f"headword {counts.get('headword', 0)}"
+            f"  ·  phrase {counts.get('phrase', 0)}"
+            f"  ·  derivative {counts.get('derivative', 0)}"
+            f"  ·  missing {counts.get('missing', 0)}"
+        ),
+    ]
+    flagged = [row for row in payload["words"] if row["status"] != "headword"]
+    if flagged:
+        lines.append("")
+        width = max(len(row["lemma"]) for row in flagged)
+        for row in flagged:
+            lines.append(f"  {row['lemma']:<{width}}  {row['status']}")
+    return "\n".join(lines) + "\n"
 
 
 def _emit(payload, as_json: bool) -> None:
