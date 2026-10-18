@@ -19,7 +19,7 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | `plugin/` | The `manny.tepi` bar widget. Linked from `~/.config/omarchy/plugins/manny.tepi`. |
 | `~/.local/share/tepi/tepi.sqlite` | Progress. Created on the first real day, never committed. |
 
-The vault note at `Tepi/Tepi.md` in the Obsidian vault is the resume page. This repo wins if the two disagree.
+The vault note at `Projects/Tepi.md` in the Obsidian vault is the resume page. This repo wins if the two disagree.
 
 ## Dictionary
 
