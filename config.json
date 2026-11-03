@@ -1,6 +1,8 @@
 {
   "newPerDay": 2,
   "reviewCap": 4,
+  "catchUpReviewCap": 12,
+  "catchUp": true,
   "knownIntervals": [1, 3, 7, 16, 30],
   "fuzzyDays": 2,
   "missedDays": 1

@@ -73,6 +73,7 @@ def card_payload(card: Presentation) -> dict:
         "word": word,
         "plan": {"reviews": list(card.plan.reviews), "new": list(card.plan.new)},
         "remaining": {"reviews": card.reviews_remaining, "new": card.new_remaining},
+        "catchUp": card.plan.catch_up,
     }
 
 
@@ -329,11 +330,15 @@ def _heading(card: Presentation) -> str:
     label = "resting" if card.mode == "rest" else card.mode
     if card.mode == "review" and card.plan.reviews:
         place = card.plan.reviews.index(card.entry.id) + 1
-        return f"{card.date.isoformat()}  {label}  {place}/{len(card.plan.reviews)}"
-    if card.mode == "new" and card.plan.new:
+        text = f"{card.date.isoformat()}  {label}  {place}/{len(card.plan.reviews)}"
+    elif card.mode == "new" and card.plan.new:
         place = card.plan.new.index(card.entry.id) + 1
-        return f"{card.date.isoformat()}  {label}  {place}/{len(card.plan.new)}"
-    return f"{card.date.isoformat()}  {label}"
+        text = f"{card.date.isoformat()}  {label}  {place}/{len(card.plan.new)}"
+    else:
+        text = f"{card.date.isoformat()}  {label}"
+    if card.plan.catch_up:
+        return f"{text} (catch-up)"
+    return text
 
 
 def _hint(card: Presentation) -> str:

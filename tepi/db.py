@@ -20,7 +20,8 @@ CREATE TABLE events (
 CREATE TABLE plans (
     day TEXT PRIMARY KEY,
     reviews TEXT NOT NULL,
-    introduced TEXT NOT NULL
+    introduced TEXT NOT NULL,
+    catch_up INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX events_day ON events(day);
 """
@@ -40,7 +41,18 @@ def connect(path: Path) -> sqlite3.Connection:
         raise sqlite3.DatabaseError(f"This log uses schema {version}, which this Tepi does not read.")
     elif version == 0:
         raise sqlite3.DatabaseError(f"The log at {path} is not a Tepi database.")
+    # Leave user_version at 1. Older Tepi rejects any other version, and it
+    # ignores a column it does not select. Today's stored plan is not rewritten.
+    _ensure_catch_up_column(conn)
     return conn
+
+
+def _ensure_catch_up_column(conn: sqlite3.Connection) -> None:
+    names = {row[1] for row in conn.execute("PRAGMA table_info(plans)")}
+    if "catch_up" in names:
+        return
+    conn.execute("ALTER TABLE plans ADD COLUMN catch_up INTEGER NOT NULL DEFAULT 0")
+    conn.commit()
 
 
 def _empty(conn: sqlite3.Connection) -> bool:

@@ -41,6 +41,8 @@ class Config:
     known_intervals: tuple[int, ...]
     fuzzy_days: int
     missed_days: int
+    catch_up: bool = False
+    catch_up_review_cap: int = 0
 
 
 def load_deck(path: Path) -> Deck:
@@ -93,12 +95,21 @@ def load_config(path: Path) -> Config:
         or not all(isinstance(day, int) and day > 0 for day in intervals)
     ):
         raise TepiError("knownIntervals must be a list of days.")
+    review_cap = _count(raw, "reviewCap")
+    if "catchUpReviewCap" in raw:
+        catch_up_review_cap = _count(raw, "catchUpReviewCap")
+        if catch_up_review_cap < review_cap:
+            raise TepiError("catchUpReviewCap must be at least reviewCap.")
+    else:
+        catch_up_review_cap = review_cap
     return Config(
         new_per_day=_count(raw, "newPerDay"),
-        review_cap=_count(raw, "reviewCap"),
+        review_cap=review_cap,
         known_intervals=tuple(intervals),
         fuzzy_days=_days(raw, "fuzzyDays"),
         missed_days=_days(raw, "missedDays"),
+        catch_up=_flag(raw, "catchUp"),
+        catch_up_review_cap=catch_up_review_cap,
     )
 
 
@@ -114,6 +125,15 @@ def _count(raw: dict, key: str) -> int:
     value = raw.get(key)
     if not isinstance(value, int) or value < 0:
         raise TepiError(f"{key} must be a number of words, zero or more.")
+    return value
+
+
+def _flag(raw: dict, key: str) -> bool:
+    if key not in raw:
+        return False
+    value = raw[key]
+    if not isinstance(value, bool):
+        raise TepiError(f"{key} must be true or false.")
     return value
 
 

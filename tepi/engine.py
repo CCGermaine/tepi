@@ -13,6 +13,7 @@ class Plan:
     day: date
     reviews: tuple[str, ...]
     new: tuple[str, ...]
+    catch_up: bool = False
 
 
 @dataclass(frozen=True)
@@ -76,7 +77,7 @@ class Session:
 
     def ensure_plan(self) -> Plan:
         existing = self.conn.execute(
-            "SELECT reviews, introduced FROM plans WHERE day = ?",
+            "SELECT reviews, introduced, catch_up FROM plans WHERE day = ?",
             (_iso(self.today),),
         ).fetchone()
         if existing:
@@ -84,8 +85,9 @@ class Session:
                 self.today,
                 tuple(json.loads(existing["reviews"])),
                 tuple(json.loads(existing["introduced"])),
+                bool(existing["catch_up"]),
             )
-        reviews = self._due_ids()
+        reviews, catch_up = self._due_ids()
         fresh = self._next_new_words()
         tomorrow = self.today + timedelta(days=1)
         now = _now()
@@ -98,10 +100,10 @@ class Session:
                 (entry.id, _iso(self.today), _iso(tomorrow), entry.index),
             )
             self._event(entry.id, "introduced", now)
-        plan = Plan(self.today, reviews, tuple(entry.id for entry in fresh))
+        plan = Plan(self.today, reviews, tuple(entry.id for entry in fresh), catch_up)
         self.conn.execute(
-            "INSERT INTO plans (day, reviews, introduced) VALUES (?, ?, ?)",
-            (_iso(self.today), json.dumps(plan.reviews), json.dumps(plan.new)),
+            "INSERT INTO plans (day, reviews, introduced, catch_up) VALUES (?, ?, ?, ?)",
+            (_iso(self.today), json.dumps(plan.reviews), json.dumps(plan.new), int(plan.catch_up)),
         )
         self.conn.commit()
         return plan
@@ -192,16 +194,21 @@ class Session:
             len(self.deck.entries),
         )
 
-    def _due_ids(self) -> tuple[str, ...]:
+    def _due_ids(self) -> tuple[tuple[str, ...], bool]:
+        today = _iso(self.today)
         rows = self.conn.execute(
             """
-            SELECT word_id FROM progress
+            SELECT word_id, due FROM progress
             WHERE state = 'in_play' AND due IS NOT NULL AND due <= ?
             ORDER BY due ASC, deck_index ASC
             """,
-            (_iso(self.today),),
+            (today,),
         ).fetchall()
-        return tuple(row["word_id"] for row in rows[: self.config.review_cap])
+        # Overdue means due before today. A word due today does not raise the cap.
+        overdue = any(row["due"] < today for row in rows)
+        catch_up = bool(self.config.catch_up and overdue)
+        cap = self.config.catch_up_review_cap if catch_up else self.config.review_cap
+        return tuple(row["word_id"] for row in rows[:cap]), catch_up
 
     def _next_new_words(self) -> tuple[Entry, ...]:
         if self.config.new_per_day == 0:

@@ -66,7 +66,7 @@ The portal keeps the synonym lists. Tepi stores the status and the class.
 
 The command builds a day plan once, in the local timezone, and keeps it stable until the next day.
 
-1. Reviews come first: words due today or earlier, oldest due date first, up to `reviewCap` (4).
+1. Reviews come first: words due today or earlier, oldest due date first, up to `reviewCap` (4). While `catchUp` is true and any of those reviews is overdue (due before today), that day's new plan uses `catchUpReviewCap` (12) instead; with nothing overdue, or with `catchUp` false, the cap stays `reviewCap`, and the command does not write `config.json`.
 2. Then new words, in deck order, up to `newPerDay` (2). A word is skipped until everything in `requires` has been introduced.
 3. The chip shows one word. An unrated review in today's plan comes before a new word. After both are done, the chip rests on the latest word introduced today.
 
