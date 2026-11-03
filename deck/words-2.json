@@ -311,7 +311,7 @@
       "lemma": "harga",
       "root": "harga",
       "gloss": "price",
-      "sentence": "Harga baju ini baik.",
+      "sentence": "Ini harga baju.",
       "register": "neutral",
       "requires": [
         "baju",

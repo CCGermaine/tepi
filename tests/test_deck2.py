@@ -56,16 +56,21 @@ def _phrases(lemmas: set[str]) -> list[tuple[str, ...]]:
     return sorted((tuple(lemma.casefold().split()) for lemma in lemmas), key=len, reverse=True)
 
 
-# A root may appear in its standard meN- or ber- form. `ajar` is taught as `mengajar`.
-_ACTIVE_PREFIXES = ("meng", "meny", "mem", "men", "me", "ber")
+# Derived forms deck 2 sentences actually use. Any other meN- or ber- shape stays unknown.
+_ACTIVE_FORMS = {
+    "ajar": frozenset({"mengajar"}),
+    "jalan": frozenset({"berjalan"}),
+    "beli": frozenset({"membeli"}),
+    "main": frozenset({"bermain"}),
+    "cuci": frozenset({"mencuci"}),
+}
 
 
 def _active_form(token: str, lemmas: set[str]) -> bool:
-    for lemma in lemmas:
-        folded = lemma.casefold()
-        if " " in folded or len(folded) < 3 or not token.endswith(folded):
-            continue
-        if token[: -len(folded)] in _ACTIVE_PREFIXES:
+    known = {lemma.casefold() for lemma in lemmas}
+    folded = token.casefold()
+    for root, forms in _ACTIVE_FORMS.items():
+        if root in known and folded in forms:
             return True
     return False
 
@@ -171,6 +176,31 @@ class Deck2ContentTest(unittest.TestCase):
             if not tokens or len(tokens) > 12:
                 problems.append(f"{entry.id}: {len(tokens)} words")
             unknown = _unknown(tokens, known | {entry.lemma})
+            if unknown:
+                problems.append(f"{entry.id}: {', '.join(unknown)}")
+            known.add(entry.lemma)
+        self.assertEqual(problems, [])
+
+    def test_menbaca_mebaca_and_bersaya_stay_unknown(self):
+        # e0e98f1 accepted any meN- or ber- prefix on any known word.
+        self.assertFalse(_active_form("menbaca", {"baca"}))
+        self.assertFalse(_active_form("mebaca", {"baca"}))
+        self.assertFalse(_active_form("bersaya", {"saya"}))
+        used = {
+            "ajar": "mengajar",
+            "jalan": "berjalan",
+            "beli": "membeli",
+            "main": "bermain",
+            "cuci": "mencuci",
+        }
+        for root, form in used.items():
+            self.assertTrue(_active_form(form, {root}))
+        deck1 = load_deck(ROOT / "deck" / "words.json")
+        deck2 = load_deck(DECK2)
+        known = {entry.lemma for entry in deck1.entries}
+        problems = []
+        for entry in deck2.entries:
+            unknown = _unknown(_tokens(entry.sentence), known | {entry.lemma})
             if unknown:
                 problems.append(f"{entry.id}: {', '.join(unknown)}")
             known.add(entry.lemma)
