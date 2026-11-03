@@ -1,8 +1,12 @@
 """Raise when a test reads the checkout's config.json."""
 
+import os
 from pathlib import Path
 
 import tepi.deck as deck
+
+# Child processes copy this environment. tepi refuses the repo config while it is set.
+os.environ["TEPI_TEST"] = "1"
 
 _REPO_CONFIG = Path(__file__).resolve().parents[1] / "config.json"
 _load_config = deck.load_config

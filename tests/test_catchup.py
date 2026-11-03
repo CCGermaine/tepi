@@ -167,6 +167,23 @@ class CatchUpTest(unittest.TestCase):
             load_config(ROOT / "config.json")
         self.assertIn("repo config", str(caught.exception))
 
+    def test_a_subprocess_cannot_open_the_repo_config(self):
+        env = os.environ.copy()
+        env["TEPI_DATA_DIR"] = self.tmp.name
+        env["TEPI_TODAY"] = DAY.isoformat()
+        env.pop("TEPI_CONFIG", None)
+        env["PYTHONPATH"] = str(ROOT)
+        completed = subprocess.run(
+            [sys.executable, "-m", "tepi", "today", "--json"],
+            cwd=ROOT,
+            env=env,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(completed.returncode, 0, completed.stdout or completed.stderr)
+        self.assertIn("repo config", completed.stderr)
+
     def test_due_today_stays_on_the_review_cap_while_catch_up_is_true(self):
         words = [f"w{i:02d}" for i in range(20)]
         config = load_config(self.write_config(catchUp=True, catchUpReviewCap=12))
