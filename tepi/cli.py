@@ -261,7 +261,11 @@ def _merge_attestation(existing: dict, incoming: dict) -> dict:
         if row["id"] not in seen:
             ordered.append(row)
             seen.add(row["id"])
-    return {"authority": incoming["authority"], "checked": incoming["checked"], "words": ordered}
+    # One deck file must not restamp the date on the whole saved check.
+    checked = existing.get("checked", incoming["checked"])
+    if not isinstance(checked, str) or not checked.strip():
+        checked = incoming["checked"]
+    return {"authority": incoming["authority"], "checked": checked, "words": ordered}
 
 
 def _format_thesaurus(lemma: str, place, title: str) -> str:

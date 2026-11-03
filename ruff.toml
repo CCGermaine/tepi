@@ -1,0 +1,5 @@
+# The tree already uses a short alias for tepi.cli and tepi.deck, and isort
+# wants to split the thesaurus import into one statement per name. Ignore
+# those two nits. Every other rule still runs.
+[lint]
+ignore = ["I001", "PLR0402"]

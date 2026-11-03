@@ -56,6 +56,20 @@ def _phrases(lemmas: set[str]) -> list[tuple[str, ...]]:
     return sorted((tuple(lemma.casefold().split()) for lemma in lemmas), key=len, reverse=True)
 
 
+# A root may appear in its standard meN- or ber- form. `ajar` is taught as `mengajar`.
+_ACTIVE_PREFIXES = ("meng", "meny", "mem", "men", "me", "ber")
+
+
+def _active_form(token: str, lemmas: set[str]) -> bool:
+    for lemma in lemmas:
+        folded = lemma.casefold()
+        if " " in folded or len(folded) < 3 or not token.endswith(folded):
+            continue
+        if token[: -len(folded)] in _ACTIVE_PREFIXES:
+            return True
+    return False
+
+
 def _unknown(tokens: list[str], lemmas: set[str]) -> list[str]:
     phrases = _phrases(lemmas)
     unknown = []
@@ -70,7 +84,7 @@ def _unknown(tokens: list[str], lemmas: set[str]) -> list[str]:
                 break
         if matched:
             continue
-        if tokens[index] in FUNCTION_WORDS:
+        if tokens[index] in FUNCTION_WORDS or _active_form(tokens[index], lemmas):
             index += 1
             continue
         unknown.append(tokens[index])

@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import timedelta
 from pathlib import Path
 from unittest.mock import patch
@@ -16,7 +16,7 @@ import _guard  # noqa: F401  -- patch load_config before tepi binds it
 import tepi.deck as deck_module
 from tepi.cli import main
 from tepi.db import connect
-from tepi.deck import TepiError, load_config, load_deck
+from tepi.deck import TepiError, load_config, load_deck, load_decks
 from tepi.engine import Session
 from tepi.kamus import Hit
 from test_engine import TODAY, write_config
@@ -143,6 +143,50 @@ class DeckLoadTest(unittest.TestCase):
         message = str(caught.exception)
         self.assertIn("dua", message)
         self.assertIn("tiada", message)
+
+    def test_an_unknown_require_names_the_file_and_the_bad_id(self):
+        # Fails on 406c88d: load_deck accepted a requires id that is not a word.
+        folder = Path(self.tmp.name) / "deck"
+        folder.mkdir()
+        raw = json.loads((ROOT / "deck" / "words.json").read_text(encoding="utf-8"))
+        words = raw["words"][:3]
+        self.assertEqual([word["id"] for word in words], ["selamat", "pagi", "saya"])
+        for word in words:
+            if word["id"] == "saya":
+                word["requires"] = ["typo-id"]
+        path = _write_deck(folder, "words-9.json", words)
+        with self.assertRaises(TepiError) as caught:
+            load_deck(path)
+        message = str(caught.exception)
+        self.assertIn("words-9.json", message)
+        self.assertIn("typo-id", message)
+
+        first = _write_deck(folder, "words.json", [_word("pengantar")])
+        with self.assertRaises(TepiError) as caught_all:
+            load_decks([first, path])
+        message_all = str(caught_all.exception)
+        self.assertIn("words-9.json", message_all)
+        self.assertIn("typo-id", message_all)
+
+        import tepi.cli as cli
+
+        class Boom:
+            def __init__(self, authority):
+                self.authority = authority
+
+            def search(self, lemma):
+                raise AssertionError(f"check reached the portal for {lemma}")
+
+        stderr = io.StringIO()
+        dest = Path(self.tmp.name) / "kamus-out.json"
+        with patch.object(cli, "Kamus", Boom), patch.object(cli, "ATTESTATION_PATH", dest), redirect_stderr(
+            stderr
+        ):
+            code = main(["check", "--deck-file", str(path)])
+        self.assertEqual(code, 2, stderr.getvalue())
+        self.assertIn("words-9.json", stderr.getvalue())
+        self.assertIn("typo-id", stderr.getvalue())
+        self.assertFalse(dest.exists())
 
     def test_a_require_that_points_later_is_an_error(self):
         load_decks = self._require("load_decks")
@@ -285,6 +329,42 @@ class DeckCheckTest(unittest.TestCase):
         self.assertEqual(merged["words"][0]["lemma"], "SELAMAT-SENTINEL")
         self.assertEqual(merged["words"][71]["lemma"], "ajar")
         self.assertEqual(len(merged["words"]), 111)
+
+    def test_check_deck_file_keeps_the_top_checked_date(self):
+        # A partial check updates the rows it asked about and leaves the date.
+        import tepi.cli as cli
+
+        asked = []
+
+        class FakeKamus:
+            def __init__(self, authority):
+                self.authority = authority
+
+            def search(self, lemma):
+                asked.append(lemma)
+                return [Hit(form=lemma, kind="kata entri")]
+
+        dest = Path(self.tmp.name) / "kamus.json"
+        saved = json.loads((ROOT / "deck" / "kamus.json").read_text(encoding="utf-8"))
+        saved["checked"] = "1999-01-01"
+        saved["words"][0]["lemma"] = "SELAMAT-SENTINEL"
+        for row in saved["words"]:
+            if row["id"] == "ajar":
+                row["status"] = "missing"
+        dest.write_text(json.dumps(saved), encoding="utf-8")
+        with patch.object(cli, "Kamus", FakeKamus), patch.object(cli.time, "sleep"), patch.object(
+            cli, "ATTESTATION_PATH", dest
+        ), redirect_stdout(io.StringIO()):
+            code = main(["check", "--deck-file", str(ROOT / "deck" / "words-2.json")])
+        self.assertEqual(code, 0)
+        self.assertEqual(asked[0], "ajar")
+        self.assertNotIn("selamat", asked)
+        merged = json.loads(dest.read_text(encoding="utf-8"))
+        self.assertEqual(merged["checked"], "1999-01-01")
+        self.assertEqual(merged["words"][0]["lemma"], "SELAMAT-SENTINEL")
+        ajar = next(row for row in merged["words"] if row["id"] == "ajar")
+        self.assertEqual(ajar["status"], "headword")
+        self.assertEqual(ajar["lemma"], "ajar")
 
     def test_thesaurus_deck_asks_every_deck(self):
         import tepi.cli as cli

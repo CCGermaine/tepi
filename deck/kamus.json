@@ -443,6 +443,11 @@
       "status": "headword"
     },
     {
+      "id": "baju",
+      "lemma": "baju",
+      "status": "headword"
+    },
+    {
       "id": "mencuci",
       "lemma": "mencuci",
       "status": "derivative"
@@ -530,11 +535,6 @@
     {
       "id": "minggu",
       "lemma": "minggu",
-      "status": "headword"
-    },
-    {
-      "id": "baju",
-      "lemma": "baju",
       "status": "headword"
     },
     {

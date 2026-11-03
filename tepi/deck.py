@@ -46,7 +46,7 @@ class Config:
     catch_up_review_cap: int = 0
 
 
-def load_deck(path: Path) -> Deck:
+def _read_deck(path: Path) -> Deck:
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as err:
@@ -86,6 +86,52 @@ def load_deck(path: Path) -> Deck:
     return Deck(tuple(entries))
 
 
+def load_deck(path: Path) -> Deck:
+    """Load one deck file.
+
+    A require must name an earlier word in this file, or a word in an earlier
+    deck file in the same directory. `words.json` is earlier than `words-2.json`.
+    """
+    path = Path(path)
+    deck = _read_deck(path)
+    known = _earlier_ids(path)
+    known.update(entry.id for entry in deck.entries)
+    for entry in deck.entries:
+        for req in entry.requires:
+            if req not in known:
+                raise TepiError(
+                    f"{path.name}: {entry.id} requires {req}, which is not in the deck."
+                )
+    return deck
+
+
+def _earlier_ids(path: Path) -> set[str]:
+    match = _DECK_FILE.match(path.name)
+    if match is None:
+        return set()
+    number = int(match.group(1)) if match.group(1) else 0
+    earlier: list[tuple[int, str, Path]] = []
+    try:
+        names = list(path.parent.iterdir())
+    except OSError as err:
+        raise TepiError(f"Could not read the deck directory {path.parent}.") from err
+    for sibling in names:
+        if not sibling.is_file() or sibling.resolve() == path.resolve():
+            continue
+        sibling_match = _DECK_FILE.match(sibling.name)
+        if sibling_match is None:
+            continue
+        sibling_number = int(sibling_match.group(1)) if sibling_match.group(1) else 0
+        if sibling_number < number:
+            earlier.append((sibling_number, sibling.name, sibling))
+    earlier.sort()
+    found: set[str] = set()
+    for _, _, sibling in earlier:
+        for entry in _read_deck(sibling).entries:
+            found.add(entry.id)
+    return found
+
+
 # words.json, then words-2.json, words-3.json, and so on.
 _DECK_FILE = re.compile(r"^words(?:-([1-9]\d*))?\.json$")
 
@@ -116,21 +162,24 @@ def deck_paths(directory: Path) -> tuple[Path, ...]:
 
 def load_decks(paths) -> Deck:
     """Load deck files in the order given and number the words from the start."""
-    parts: list[Deck] = []
+    parts: list[tuple[Path, Deck]] = []
     located: dict[str, int] = {}
     for path in paths:
-        part = load_deck(Path(path))
+        path = Path(path)
+        part = _read_deck(path)
         for entry in part.entries:
             if entry.id in located:
                 raise TepiError(f"The decks repeat the id {entry.id!r}.")
             located[entry.id] = len(located)
-        parts.append(part)
+        parts.append((path, part))
     combined: list[Entry] = []
-    for part in parts:
+    for path, part in parts:
         for entry in part.entries:
             for req in entry.requires:
                 if req not in located:
-                    raise TepiError(f"{entry.id} requires {req}, which is not in the decks.")
+                    raise TepiError(
+                        f"{path.name}: {entry.id} requires {req}, which is not in the decks."
+                    )
                 if located[req] >= located[entry.id]:
                     raise TepiError(f"{entry.id} requires {req}, which is not earlier in the decks.")
             combined.append(replace(entry, index=len(combined)))

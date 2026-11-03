@@ -12,7 +12,7 @@ from pathlib import Path
 import _guard  # noqa: F401  -- patch load_config before tepi binds it
 from tepi.cli import _format_today, card_payload
 from tepi.db import connect
-from tepi.deck import Deck, Entry, TepiError, load_config, load_deck
+from tepi.deck import Deck, Entry, TepiError, load_config, load_curriculum, load_deck
 from tepi.engine import Session
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -298,8 +298,8 @@ class CatchUpTest(unittest.TestCase):
         text = _run(["today"], env)
         self.assertIn("1/12 (catch-up)", text)
         log = _run(["log", "--json"], env)
-        # The command counts every deck file. This test seeds deck 1 only.
-        self.assertEqual(log["deck"], 111)
+        # The command counts every loaded deck file. This test seeds deck 1 only.
+        self.assertEqual(log["deck"], len(load_curriculum(ROOT).entries))
         self.assertNotIn("catchUp", log)
 
 

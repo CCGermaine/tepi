@@ -8,7 +8,7 @@
       "lemma": "ajar",
       "root": "ajar",
       "gloss": "teach",
-      "sentence": "Saya mahu ajar.",
+      "sentence": "Saya mahu mengajar.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -80,11 +80,12 @@
       "lemma": "perjalanan",
       "root": "jalan",
       "gloss": "journey",
-      "sentence": "Ini perjalanan.",
+      "sentence": "Perjalanan ke rumah.",
       "register": "neutral",
       "requires": [
         "jalan",
-        "ini"
+        "ke",
+        "rumah"
       ]
     },
     {
@@ -92,18 +93,18 @@
       "lemma": "jalanan",
       "root": "jalan",
       "gloss": "streets",
-      "sentence": "Ini jalanan.",
+      "sentence": "Jalanan sibuk.",
       "register": "neutral",
       "requires": [
         "jalan",
-        "ini"
+        "sibuk"
       ]
     },
     {
       "id": "beli",
       "lemma": "beli",
       "root": "beli",
-      "gloss": "buy",
+      "gloss": "buy (root)",
       "sentence": "Saya mahu beli.",
       "register": "neutral",
       "requires": [
@@ -115,7 +116,7 @@
       "id": "membeli",
       "lemma": "membeli",
       "root": "beli",
-      "gloss": "buy",
+      "gloss": "to buy, purchase (active verb)",
       "sentence": "Saya mahu membeli.",
       "register": "neutral",
       "requires": [
@@ -141,18 +142,19 @@
       "lemma": "belian",
       "root": "beli",
       "gloss": "purchase",
-      "sentence": "Ini belian.",
+      "sentence": "Belian saya banyak.",
       "register": "neutral",
       "requires": [
         "beli",
-        "ini"
+        "saya",
+        "banyak"
       ]
     },
     {
       "id": "main",
       "lemma": "main",
       "root": "main",
-      "gloss": "play",
+      "gloss": "play (root)",
       "sentence": "Saya mahu main.",
       "register": "neutral",
       "requires": [
@@ -164,7 +166,7 @@
       "id": "bermain",
       "lemma": "bermain",
       "root": "main",
-      "gloss": "play",
+      "gloss": "to play (active verb)",
       "sentence": "Saya bermain.",
       "register": "neutral",
       "requires": [
@@ -200,7 +202,7 @@
       "id": "cuci",
       "lemma": "cuci",
       "root": "cuci",
-      "gloss": "wash",
+      "gloss": "wash (root)",
       "sentence": "Saya mahu cuci.",
       "register": "neutral",
       "requires": [
@@ -209,22 +211,34 @@
       ]
     },
     {
+      "id": "baju",
+      "lemma": "baju",
+      "root": "baju",
+      "gloss": "shirt, top",
+      "sentence": "Ini baju.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
       "id": "mencuci",
       "lemma": "mencuci",
       "root": "cuci",
-      "gloss": "wash",
-      "sentence": "Saya mencuci.",
+      "gloss": "to wash (active verb)",
+      "sentence": "Saya mencuci baju.",
       "register": "neutral",
       "requires": [
         "cuci",
-        "saya"
+        "saya",
+        "baju"
       ]
     },
     {
       "id": "pencuci",
       "lemma": "pencuci",
       "root": "cuci",
-      "gloss": "cleaner",
+      "gloss": "cleanser, detergent",
       "sentence": "Ini pencuci.",
       "register": "neutral",
       "requires": [
@@ -297,10 +311,12 @@
       "lemma": "harga",
       "root": "harga",
       "gloss": "price",
-      "sentence": "Ini harga.",
+      "sentence": "Harga baju ini baik.",
       "register": "neutral",
       "requires": [
-        "ini"
+        "baju",
+        "ini",
+        "baik"
       ]
     },
     {
@@ -415,21 +431,12 @@
       "lemma": "minggu",
       "root": "minggu",
       "gloss": "week",
-      "sentence": "Ini minggu.",
+      "sentence": "Minggu ini saya sibuk.",
       "register": "neutral",
       "requires": [
-        "ini"
-      ]
-    },
-    {
-      "id": "baju",
-      "lemma": "baju",
-      "root": "baju",
-      "gloss": "clothes",
-      "sentence": "Ini baju.",
-      "register": "neutral",
-      "requires": [
-        "ini"
+        "ini",
+        "saya",
+        "sibuk"
       ]
     },
     {
