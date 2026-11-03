@@ -205,10 +205,13 @@ class Session:
             (today,),
         ).fetchall()
         # Overdue means due before today. A word due today does not raise the cap.
+        # The marker stays off unless the higher cap actually adds reviews.
         overdue = any(row["due"] < today for row in rows)
-        catch_up = bool(self.config.catch_up and overdue)
-        cap = self.config.catch_up_review_cap if catch_up else self.config.review_cap
-        return tuple(row["word_id"] for row in rows[:cap]), catch_up
+        use_higher = bool(self.config.catch_up and overdue)
+        cap = self.config.catch_up_review_cap if use_higher else self.config.review_cap
+        chosen = tuple(row["word_id"] for row in rows[:cap])
+        catch_up = use_higher and len(chosen) > self.config.review_cap
+        return chosen, catch_up
 
     def _next_new_words(self) -> tuple[Entry, ...]:
         if self.config.new_per_day == 0:

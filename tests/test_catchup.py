@@ -9,6 +9,7 @@ import unittest
 from datetime import date, timedelta
 from pathlib import Path
 
+import _guard  # noqa: F401  -- patch load_config before tepi binds it
 from tepi.cli import _format_today, card_payload
 from tepi.db import connect
 from tepi.deck import Deck, Entry, TepiError, load_config, load_deck
@@ -123,6 +124,49 @@ class CatchUpTest(unittest.TestCase):
         self.assertFalse(card_payload(card)["catchUp"])
         self.assertNotIn("(catch-up)", _format_today(card))
 
+    def test_catch_up_on_with_nothing_overdue_leaves_the_marker_off(self):
+        words = [f"w{i:02d}" for i in range(6)]
+        config = load_config(self.write_config(catchUp=True, catchUpReviewCap=12))
+        session = self.session(deck_of(*words), config)
+        self.seed(session, words, "2026-11-10")
+        plan = session.ensure_plan()
+        self.assertEqual(plan.reviews, ())
+        self.assertFalse(plan.catch_up)
+        card = session.presentation()
+        self.assertFalse(card_payload(card)["catchUp"])
+        self.assertNotIn("(catch-up)", _format_today(card))
+
+    def test_catch_up_on_with_two_overdue_leaves_the_marker_off(self):
+        words = ["w00", "w01"]
+        config = load_config(self.write_config(catchUp=True, catchUpReviewCap=12))
+        session = self.session(deck_of(*words), config)
+        self.seed(session, words, OVERDUE)
+        plan = session.ensure_plan()
+        self.assertEqual(plan.reviews, ("w00", "w01"))
+        self.assertFalse(plan.catch_up)
+        card = session.presentation()
+        self.assertFalse(card_payload(card)["catchUp"])
+        self.assertNotIn("(catch-up)", _format_today(card))
+        self.assertIn("1/2", _format_today(card))
+
+    def test_catch_up_on_with_twenty_overdue_marks_twelve(self):
+        words = [f"w{i:02d}" for i in range(20)]
+        config = load_config(self.write_config(catchUp=True, catchUpReviewCap=12))
+        session = self.session(deck_of(*words), config)
+        self.seed(session, words, OVERDUE)
+        plan = session.ensure_plan()
+        self.assertEqual(len(plan.reviews), 12)
+        self.assertEqual(plan.reviews, tuple(words[:12]))
+        self.assertTrue(plan.catch_up)
+        card = session.presentation()
+        self.assertTrue(card_payload(card)["catchUp"])
+        self.assertIn("1/12 (catch-up)", _format_today(card))
+
+    def test_a_test_cannot_open_the_repo_config(self):
+        with self.assertRaises(AssertionError) as caught:
+            load_config(ROOT / "config.json")
+        self.assertIn("repo config", str(caught.exception))
+
     def test_due_today_stays_on_the_review_cap_while_catch_up_is_true(self):
         words = [f"w{i:02d}" for i in range(20)]
         config = load_config(self.write_config(catchUp=True, catchUpReviewCap=12))
@@ -134,7 +178,7 @@ class CatchUpTest(unittest.TestCase):
         self.assertFalse(card_payload(session.presentation())["catchUp"])
 
     def test_known_days_clear_the_backlog_and_leave_config_untouched(self):
-        path = ROOT / "config.json"
+        path = self.write_config(newPerDay=2, catchUp=True, catchUpReviewCap=12)
         before = hashlib.sha256(path.read_bytes()).hexdigest()
         deck = load_deck(ROOT / "deck" / "words.json")
         config = load_config(path)
@@ -227,6 +271,7 @@ class CatchUpTest(unittest.TestCase):
         env = os.environ.copy()
         env["TEPI_DATA_DIR"] = self.tmp.name
         env["TEPI_TODAY"] = DAY.isoformat()
+        env["TEPI_CONFIG"] = str(self.write_config(newPerDay=2, catchUp=True, catchUpReviewCap=12))
         env["PYTHONPATH"] = str(ROOT)
         payload = _run(["today", "--json"], env)
         self.assertTrue(payload["catchUp"])

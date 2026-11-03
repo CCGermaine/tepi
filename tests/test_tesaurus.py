@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import _guard  # noqa: F401  -- patch load_config before tepi binds it
 from tepi.deck import Deck, Entry, TepiError, load_deck
 from tepi.tesaurus import (
     CLASS_LABELS,

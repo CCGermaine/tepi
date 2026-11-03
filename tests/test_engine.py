@@ -7,12 +7,29 @@ import unittest
 from datetime import date, timedelta
 from pathlib import Path
 
+import _guard  # noqa: F401  -- patch load_config before tepi binds it
 from tepi.db import connect
 from tepi.deck import Config, Deck, Entry, TepiError, load_config, load_deck
 from tepi.engine import Session
 
 ROOT = Path(__file__).resolve().parents[1]
 TODAY = date(2026, 9, 29)
+
+
+def write_config(directory, **overrides) -> Path:
+    raw = {
+        "newPerDay": 2,
+        "reviewCap": 4,
+        "catchUpReviewCap": 12,
+        "catchUp": True,
+        "knownIntervals": [1, 3, 7, 16, 30],
+        "fuzzyDays": 2,
+        "missedDays": 1,
+    }
+    raw.update(overrides)
+    path = Path(directory) / "config.json"
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    return path
 
 
 def tiny(*words: str, intervals=(1, 3, 7, 16, 30), new_per_day=2, review_cap=4) -> tuple[Deck, Config]:
@@ -35,7 +52,7 @@ class EngineTest(unittest.TestCase):
 
     def test_first_day_of_the_real_deck_introduces_the_greeting(self):
         deck = load_deck(ROOT / "deck" / "words.json")
-        config = load_config(ROOT / "config.json")
+        config = load_config(write_config(self.tmp.name))
         session = self.session(deck, config, TODAY)
         plan = session.ensure_plan()
         self.assertEqual(plan.new, ("selamat", "pagi"))
@@ -61,7 +78,7 @@ class EngineTest(unittest.TestCase):
 
     def test_a_day_shows_reviews_before_new_words_and_then_rests(self):
         deck = load_deck(ROOT / "deck" / "words.json")
-        config = load_config(ROOT / "config.json")
+        config = load_config(write_config(self.tmp.name))
         first = self.session(deck, config, TODAY)
         first.ensure_plan()
         second = Session(first.conn, deck, config, TODAY + timedelta(days=1))
@@ -196,6 +213,7 @@ class EngineTest(unittest.TestCase):
         env = os.environ.copy()
         env["TEPI_DATA_DIR"] = self.tmp.name
         env["TEPI_TODAY"] = TODAY.isoformat()
+        env["TEPI_CONFIG"] = str(write_config(self.tmp.name))
         env["PYTHONPATH"] = str(ROOT)
         today = _run(["today", "--json"], env)
         self.assertEqual(today["mode"], "new")

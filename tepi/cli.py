@@ -103,7 +103,10 @@ def _session() -> Session:
     raw_today = os.environ.get("TEPI_TODAY")
     today = date.fromisoformat(raw_today) if raw_today else date.today()
     data = Path(os.environ.get("TEPI_DATA_DIR", Path.home() / ".local/share/tepi"))
-    return Session.open(data / "tepi.sqlite", load_deck(ROOT / "deck" / "words.json"), load_config(ROOT / "config.json"), today)
+    # Unset TEPI_CONFIG means the repo schedule. The bar never sets it.
+    raw_config = os.environ.get("TEPI_CONFIG")
+    config_path = Path(raw_config) if raw_config else ROOT / "config.json"
+    return Session.open(data / "tepi.sqlite", load_deck(ROOT / "deck" / "words.json"), load_config(config_path), today)
 
 
 def _parser() -> argparse.ArgumentParser:

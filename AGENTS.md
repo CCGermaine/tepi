@@ -30,3 +30,4 @@ Tests and manual runs must set `TEPI_DATA_DIR` to a temp folder (and `TEPI_TODAY
 6. Run `python3 -m unittest discover -s tests` before reporting done. If a `_handoff/reports/` folder exists, write the report there.
 7. Bug-to-lint-rule: when the same bug or mistake shows up a second time, add an automatic check (lint rule, test, or guard script) that fails on it, rather than a note. Show that the check fails on the old code.
 8. Keep changes small, one feature per build. No new dependencies.
+9. Builds work in a git worktree under /tmp, never in ~/Work/tepi. The bar widget runs the live checkout against the real database every 60 seconds.
