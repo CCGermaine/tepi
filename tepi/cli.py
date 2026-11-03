@@ -7,13 +7,22 @@ import time
 from datetime import date
 from pathlib import Path
 
-from tepi.deck import TepiError, load_config, load_deck
+from tepi.deck import TepiError, load_config, load_curriculum, load_deck
 from tepi.engine import LearningLog, Presentation, Rated, Session
-from tepi.kamus import MISSING, Kamus, build_attestation, classify, load_authority, write_attestation
+from tepi.kamus import (
+    MISSING,
+    Kamus,
+    build_attestation,
+    classify,
+    load_attestation,
+    load_authority,
+    write_attestation,
+)
 from tepi.tesaurus import (
     Tesaurus,
     build_attestation as build_thesaurus,
     classify as classify_thesaurus,
+    load_attestation as load_thesaurus_attestation,
     load_authority as load_thesaurus,
     write_attestation as write_thesaurus,
 )
@@ -109,7 +118,7 @@ def _session() -> Session:
     config_path = Path(raw_config) if raw_config else ROOT / "config.json"
     if os.environ.get("TEPI_TEST") and config_path.resolve() == (ROOT / "config.json").resolve():
         raise TepiError(f"A test opened the repo config at {config_path}. Pass a temp config instead.")
-    return Session.open(data / "tepi.sqlite", load_deck(ROOT / "deck" / "words.json"), load_config(config_path), today)
+    return Session.open(data / "tepi.sqlite", load_curriculum(ROOT), load_config(config_path), today)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -135,12 +144,22 @@ def _parser() -> argparse.ArgumentParser:
     lookup.add_argument("--json", action="store_true")
     check = commands.add_parser("check", help="Check every deck spelling against Kamus Dewan Perdana")
     check.add_argument("--json", action="store_true")
+    check.add_argument(
+        "--deck-file",
+        type=Path,
+        help="Check one deck file and merge those rows into deck/kamus.json",
+    )
     thesaurus = commands.add_parser(
         "thesaurus",
         help="Ask Tesaurus Bahasa Melayu Dewan whether a lemma is listed",
     )
     thesaurus.add_argument("words", nargs="*")
     thesaurus.add_argument("--deck", action="store_true", help="Check every deck lemma and write deck/tesaurus.json")
+    thesaurus.add_argument(
+        "--deck-file",
+        type=Path,
+        help="Check one deck file and merge those rows into deck/tesaurus.json",
+    )
     thesaurus.add_argument("--json", action="store_true")
     return parser
 
@@ -155,7 +174,7 @@ def _dictionary(args) -> int:
             payload = {"lemma": lemma, "status": status, "authority": authority.id, "title": authority.title}
             _emit(payload if args.json else _format_dict(lemma, status, authority.title), args.json)
             return 1 if status == MISSING else 0
-        deck = load_deck(ROOT / "deck" / "words.json")
+        deck, merge = _open_check_deck(args.deck_file)
         by_lemma: dict[str, str] = {}
         for entry in deck.entries:
             if entry.lemma in by_lemma:
@@ -163,23 +182,30 @@ def _dictionary(args) -> int:
             if by_lemma:
                 time.sleep(CHECK_PAUSE)
             by_lemma[entry.lemma] = classify(entry.lemma, kamus.search(entry.lemma))
-        payload = build_attestation(deck, by_lemma, date.today().isoformat())
-        write_attestation(ATTESTATION_PATH, payload)
-        _emit(payload if args.json else _format_check(payload, authority.title), args.json)
-        return 1 if any(row["status"] == MISSING for row in payload["words"]) else 0
+        checked = build_attestation(deck, by_lemma, date.today().isoformat())
+        stored = checked
+        if merge and ATTESTATION_PATH.exists():
+            stored = _merge_attestation(load_attestation(ATTESTATION_PATH), checked)
+        write_attestation(ATTESTATION_PATH, stored)
+        # The text is the file just checked. The saved record keeps the other deck.
+        _emit(checked if args.json else _format_check(checked, authority.title), args.json)
+        return 1 if any(row["status"] == MISSING for row in checked["words"]) else 0
     except TepiError as err:
         print(err, file=sys.stderr)
         return 2
 
 
 def _thesaurus(args) -> int:
-    if args.deck == bool(args.words):
+    if args.deck_file and (args.deck or args.words):
+        print("Give a word, or pass --deck, or pass --deck-file.", file=sys.stderr)
+        return 2
+    if not args.deck_file and args.deck == bool(args.words):
         print("Give a word, or pass --deck.", file=sys.stderr)
         return 2
     try:
         authority = load_thesaurus(THESAURUS_PATH)
         book = Tesaurus(authority)
-        if not args.deck:
+        if not args.deck and not args.deck_file:
             lemma = " ".join(args.words)
             place = classify_thesaurus(lemma, book.search(lemma))
             payload = {
@@ -192,7 +218,7 @@ def _thesaurus(args) -> int:
                 payload["class"] = place.word_class
             _emit(payload if args.json else _format_thesaurus(lemma, place, authority.title), args.json)
             return 0
-        deck = load_deck(ROOT / "deck" / "words.json")
+        deck, merge = _open_check_deck(args.deck_file)
         by_lemma = {}
         for entry in deck.entries:
             if entry.lemma in by_lemma:
@@ -200,13 +226,42 @@ def _thesaurus(args) -> int:
             if by_lemma:
                 time.sleep(CHECK_PAUSE)
             by_lemma[entry.lemma] = classify_thesaurus(entry.lemma, book.search(entry.lemma))
-        payload = build_thesaurus(deck, by_lemma, date.today().isoformat())
-        write_thesaurus(THESAURUS_ATTESTATION_PATH, payload)
-        _emit(payload if args.json else _format_thesaurus_deck(payload, authority.title), args.json)
+        checked = build_thesaurus(deck, by_lemma, date.today().isoformat())
+        stored = checked
+        if merge and THESAURUS_ATTESTATION_PATH.exists():
+            stored = _merge_attestation(load_thesaurus_attestation(THESAURUS_ATTESTATION_PATH), checked)
+        write_thesaurus(THESAURUS_ATTESTATION_PATH, stored)
+        _emit(checked if args.json else _format_thesaurus_deck(checked, authority.title), args.json)
         return 0
     except TepiError as err:
         print(err, file=sys.stderr)
         return 2
+
+
+def _open_check_deck(deck_file: Path | None):
+    """Return the deck to check, and whether to merge into the saved file.
+
+    No path means every deck file, in teaching order, written as a new record.
+    A path means that file only. Its rows replace the same ids and new ids are
+    appended, so the other deck stays in the saved file.
+    """
+    if deck_file:
+        return load_deck(deck_file), True
+    return load_curriculum(ROOT), False
+
+
+def _merge_attestation(existing: dict, incoming: dict) -> dict:
+    incoming_by_id = {row["id"]: row for row in incoming["words"]}
+    ordered = []
+    seen: set[str] = set()
+    for row in existing["words"]:
+        ordered.append(incoming_by_id.get(row["id"], row))
+        seen.add(row["id"])
+    for row in incoming["words"]:
+        if row["id"] not in seen:
+            ordered.append(row)
+            seen.add(row["id"])
+    return {"authority": incoming["authority"], "checked": incoming["checked"], "words": ordered}
 
 
 def _format_thesaurus(lemma: str, place, title: str) -> str:

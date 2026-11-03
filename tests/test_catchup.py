@@ -82,7 +82,9 @@ class CatchUpTest(unittest.TestCase):
         return path
 
     def session(self, deck, config, day=DAY):
-        return Session(connect(self.db), deck, config, day)
+        opened = Session(connect(self.db), deck, config, day)
+        self.addCleanup(opened.close)
+        return opened
 
     def seed(self, session, words, due):
         for index, word in enumerate(words):
@@ -296,7 +298,8 @@ class CatchUpTest(unittest.TestCase):
         text = _run(["today"], env)
         self.assertIn("1/12 (catch-up)", text)
         log = _run(["log", "--json"], env)
-        self.assertEqual(log["deck"], len(deck.entries))
+        # The command counts every deck file. This test seeds deck 1 only.
+        self.assertEqual(log["deck"], 111)
         self.assertNotIn("catchUp", log)
 
 

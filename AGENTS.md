@@ -4,7 +4,7 @@ Tepi: a Bahasa Melayu learning chip for the Omarchy bar. The `tepi` command (Pyt
 
 ## Layout
 
-- `deck/words.json` the curriculum, array order is teaching order. Contract: `deck/words.schema.json`.
+- `deck/words.json` the first deck, then `deck/words-N.json` by number. Array order across those files is teaching order. Contract: `deck/words.schema.json`.
 - `deck/kamus.json`, `deck/tesaurus.json` results of the last dictionary and thesaurus checks.
 - `config.json` daily caps and the recall ladder.
 - `tepi/` the command, `bin/tepi` its launcher (linked from `~/.local/bin/tepi`).

@@ -8,8 +8,9 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 
 | Path | What it is |
 | --- | --- |
-| `deck/words.json` | The curriculum. Order in the array is teaching order. |
-| `deck/words.schema.json` | The deck contract. |
+| `deck/words.json` | Deck 1. Teaching order starts here. |
+| `deck/words-2.json` | Deck 2. Taught after every word in deck 1. |
+| `deck/words.schema.json` | The deck contract. Every `deck/words*.json` file matches it. |
 | `deck/kamus.json` | The last spelling check. One status per deck word. |
 | `dictionary/kamus-dewan-perdana.json` | Which dictionary that check asks. |
 | `deck/tesaurus.json` | The last thesaurus check. One status per deck word. |
@@ -57,10 +58,14 @@ The portal keeps the synonym lists. Tepi stores the status and the class.
 - `lemma` is the form the chip shows.
 - `root` groups cousins (`minum`, `minuman`) without teaching them as one entry.
 - `sentence` uses this word and words already in the deck.
-- `requires` lists those earlier ids. A word can be introduced only after each of them has been introduced.
+- `requires` lists those earlier ids. A word can be introduced only after each of them has been introduced. The id may sit in an earlier deck file.
 - `register` is `neutral`, `casual`, or `formal`. The first words stay `neutral` (`saya`, `mahu`, `tidak`, `sudah`).
 
-`id` values are unique. Every id in `requires` appears earlier in `words`.
+`id` values are unique across the deck files. Every id in `requires` appears earlier in teaching order.
+
+## Decks
+
+Teaching order is `deck/words.json`, then `deck/words-2.json`, `deck/words-3.json`, and so on, by the number in the name. `words-2.json` comes before `words-10.json`. `tepi check` and `tepi thesaurus --deck` read every one of those files. `--deck-file PATH` checks that file only and merges its rows into the saved result, leaving the other deck's rows in place.
 
 ## What one day does
 
@@ -93,13 +98,15 @@ tepi rate missed
 tepi log
 tepi dict selamat
 tepi check
+tepi check --deck-file deck/words-2.json
 tepi thesaurus rumah
 tepi thesaurus --deck
+tepi thesaurus --deck-file deck/words-2.json
 ```
 
 `today` shows one word and hides the gloss on a new word or a review. `reveal` shows the meaning. `rate` is for a review, and it shows the meaning either way. A new word waits until tomorrow. `log` lists settled words, words still in play, and the last seven days. `log --all` prints the whole diary.
 
-`today --json`, `reveal --json`, `rate known --json`, and `log --json` print the same facts for the bar chip. `dict --json` and `check --json` print the spelling status. `check` needs the network, pauses briefly between words, and writes `deck/kamus.json`. `thesaurus --json` prints the thesaurus status for one lemma. `thesaurus --deck` needs the network, pauses briefly between words, and writes `deck/tesaurus.json`. An unlisted lemma does not fail that command.
+`today --json`, `reveal --json`, `rate known --json`, and `log --json` print the same facts for the bar chip. `dict --json` and `check --json` print the spelling status. `check` needs the network, pauses briefly between words, and writes `deck/kamus.json` for every deck. `check --deck-file` does that for one file and keeps the other rows. `thesaurus --json` prints the thesaurus status for one lemma. `thesaurus --deck` needs the network, pauses briefly between words, and writes `deck/tesaurus.json` for every deck. `thesaurus --deck-file` does that for one file and keeps the other rows. An unlisted lemma does not fail that command.
 
 `TEPI_DATA_DIR` and `TEPI_TODAY` override the log location and the date. The tests use them.
 
@@ -126,6 +133,10 @@ The arc runs from `Selamat pagi` through breakfast, the time of day, getting rea
 `Apa khabar?` is the how-are-you greeting. The gloss of `khabar` stays "news", which is what the word itself means. `makan` is a noun in the thesaurus. `Saya mahu makan` uses the verb, so the gloss stays "eat".
 
 Every lemma in this deck has a row in `deck/kamus.json` from the last `tepi check`, and a row in `deck/tesaurus.json` from the last `tepi thesaurus --deck`. A word the thesaurus does not list stays in the deck.
+
+## Second deck
+
+`deck/words-2.json` is the next 40 words: errands, family, and five root families (`ajar`, `jalan`, `beli`, `main`, `cuci`). The base form is the word whose lemma is the root, and it comes before the derived forms. A derived form requires that base. Most of the register is `neutral`. `tengok`, `nak`, and `tak` are `casual`. New words still arrive at `newPerDay`, and only once every earlier word has been introduced.
 
 ## Build order
 

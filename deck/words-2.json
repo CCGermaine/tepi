@@ -1,0 +1,483 @@
+{
+  "variety": "ms-MY",
+  "orthography": "standard-malaysian",
+  "speech": "peninsular",
+  "words": [
+    {
+      "id": "ajar",
+      "lemma": "ajar",
+      "root": "ajar",
+      "gloss": "teach",
+      "sentence": "Saya mahu ajar.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "belajar",
+      "lemma": "belajar",
+      "root": "ajar",
+      "gloss": "learn",
+      "sentence": "Saya mahu belajar.",
+      "register": "neutral",
+      "requires": [
+        "ajar",
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "pelajar",
+      "lemma": "pelajar",
+      "root": "ajar",
+      "gloss": "student",
+      "sentence": "Saya pelajar.",
+      "register": "neutral",
+      "requires": [
+        "ajar",
+        "saya"
+      ]
+    },
+    {
+      "id": "pelajaran",
+      "lemma": "pelajaran",
+      "root": "ajar",
+      "gloss": "lesson",
+      "sentence": "Ini pelajaran.",
+      "register": "neutral",
+      "requires": [
+        "ajar",
+        "ini"
+      ]
+    },
+    {
+      "id": "jalan",
+      "lemma": "jalan",
+      "root": "jalan",
+      "gloss": "road",
+      "sentence": "Ini jalan.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "berjalan",
+      "lemma": "berjalan",
+      "root": "jalan",
+      "gloss": "walk",
+      "sentence": "Saya berjalan.",
+      "register": "neutral",
+      "requires": [
+        "jalan",
+        "saya"
+      ]
+    },
+    {
+      "id": "perjalanan",
+      "lemma": "perjalanan",
+      "root": "jalan",
+      "gloss": "journey",
+      "sentence": "Ini perjalanan.",
+      "register": "neutral",
+      "requires": [
+        "jalan",
+        "ini"
+      ]
+    },
+    {
+      "id": "jalanan",
+      "lemma": "jalanan",
+      "root": "jalan",
+      "gloss": "streets",
+      "sentence": "Ini jalanan.",
+      "register": "neutral",
+      "requires": [
+        "jalan",
+        "ini"
+      ]
+    },
+    {
+      "id": "beli",
+      "lemma": "beli",
+      "root": "beli",
+      "gloss": "buy",
+      "sentence": "Saya mahu beli.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "membeli",
+      "lemma": "membeli",
+      "root": "beli",
+      "gloss": "buy",
+      "sentence": "Saya mahu membeli.",
+      "register": "neutral",
+      "requires": [
+        "beli",
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "pembeli",
+      "lemma": "pembeli",
+      "root": "beli",
+      "gloss": "buyer",
+      "sentence": "Saya pembeli.",
+      "register": "neutral",
+      "requires": [
+        "beli",
+        "saya"
+      ]
+    },
+    {
+      "id": "belian",
+      "lemma": "belian",
+      "root": "beli",
+      "gloss": "purchase",
+      "sentence": "Ini belian.",
+      "register": "neutral",
+      "requires": [
+        "beli",
+        "ini"
+      ]
+    },
+    {
+      "id": "main",
+      "lemma": "main",
+      "root": "main",
+      "gloss": "play",
+      "sentence": "Saya mahu main.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "bermain",
+      "lemma": "bermain",
+      "root": "main",
+      "gloss": "play",
+      "sentence": "Saya bermain.",
+      "register": "neutral",
+      "requires": [
+        "main",
+        "saya"
+      ]
+    },
+    {
+      "id": "permainan",
+      "lemma": "permainan",
+      "root": "main",
+      "gloss": "game",
+      "sentence": "Ini permainan.",
+      "register": "neutral",
+      "requires": [
+        "main",
+        "ini"
+      ]
+    },
+    {
+      "id": "pemain",
+      "lemma": "pemain",
+      "root": "main",
+      "gloss": "player",
+      "sentence": "Saya pemain.",
+      "register": "neutral",
+      "requires": [
+        "main",
+        "saya"
+      ]
+    },
+    {
+      "id": "cuci",
+      "lemma": "cuci",
+      "root": "cuci",
+      "gloss": "wash",
+      "sentence": "Saya mahu cuci.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "mencuci",
+      "lemma": "mencuci",
+      "root": "cuci",
+      "gloss": "wash",
+      "sentence": "Saya mencuci.",
+      "register": "neutral",
+      "requires": [
+        "cuci",
+        "saya"
+      ]
+    },
+    {
+      "id": "pencuci",
+      "lemma": "pencuci",
+      "root": "cuci",
+      "gloss": "cleaner",
+      "sentence": "Ini pencuci.",
+      "register": "neutral",
+      "requires": [
+        "cuci",
+        "ini"
+      ]
+    },
+    {
+      "id": "cucian",
+      "lemma": "cucian",
+      "root": "cuci",
+      "gloss": "laundry",
+      "sentence": "Ini cucian.",
+      "register": "neutral",
+      "requires": [
+        "cuci",
+        "ini"
+      ]
+    },
+    {
+      "id": "buku",
+      "lemma": "buku",
+      "root": "buku",
+      "gloss": "book",
+      "sentence": "Saya mahu baca buku.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu",
+        "baca"
+      ]
+    },
+    {
+      "id": "kereta",
+      "lemma": "kereta",
+      "root": "kereta",
+      "gloss": "car",
+      "sentence": "Ini kereta.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "bas",
+      "lemma": "bas",
+      "root": "bas",
+      "gloss": "bus",
+      "sentence": "Ini bas.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "kedai",
+      "lemma": "kedai",
+      "root": "kedai",
+      "gloss": "shop",
+      "sentence": "Saya pergi ke kedai.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "pergi",
+        "ke"
+      ]
+    },
+    {
+      "id": "harga",
+      "lemma": "harga",
+      "root": "harga",
+      "gloss": "price",
+      "sentence": "Ini harga.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "wang",
+      "lemma": "wang",
+      "root": "wang",
+      "gloss": "money",
+      "sentence": "Saya ada wang.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "ada"
+      ]
+    },
+    {
+      "id": "ibu",
+      "lemma": "ibu",
+      "root": "ibu",
+      "gloss": "mother",
+      "sentence": "Ini ibu saya.",
+      "register": "neutral",
+      "requires": [
+        "ini",
+        "saya"
+      ]
+    },
+    {
+      "id": "ayah",
+      "lemma": "ayah",
+      "root": "ayah",
+      "gloss": "father",
+      "sentence": "Ini ayah saya.",
+      "register": "neutral",
+      "requires": [
+        "ini",
+        "saya"
+      ]
+    },
+    {
+      "id": "anak",
+      "lemma": "anak",
+      "root": "anak",
+      "gloss": "child",
+      "sentence": "Ini anak saya.",
+      "register": "neutral",
+      "requires": [
+        "ini",
+        "saya"
+      ]
+    },
+    {
+      "id": "sekolah",
+      "lemma": "sekolah",
+      "root": "sekolah",
+      "gloss": "school",
+      "sentence": "Saya pergi ke sekolah.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "pergi",
+        "ke"
+      ]
+    },
+    {
+      "id": "guru",
+      "lemma": "guru",
+      "root": "guru",
+      "gloss": "teacher",
+      "sentence": "Ini guru.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "sakit",
+      "lemma": "sakit",
+      "root": "sakit",
+      "gloss": "ill",
+      "sentence": "Saya sakit.",
+      "register": "neutral",
+      "requires": [
+        "saya"
+      ]
+    },
+    {
+      "id": "ubat",
+      "lemma": "ubat",
+      "root": "ubat",
+      "gloss": "medicine",
+      "sentence": "Saya mahu ubat.",
+      "register": "neutral",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "hujan",
+      "lemma": "hujan",
+      "root": "hujan",
+      "gloss": "rain",
+      "sentence": "Hari ini hujan.",
+      "register": "neutral",
+      "requires": [
+        "hari",
+        "ini"
+      ]
+    },
+    {
+      "id": "minggu",
+      "lemma": "minggu",
+      "root": "minggu",
+      "gloss": "week",
+      "sentence": "Ini minggu.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "baju",
+      "lemma": "baju",
+      "root": "baju",
+      "gloss": "clothes",
+      "sentence": "Ini baju.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "kasut",
+      "lemma": "kasut",
+      "root": "kasut",
+      "gloss": "shoe",
+      "sentence": "Ini kasut.",
+      "register": "neutral",
+      "requires": [
+        "ini"
+      ]
+    },
+    {
+      "id": "tengok",
+      "lemma": "tengok",
+      "root": "tengok",
+      "gloss": "look",
+      "sentence": "Saya mahu tengok.",
+      "register": "casual",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    },
+    {
+      "id": "nak",
+      "lemma": "nak",
+      "root": "nak",
+      "gloss": "want",
+      "sentence": "Saya nak air.",
+      "register": "casual",
+      "requires": [
+        "saya",
+        "air"
+      ]
+    },
+    {
+      "id": "tak",
+      "lemma": "tak",
+      "root": "tak",
+      "gloss": "not",
+      "sentence": "Saya tak mahu.",
+      "register": "casual",
+      "requires": [
+        "saya",
+        "mahu"
+      ]
+    }
+  ]
+}

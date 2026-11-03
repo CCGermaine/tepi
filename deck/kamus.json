@@ -1,6 +1,6 @@
 {
   "authority": "kamus-dewan-perdana",
-  "checked": "2026-09-30",
+  "checked": "2026-11-03",
   "words": [
     {
       "id": "selamat",
@@ -355,6 +355,206 @@
     {
       "id": "tadi",
       "lemma": "tadi",
+      "status": "headword"
+    },
+    {
+      "id": "ajar",
+      "lemma": "ajar",
+      "status": "headword"
+    },
+    {
+      "id": "belajar",
+      "lemma": "belajar",
+      "status": "headword"
+    },
+    {
+      "id": "pelajar",
+      "lemma": "pelajar",
+      "status": "derivative"
+    },
+    {
+      "id": "pelajaran",
+      "lemma": "pelajaran",
+      "status": "derivative"
+    },
+    {
+      "id": "jalan",
+      "lemma": "jalan",
+      "status": "headword"
+    },
+    {
+      "id": "berjalan",
+      "lemma": "berjalan",
+      "status": "derivative"
+    },
+    {
+      "id": "perjalanan",
+      "lemma": "perjalanan",
+      "status": "derivative"
+    },
+    {
+      "id": "jalanan",
+      "lemma": "jalanan",
+      "status": "derivative"
+    },
+    {
+      "id": "beli",
+      "lemma": "beli",
+      "status": "headword"
+    },
+    {
+      "id": "membeli",
+      "lemma": "membeli",
+      "status": "derivative"
+    },
+    {
+      "id": "pembeli",
+      "lemma": "pembeli",
+      "status": "derivative"
+    },
+    {
+      "id": "belian",
+      "lemma": "belian",
+      "status": "headword"
+    },
+    {
+      "id": "main",
+      "lemma": "main",
+      "status": "headword"
+    },
+    {
+      "id": "bermain",
+      "lemma": "bermain",
+      "status": "derivative"
+    },
+    {
+      "id": "permainan",
+      "lemma": "permainan",
+      "status": "derivative"
+    },
+    {
+      "id": "pemain",
+      "lemma": "pemain",
+      "status": "derivative"
+    },
+    {
+      "id": "cuci",
+      "lemma": "cuci",
+      "status": "headword"
+    },
+    {
+      "id": "mencuci",
+      "lemma": "mencuci",
+      "status": "derivative"
+    },
+    {
+      "id": "pencuci",
+      "lemma": "pencuci",
+      "status": "derivative"
+    },
+    {
+      "id": "cucian",
+      "lemma": "cucian",
+      "status": "derivative"
+    },
+    {
+      "id": "buku",
+      "lemma": "buku",
+      "status": "headword"
+    },
+    {
+      "id": "kereta",
+      "lemma": "kereta",
+      "status": "headword"
+    },
+    {
+      "id": "bas",
+      "lemma": "bas",
+      "status": "headword"
+    },
+    {
+      "id": "kedai",
+      "lemma": "kedai",
+      "status": "headword"
+    },
+    {
+      "id": "harga",
+      "lemma": "harga",
+      "status": "headword"
+    },
+    {
+      "id": "wang",
+      "lemma": "wang",
+      "status": "headword"
+    },
+    {
+      "id": "ibu",
+      "lemma": "ibu",
+      "status": "headword"
+    },
+    {
+      "id": "ayah",
+      "lemma": "ayah",
+      "status": "headword"
+    },
+    {
+      "id": "anak",
+      "lemma": "anak",
+      "status": "headword"
+    },
+    {
+      "id": "sekolah",
+      "lemma": "sekolah",
+      "status": "headword"
+    },
+    {
+      "id": "guru",
+      "lemma": "guru",
+      "status": "headword"
+    },
+    {
+      "id": "sakit",
+      "lemma": "sakit",
+      "status": "headword"
+    },
+    {
+      "id": "ubat",
+      "lemma": "ubat",
+      "status": "headword"
+    },
+    {
+      "id": "hujan",
+      "lemma": "hujan",
+      "status": "headword"
+    },
+    {
+      "id": "minggu",
+      "lemma": "minggu",
+      "status": "headword"
+    },
+    {
+      "id": "baju",
+      "lemma": "baju",
+      "status": "headword"
+    },
+    {
+      "id": "kasut",
+      "lemma": "kasut",
+      "status": "headword"
+    },
+    {
+      "id": "tengok",
+      "lemma": "tengok",
+      "status": "headword"
+    },
+    {
+      "id": "nak",
+      "lemma": "nak",
+      "status": "headword"
+    },
+    {
+      "id": "tak",
+      "lemma": "tak",
       "status": "headword"
     }
   ]

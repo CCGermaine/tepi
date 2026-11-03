@@ -1,5 +1,6 @@
 import json
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 
@@ -64,9 +65,6 @@ def load_deck(path: Path) -> Deck:
         requires = item.get("requires", [])
         if not isinstance(requires, list) or not all(isinstance(req, str) and req for req in requires):
             raise TepiError(f"{word_id} has a requires list Tepi cannot read.")
-        for req in requires:
-            if req not in seen:
-                raise TepiError(f"{word_id} requires {req}, which is not earlier in the deck.")
         entries.append(
             Entry(
                 id=word_id,
@@ -80,7 +78,68 @@ def load_deck(path: Path) -> Deck:
             )
         )
         seen[word_id] = index
+    for entry in entries:
+        for req in entry.requires:
+            earlier = seen.get(req)
+            if earlier is not None and earlier >= entry.index:
+                raise TepiError(f"{entry.id} requires {req}, which is not earlier in the deck.")
     return Deck(tuple(entries))
+
+
+# words.json, then words-2.json, words-3.json, and so on.
+_DECK_FILE = re.compile(r"^words(?:-([1-9]\d*))?\.json$")
+
+
+def deck_paths(directory: Path) -> tuple[Path, ...]:
+    """Deck files in teaching order.
+
+    `words.json` is first. `words-N.json` follows by N, so `words-2.json`
+    comes before `words-10.json`. `words.schema.json` is not a deck.
+    """
+    directory = Path(directory)
+    numbered: list[tuple[int, str, Path]] = []
+    try:
+        names = list(directory.iterdir())
+    except OSError as err:
+        raise TepiError(f"Could not read the deck directory {directory}.") from err
+    for path in names:
+        match = _DECK_FILE.match(path.name)
+        if match is None or not path.is_file():
+            continue
+        number = int(match.group(1)) if match.group(1) else 0
+        numbered.append((number, path.name, path))
+    numbered.sort()
+    if not numbered or numbered[0][0] != 0:
+        raise TepiError(f"The deck directory {directory} has no words.json.")
+    return tuple(path for _, _, path in numbered)
+
+
+def load_decks(paths) -> Deck:
+    """Load deck files in the order given and number the words from the start."""
+    parts: list[Deck] = []
+    located: dict[str, int] = {}
+    for path in paths:
+        part = load_deck(Path(path))
+        for entry in part.entries:
+            if entry.id in located:
+                raise TepiError(f"The decks repeat the id {entry.id!r}.")
+            located[entry.id] = len(located)
+        parts.append(part)
+    combined: list[Entry] = []
+    for part in parts:
+        for entry in part.entries:
+            for req in entry.requires:
+                if req not in located:
+                    raise TepiError(f"{entry.id} requires {req}, which is not in the decks.")
+                if located[req] >= located[entry.id]:
+                    raise TepiError(f"{entry.id} requires {req}, which is not earlier in the decks.")
+            combined.append(replace(entry, index=len(combined)))
+    return Deck(tuple(combined))
+
+
+def load_curriculum(root: Path) -> Deck:
+    """Load every deck under `root/deck` in teaching order."""
+    return load_decks(deck_paths(Path(root) / "deck"))
 
 
 def load_config(path: Path) -> Config:
