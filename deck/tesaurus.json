@@ -379,6 +379,217 @@
       "lemma": "tadi",
       "status": "listed",
       "class": "adverb"
+    },
+    {
+      "id": "ajar",
+      "lemma": "ajar",
+      "status": "unlisted"
+    },
+    {
+      "id": "belajar",
+      "lemma": "belajar",
+      "status": "unlisted"
+    },
+    {
+      "id": "pelajar",
+      "lemma": "pelajar",
+      "status": "unlisted"
+    },
+    {
+      "id": "pelajaran",
+      "lemma": "pelajaran",
+      "status": "unlisted"
+    },
+    {
+      "id": "jalan",
+      "lemma": "jalan",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "berjalan",
+      "lemma": "berjalan",
+      "status": "unlisted"
+    },
+    {
+      "id": "perjalanan",
+      "lemma": "perjalanan",
+      "status": "unlisted"
+    },
+    {
+      "id": "jalanan",
+      "lemma": "jalanan",
+      "status": "unlisted"
+    },
+    {
+      "id": "beli",
+      "lemma": "beli",
+      "status": "unlisted"
+    },
+    {
+      "id": "membeli",
+      "lemma": "membeli",
+      "status": "unlisted"
+    },
+    {
+      "id": "pembeli",
+      "lemma": "pembeli",
+      "status": "unlisted"
+    },
+    {
+      "id": "belian",
+      "lemma": "belian",
+      "status": "unlisted"
+    },
+    {
+      "id": "main",
+      "lemma": "main",
+      "status": "listed"
+    },
+    {
+      "id": "bermain",
+      "lemma": "bermain",
+      "status": "unlisted"
+    },
+    {
+      "id": "permainan",
+      "lemma": "permainan",
+      "status": "unlisted"
+    },
+    {
+      "id": "pemain",
+      "lemma": "pemain",
+      "status": "unlisted"
+    },
+    {
+      "id": "cuci",
+      "lemma": "cuci",
+      "status": "unlisted"
+    },
+    {
+      "id": "baju",
+      "lemma": "baju",
+      "status": "unlisted"
+    },
+    {
+      "id": "mencuci",
+      "lemma": "mencuci",
+      "status": "unlisted"
+    },
+    {
+      "id": "pencuci",
+      "lemma": "pencuci",
+      "status": "unlisted"
+    },
+    {
+      "id": "cucian",
+      "lemma": "cucian",
+      "status": "unlisted"
+    },
+    {
+      "id": "buku",
+      "lemma": "buku",
+      "status": "unlisted"
+    },
+    {
+      "id": "kereta",
+      "lemma": "kereta",
+      "status": "unlisted"
+    },
+    {
+      "id": "bas",
+      "lemma": "bas",
+      "status": "unlisted"
+    },
+    {
+      "id": "kedai",
+      "lemma": "kedai",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "harga",
+      "lemma": "harga",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "wang",
+      "lemma": "wang",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "ibu",
+      "lemma": "ibu",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "ayah",
+      "lemma": "ayah",
+      "status": "unlisted"
+    },
+    {
+      "id": "anak",
+      "lemma": "anak",
+      "status": "unlisted"
+    },
+    {
+      "id": "sekolah",
+      "lemma": "sekolah",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "guru",
+      "lemma": "guru",
+      "status": "unlisted"
+    },
+    {
+      "id": "sakit",
+      "lemma": "sakit",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "ubat",
+      "lemma": "ubat",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "hujan",
+      "lemma": "hujan",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "minggu",
+      "lemma": "minggu",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "kasut",
+      "lemma": "kasut",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "tengok",
+      "lemma": "tengok",
+      "status": "listed"
+    },
+    {
+      "id": "nak",
+      "lemma": "nak",
+      "status": "unlisted"
+    },
+    {
+      "id": "tak",
+      "lemma": "tak",
+      "status": "unlisted"
     }
   ]
 }
