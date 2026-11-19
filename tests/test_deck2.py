@@ -1,100 +1,20 @@
 """Deck 2 content: forty attested words, root families, and closed sentences."""
 
 import json
-import re
 import unittest
 from pathlib import Path
 
 import _guard  # noqa: F401  -- patch load_config before tepi binds it
 from tepi.deck import load_deck
 from tepi.kamus import MISSING, load_attestation
+from tepi.sentence import active_form as _active_form, tokens as _tokens, unknown as _unknown
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK2 = ROOT / "deck" / "words-2.json"
 
-# Closed-class words a sentence may use besides lemmas already taught.
-FUNCTION_WORDS = frozenset(
-    {
-        "yang",
-        "untuk",
-        "dengan",
-        "pada",
-        "kepada",
-        "daripada",
-        "oleh",
-        "itu",
-        "atau",
-        "kalau",
-        "jika",
-        "kerana",
-        "sebab",
-        "pun",
-        "lah",
-        "kah",
-        "tah",
-        "nya",
-        "akan",
-        "telah",
-        "sedang",
-        "supaya",
-        "agar",
-        "dalam",
-        "atas",
-        "bawah",
-        "tentang",
-    }
-)
-
-_TOKEN = re.compile(r"[^\w\s-]+", re.UNICODE)
-
-
-def _tokens(sentence: str) -> list[str]:
-    return [token for token in _TOKEN.sub(" ", sentence.casefold()).split() if token]
-
-
-def _phrases(lemmas: set[str]) -> list[tuple[str, ...]]:
-    return sorted((tuple(lemma.casefold().split()) for lemma in lemmas), key=len, reverse=True)
-
-
-# Derived forms deck 2 sentences actually use. Any other meN- or ber- shape stays unknown.
-_ACTIVE_FORMS = {
-    "ajar": frozenset({"mengajar"}),
-    "jalan": frozenset({"berjalan"}),
-    "beli": frozenset({"membeli"}),
-    "main": frozenset({"bermain"}),
-    "cuci": frozenset({"mencuci"}),
-}
-
-
-def _active_form(token: str, lemmas: set[str]) -> bool:
-    known = {lemma.casefold() for lemma in lemmas}
-    folded = token.casefold()
-    for root, forms in _ACTIVE_FORMS.items():
-        if root in known and folded in forms:
-            return True
-    return False
-
-
-def _unknown(tokens: list[str], lemmas: set[str]) -> list[str]:
-    phrases = _phrases(lemmas)
-    unknown = []
-    index = 0
-    while index < len(tokens):
-        matched = False
-        for phrase in phrases:
-            size = len(phrase)
-            if tuple(tokens[index : index + size]) == phrase:
-                index += size
-                matched = True
-                break
-        if matched:
-            continue
-        if tokens[index] in FUNCTION_WORDS or _active_form(tokens[index], lemmas):
-            index += 1
-            continue
-        unknown.append(tokens[index])
-        index += 1
-    return unknown
+# The tokenizer, the function-word allow-list and the active-form allow-list
+# now live in tepi.sentence, imported above, so the command and these tests
+# share one copy.
 
 
 class Deck2ContentTest(unittest.TestCase):

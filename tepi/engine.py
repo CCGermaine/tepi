@@ -4,6 +4,8 @@ from datetime import date, datetime, timedelta
 
 from tepi.db import connect
 from tepi.deck import Config, Deck, Entry, TepiError
+from tepi.kamus import MISSING
+from tepi.sentence import tokens, unknown
 
 RATINGS = ("known", "fuzzy", "missed")
 
@@ -88,6 +90,46 @@ def cousins_of(deck: Deck, entry: Entry) -> tuple[str, ...]:
         if any(member.id == entry.id for member in family.members):
             return tuple(member.lemma for member in family.members if member.id != entry.id)
     return ()
+
+
+@dataclass(frozen=True)
+class Prompt:
+    entry: Entry
+    sentence: str
+
+
+def attested_settled(settled, attestation) -> tuple[Learned, ...]:
+    """Settled words whose spelling the saved dictionary check attests.
+
+    A settled word with no row, or a row marked missing, is left out. The
+    incoming order (teaching order) is kept.
+    """
+    rows = {row["id"]: row for row in attestation["words"]}
+    usable = []
+    for item in settled:
+        row = rows.get(item.entry.id)
+        if row and row["lemma"] == item.entry.lemma and row["status"] != MISSING:
+            usable.append(item)
+    return tuple(usable)
+
+
+def prompt_sentence(settled, attestation) -> Prompt | None:
+    """The first settled, attested word whose own sentence can be formed.
+
+    A sentence qualifies when it has at most 12 tokens and every non-function
+    word is itself a settled, attested lemma. Only a sentence already in the
+    deck is returned, so no spelling is invented. Returns None when no settled
+    word can form its sentence. Reads no progress log; the caller passes the
+    settled words.
+    """
+    usable = attested_settled(settled, attestation)
+    allowed = {item.entry.lemma for item in usable}
+    for item in usable:
+        sentence = item.entry.sentence
+        toks = tokens(sentence)
+        if toks and len(toks) <= 12 and not unknown(toks, allowed, active=False):
+            return Prompt(item.entry, sentence)
+    return None
 
 
 class Session:

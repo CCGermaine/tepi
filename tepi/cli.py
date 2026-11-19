@@ -8,7 +8,16 @@ from datetime import date
 from pathlib import Path
 
 from tepi.deck import TepiError, load_config, load_curriculum, load_deck
-from tepi.engine import LearningLog, Presentation, Rated, Session, cousin_families, cousins_of
+from tepi.engine import (
+    LearningLog,
+    Presentation,
+    Rated,
+    Session,
+    attested_settled,
+    cousin_families,
+    cousins_of,
+    prompt_sentence,
+)
 from tepi.kamus import (
     MISSING,
     Kamus,
@@ -61,6 +70,15 @@ def main(argv: list[str] | None = None) -> int:
         elif args.cmd == "log":
             learned = session.learning_log(None if args.all else 7)
             _emit(log_payload(learned) if args.json else _format_log(learned), args.json)
+        elif args.cmd == "prompt":
+            learned = session.learning_log(None)
+            if not learned.settled:
+                usable, prompt = 0, None
+            else:
+                attestation = load_attestation(ATTESTATION_PATH)
+                usable = len(attested_settled(learned.settled, attestation))
+                prompt = prompt_sentence(learned.settled, attestation)
+            _emit(prompt_payload(prompt, usable) if args.json else _format_prompt(prompt, usable), args.json)
         else:
             raise TepiError("Unknown command.")
     except TepiError as err:
@@ -112,6 +130,25 @@ def log_payload(learned: LearningLog) -> dict:
     }
 
 
+def prompt_payload(prompt, settled_count: int) -> dict:
+    if prompt is None:
+        message = "No settled words yet." if settled_count == 0 else "No settled sentence yet."
+        return {"sentence": None, "word": None, "settled": settled_count, "message": message}
+    return {
+        "sentence": prompt.sentence,
+        "word": {"id": prompt.entry.id, "lemma": prompt.entry.lemma},
+        "settled": settled_count,
+        "message": None,
+    }
+
+
+def _format_prompt(prompt, settled_count: int) -> str:
+    if prompt is None:
+        message = "No settled words yet." if settled_count == 0 else "No settled sentence yet."
+        return message + "\n"
+    return prompt.sentence + "\n"
+
+
 def _session() -> Session:
     raw_today = os.environ.get("TEPI_TODAY")
     today = date.fromisoformat(raw_today) if raw_today else date.today()
@@ -143,6 +180,8 @@ def _parser() -> argparse.ArgumentParser:
     rate = commands.add_parser("rate", help="Record a review of the current word")
     rate.add_argument("rating", choices=("known", "fuzzy", "missed"))
     rate.add_argument("--json", action="store_true")
+    prompt = commands.add_parser("prompt", help="Build a short sentence from settled words only")
+    prompt.add_argument("--json", action="store_true")
     lookup = commands.add_parser("dict", help="Ask Kamus Dewan Perdana about one spelling")
     lookup.add_argument("words", nargs="+")
     lookup.add_argument("--json", action="store_true")
