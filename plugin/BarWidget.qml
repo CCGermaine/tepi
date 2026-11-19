@@ -45,6 +45,8 @@ BarWidget {
   readonly property string faceLemma: face && face.lemma ? String(face.lemma) : ""
   readonly property string faceGloss: face && face.gloss ? String(face.gloss) : ""
   readonly property string faceSentence: face && face.sentence ? String(face.sentence) : ""
+  readonly property var faceCousins: face && face.cousins ? face.cousins : []
+  readonly property string cousinsCaption: faceCousins.length > 0 ? "cousins: " + faceCousins.join(", ") : ""
   readonly property bool showRatings: faceMode === "review" && !rated
   readonly property string caption: {
     if (rated && rateNote) return rateNote
@@ -134,6 +136,7 @@ BarWidget {
       lemma: String(word.lemma),
       gloss: word.gloss ? String(word.gloss) : "",
       sentence: word.sentence ? String(word.sentence) : "",
+      cousins: word.cousins ? word.cousins.map(String) : [],
       mode: String(payload.mode || "")
     }
   }
@@ -181,6 +184,7 @@ BarWidget {
           lemma: String(payload.word.lemma || faceLemma),
           gloss: payload.word.gloss ? String(payload.word.gloss) : "",
           sentence: payload.word.sentence ? String(payload.word.sentence) : "",
+          cousins: payload.word.cousins ? payload.word.cousins.map(String) : [],
           mode: "review"
         }
       }
@@ -304,6 +308,17 @@ BarWidget {
         font.family: root.inkFont
         font.pixelSize: Style.font.subtitle
         font.bold: true
+        wrapMode: Text.WordWrap
+      }
+
+      Text {
+        width: column.width
+        visible: text !== ""
+        textFormat: Text.PlainText
+        text: root.cousinsCaption
+        color: Qt.darker(root.popupInk, 1.55)
+        font.family: root.inkFont
+        font.pixelSize: Style.font.caption
         wrapMode: Text.WordWrap
       }
 

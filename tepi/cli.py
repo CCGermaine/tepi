@@ -8,7 +8,7 @@ from datetime import date
 from pathlib import Path
 
 from tepi.deck import TepiError, load_config, load_curriculum, load_deck
-from tepi.engine import LearningLog, Presentation, Rated, Session
+from tepi.engine import LearningLog, Presentation, Rated, Session, cousin_families, cousins_of
 from tepi.kamus import (
     MISSING,
     Kamus,
@@ -41,6 +41,8 @@ def main(argv: list[str] | None = None) -> int:
         return _dictionary(args)
     if args.cmd == "thesaurus":
         return _thesaurus(args)
+    if args.cmd == "cousins":
+        return _cousins(args)
     try:
         session = _session()
     except TepiError as err:
@@ -49,13 +51,13 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.cmd == "today":
             card = session.presentation()
-            _emit(card_payload(card) if args.json else _format_today(card), args.json)
+            _emit(card_payload(card, session.deck) if args.json else _format_today(card), args.json)
         elif args.cmd == "reveal":
             card = session.reveal()
-            _emit(card_payload(card) if args.json else _format_revealed(card), args.json)
+            _emit(card_payload(card, session.deck) if args.json else _format_revealed(card), args.json)
         elif args.cmd == "rate":
             rated = session.rate(args.rating)
-            _emit(rated_payload(rated) if args.json else _format_rated(rated), args.json)
+            _emit(rated_payload(rated, session.deck) if args.json else _format_rated(rated), args.json)
         elif args.cmd == "log":
             learned = session.learning_log(None if args.all else 7)
             _emit(log_payload(learned) if args.json else _format_log(learned), args.json)
@@ -72,9 +74,10 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def card_payload(card: Presentation) -> dict:
+def card_payload(card: Presentation, deck=None) -> dict:
     show = card.revealed or card.mode == "rest"
-    word = None if card.entry is None else _word(card.entry, show)
+    cousins = cousins_of(deck, card.entry) if deck is not None and card.entry is not None else ()
+    word = None if card.entry is None else _word(card.entry, show, cousins)
     return {
         "date": card.date.isoformat(),
         "mode": card.mode,
@@ -86,13 +89,14 @@ def card_payload(card: Presentation) -> dict:
     }
 
 
-def rated_payload(rated: Rated) -> dict:
+def rated_payload(rated: Rated, deck=None) -> dict:
+    cousins = cousins_of(deck, rated.entry) if deck is not None else ()
     return {
         "rating": rated.rating,
         "due": rated.due.isoformat() if rated.due else None,
         "state": rated.state,
         "intervalIndex": rated.interval_index,
-        "word": _word(rated.entry, True),
+        "word": _word(rated.entry, True, cousins),
     }
 
 
@@ -161,6 +165,9 @@ def _parser() -> argparse.ArgumentParser:
         help="Check one deck file and merge those rows into deck/tesaurus.json",
     )
     thesaurus.add_argument("--json", action="store_true")
+    cousins = commands.add_parser("cousins", help="Show the root family of a word, or every family")
+    cousins.add_argument("id", nargs="?", help="A deck id. Without it, every family is shown.")
+    cousins.add_argument("--json", action="store_true")
     return parser
 
 
@@ -236,6 +243,47 @@ def _thesaurus(args) -> int:
     except TepiError as err:
         print(err, file=sys.stderr)
         return 2
+
+
+def _cousins(args) -> int:
+    """Read the deck only. The progress log is never opened."""
+    try:
+        deck = load_curriculum(ROOT)
+        families = cousin_families(deck)
+        if args.id:
+            entry = deck.entry(args.id)
+            family = next((f for f in families if any(m.id == entry.id for m in f.members)), None)
+            if family is None:
+                payload = {"id": entry.id, "lemma": entry.lemma, "root": entry.root, "cousins": []}
+                _emit(payload if args.json else f"{entry.lemma} has no cousins.\n", args.json)
+                return 0
+            _emit(_family_payload(family) if args.json else _format_family(family), args.json)
+            return 0
+        payload = {"families": [_family_payload(family) for family in families]}
+        _emit(payload if args.json else _format_families(families), args.json)
+        return 0
+    except TepiError as err:
+        print(err, file=sys.stderr)
+        return 2
+
+
+def _family_payload(family) -> dict:
+    return {
+        "root": family.root,
+        "members": [{"id": m.id, "lemma": m.lemma, "index": m.index} for m in family.members],
+    }
+
+
+def _format_family(family) -> str:
+    lines = [f"{family.root}  ·  {len(family.members)} words"]
+    lines.extend(f"  {member.lemma}" for member in family.members)
+    return "\n".join(lines) + "\n"
+
+
+def _format_families(families) -> str:
+    if not families:
+        return "No root families yet.\n"
+    return "\n".join(_format_family(family) for family in families) + "\n"
 
 
 def _open_check_deck(deck_file: Path | None):
@@ -414,7 +462,7 @@ def _hint(card: Presentation) -> str:
     return ""
 
 
-def _word(entry, show: bool) -> dict:
+def _word(entry, show: bool, cousins=()) -> dict:
     return {
         "id": entry.id,
         "lemma": entry.lemma,
@@ -422,6 +470,7 @@ def _word(entry, show: bool) -> dict:
         "register": entry.register,
         "gloss": entry.gloss if show else None,
         "sentence": entry.sentence if show else None,
+        "cousins": list(cousins),
     }
 
 

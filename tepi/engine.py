@@ -61,6 +61,35 @@ class LearningLog:
     deck_size: int
 
 
+@dataclass(frozen=True)
+class Family:
+    root: str
+    members: tuple[Entry, ...]
+
+
+def cousin_families(deck: Deck) -> tuple[Family, ...]:
+    """Root families with two or more members, derived from the deck alone.
+
+    Members keep teaching order. Families are ordered by the teaching index of
+    their first member. A root with a single word has no cousins and is left out.
+    This reads no progress log.
+    """
+    groups: dict[str, list[Entry]] = {}
+    for entry in deck.entries:
+        groups.setdefault(entry.root, []).append(entry)
+    families = [Family(root, tuple(members)) for root, members in groups.items() if len(members) >= 2]
+    families.sort(key=lambda family: family.members[0].index)
+    return tuple(families)
+
+
+def cousins_of(deck: Deck, entry: Entry) -> tuple[str, ...]:
+    """The other lemmas in this word's family, in teaching order."""
+    for family in cousin_families(deck):
+        if any(member.id == entry.id for member in family.members):
+            return tuple(member.lemma for member in family.members if member.id != entry.id)
+    return ()
+
+
 class Session:
     def __init__(self, conn, deck: Deck, config: Config, today: date):
         self.conn = conn
