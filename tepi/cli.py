@@ -77,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 attestation = load_attestation(ATTESTATION_PATH)
                 usable = len(attested_settled(learned.settled, attestation))
-                prompt = prompt_sentence(learned.settled, attestation)
+                prompt = prompt_sentence(learned.settled, attestation, args.about)
             _emit(prompt_payload(prompt, usable) if args.json else _format_prompt(prompt, usable), args.json)
         else:
             raise TepiError("Unknown command.")
@@ -182,6 +182,7 @@ def _parser() -> argparse.ArgumentParser:
     rate.add_argument("--json", action="store_true")
     prompt = commands.add_parser("prompt", help="Build a short sentence from settled words only")
     prompt.add_argument("--json", action="store_true")
+    prompt.add_argument("--about", help="Prefer a settled word or cousin matching this hint")
     lookup = commands.add_parser("dict", help="Ask Kamus Dewan Perdana about one spelling")
     lookup.add_argument("words", nargs="+")
     lookup.add_argument("--json", action="store_true")

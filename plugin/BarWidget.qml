@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import qs.Ui
 import qs.Commons
 
@@ -24,6 +25,7 @@ BarWidget {
   property bool ratingBusy: false
   property string rateNote: ""
   property string statusLine: ""
+  property string promptSentence: ""
   property bool refreshQueued: false
   property string job: ""
   property string queuedKind: ""
@@ -47,6 +49,14 @@ BarWidget {
   readonly property string faceSentence: face && face.sentence ? String(face.sentence) : ""
   readonly property var faceCousins: face && face.cousins ? face.cousins : []
   readonly property string cousinsCaption: faceCousins.length > 0 ? "cousins: " + faceCousins.join(", ") : ""
+  // Read-only workspace signal: the focused monitor's active workspace, the
+  // same Quickshell.Hyprland read the shell's own Workspaces widget uses. Its
+  // name becomes the --about hint. No dispatch, no new dependency.
+  readonly property var activeWorkspace: {
+    var monitor = Hyprland.focusedMonitor
+    return monitor && monitor.activeWorkspace ? monitor.activeWorkspace : null
+  }
+  readonly property string workspaceHint: activeWorkspace && activeWorkspace.name ? String(activeWorkspace.name) : ""
   readonly property bool showRatings: faceMode === "review" && !rated
   readonly property string caption: {
     if (rated && rateNote) return rateNote
@@ -69,6 +79,7 @@ BarWidget {
   function present() {
     if (!hasWord || popupOpen || wantPopup) return
     statusLine = ""
+    promptSentence = ""
     rated = false
     rateNote = ""
     var needsReveal = (mode === "new" || mode === "review") && card.revealed !== true
@@ -81,6 +92,7 @@ BarWidget {
     if (!next) return
     face = next
     popupOpen = true
+    requestPrompt()
   }
 
   function dismiss() {
@@ -104,6 +116,10 @@ BarWidget {
     request("today", "")
   }
 
+  function requestPrompt() {
+    request("prompt", "")
+  }
+
   function request(kind, rating) {
     if (tepiProc.running) {
       if (kind === "today") {
@@ -124,6 +140,10 @@ BarWidget {
     if (kind === "rate") ratingBusy = true
     var command = [tepiBin]
     if (kind === "rate") command.push("rate", rating, "--json")
+    else if (kind === "prompt") {
+      command.push("prompt", "--json")
+      if (root.workspaceHint !== "") command.push("--about", root.workspaceHint)
+    }
     else command.push(kind, "--json")
     tepiProc.command = command
     tepiProc.running = true
@@ -162,6 +182,10 @@ BarWidget {
       if (kind === "rate") statusLine = "That rating did not save."
       return
     }
+    if (kind === "prompt") {
+      promptSentence = payload.sentence ? String(payload.sentence) : ""
+      return
+    }
     if (kind === "today") {
       if ((payload.word && payload.word.lemma) || payload.mode === "empty") card = payload
       return
@@ -172,7 +196,9 @@ BarWidget {
         face = revealed
         rated = false
         rateNote = ""
+        promptSentence = ""
         popupOpen = true
+        requestPrompt()
       }
       return
     }
@@ -341,6 +367,18 @@ BarWidget {
         color: Qt.darker(root.popupInk, 1.35)
         font.family: root.inkFont
         font.pixelSize: Style.font.bodySmall
+        wrapMode: Text.WordWrap
+      }
+
+      Text {
+        width: column.width
+        visible: text !== ""
+        textFormat: Text.PlainText
+        text: root.promptSentence
+        color: Qt.darker(root.popupInk, 1.45)
+        font.family: root.inkFont
+        font.pixelSize: Style.font.bodySmall
+        font.italic: true
         wrapMode: Text.WordWrap
       }
 

@@ -113,7 +113,7 @@ def attested_settled(settled, attestation) -> tuple[Learned, ...]:
     return tuple(usable)
 
 
-def prompt_sentence(settled, attestation) -> Prompt | None:
+def prompt_sentence(settled, attestation, about: str | None = None) -> Prompt | None:
     """The first settled, attested word whose own sentence can be formed.
 
     A sentence qualifies when it has at most 12 tokens and every non-function
@@ -121,15 +121,30 @@ def prompt_sentence(settled, attestation) -> Prompt | None:
     deck is returned, so no spelling is invented. Returns None when no settled
     word can form its sentence. Reads no progress log; the caller passes the
     settled words.
+
+    With `about`, a word whose lemma or root matches the hint is preferred —
+    a root match picks a settled cousin. An unmatched hint falls back to the
+    first eligible word, so the hint never breaks the no-op behaviour.
     """
     usable = attested_settled(settled, attestation)
     allowed = {item.entry.lemma for item in usable}
+    eligible = []
     for item in usable:
         sentence = item.entry.sentence
         toks = tokens(sentence)
         if toks and len(toks) <= 12 and not unknown(toks, allowed, active=False):
-            return Prompt(item.entry, sentence)
-    return None
+            eligible.append(item)
+    if not eligible:
+        return None
+    chosen = eligible[0]
+    if about:
+        hint = about.casefold().strip()
+        if hint:
+            for item in eligible:
+                if item.entry.lemma.casefold() == hint or item.entry.root.casefold() == hint:
+                    chosen = item
+                    break
+    return Prompt(chosen.entry, chosen.entry.sentence)
 
 
 class Session:
