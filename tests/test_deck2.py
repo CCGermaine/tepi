@@ -138,9 +138,9 @@ class Deck2ContentTest(unittest.TestCase):
         deck2 = load_deck(DECK2)
         saved = load_attestation(ROOT / "deck" / "kamus.json")
         rows = saved["words"]
-        self.assertEqual(
-            [(row["id"], row["lemma"]) for row in rows],
-            [(entry.id, entry.lemma) for entry in (*deck1.entries, *deck2.entries)],
-        )
-        for row in rows:
+        by_id = {row["id"]: row for row in rows}
+        for entry in (*deck1.entries, *deck2.entries):
+            row = by_id.get(entry.id)
+            self.assertIsNotNone(row, f"{entry.id} missing from kamus.json")
+            self.assertEqual(row["lemma"], entry.lemma)
             self.assertNotEqual(row["status"], MISSING)

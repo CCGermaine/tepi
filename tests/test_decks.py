@@ -329,7 +329,7 @@ class DeckCheckTest(unittest.TestCase):
         self.assertEqual(merged["words"][0]["id"], "selamat")
         self.assertEqual(merged["words"][0]["lemma"], "SELAMAT-SENTINEL")
         self.assertEqual(merged["words"][71]["lemma"], "ajar")
-        self.assertEqual(len(merged["words"]), 111)
+        self.assertEqual(len(merged["words"]), 151)
 
     def test_check_deck_file_keeps_the_top_checked_date(self):
         # A partial check updates the rows it asked about and leaves the date.
@@ -426,4 +426,4 @@ class DeckCheckTest(unittest.TestCase):
         merged = json.loads(dest.read_text(encoding="utf-8"))
         self.assertEqual(merged["words"][0]["lemma"], "SELAMAT-SENTINEL")
         self.assertEqual(merged["words"][71]["lemma"], "ajar")
-        self.assertEqual(len(merged["words"]), 111)
+        self.assertEqual(len(merged["words"]), 151)

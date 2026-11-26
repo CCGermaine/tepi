@@ -590,6 +590,216 @@
       "id": "tak",
       "lemma": "tak",
       "status": "unlisted"
+    },
+    {
+      "id": "bekerja",
+      "lemma": "bekerja",
+      "status": "unlisted"
+    },
+    {
+      "id": "pekerja",
+      "lemma": "pekerja",
+      "status": "unlisted"
+    },
+    {
+      "id": "pekerjaan",
+      "lemma": "pekerjaan",
+      "status": "unlisted"
+    },
+    {
+      "id": "cakap",
+      "lemma": "cakap",
+      "status": "unlisted"
+    },
+    {
+      "id": "bercakap",
+      "lemma": "bercakap",
+      "status": "unlisted"
+    },
+    {
+      "id": "percakapan",
+      "lemma": "percakapan",
+      "status": "unlisted"
+    },
+    {
+      "id": "bayar",
+      "lemma": "bayar",
+      "status": "unlisted"
+    },
+    {
+      "id": "membayar",
+      "lemma": "membayar",
+      "status": "unlisted"
+    },
+    {
+      "id": "bayaran",
+      "lemma": "bayaran",
+      "status": "unlisted"
+    },
+    {
+      "id": "masak",
+      "lemma": "masak",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "memasak",
+      "lemma": "memasak",
+      "status": "unlisted"
+    },
+    {
+      "id": "masakan",
+      "lemma": "masakan",
+      "status": "unlisted"
+    },
+    {
+      "id": "membaca",
+      "lemma": "membaca",
+      "status": "unlisted"
+    },
+    {
+      "id": "pembaca",
+      "lemma": "pembaca",
+      "status": "unlisted"
+    },
+    {
+      "id": "bacaan",
+      "lemma": "bacaan",
+      "status": "unlisted"
+    },
+    {
+      "id": "teh",
+      "lemma": "teh",
+      "status": "unlisted"
+    },
+    {
+      "id": "ais",
+      "lemma": "ais",
+      "status": "unlisted"
+    },
+    {
+      "id": "pedas",
+      "lemma": "pedas",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "manis",
+      "lemma": "manis",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "sedap",
+      "lemma": "sedap",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "pinggan",
+      "lemma": "pinggan",
+      "status": "unlisted"
+    },
+    {
+      "id": "cawan",
+      "lemma": "cawan",
+      "status": "unlisted"
+    },
+    {
+      "id": "sudu",
+      "lemma": "sudu",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "bil",
+      "lemma": "bil",
+      "status": "unlisted"
+    },
+    {
+      "id": "bungkus",
+      "lemma": "bungkus",
+      "status": "unlisted"
+    },
+    {
+      "id": "kanan",
+      "lemma": "kanan",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "kiri",
+      "lemma": "kiri",
+      "status": "unlisted"
+    },
+    {
+      "id": "lurus",
+      "lemma": "lurus",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "jauh",
+      "lemma": "jauh",
+      "status": "listed",
+      "class": "adjective"
+    },
+    {
+      "id": "dekat",
+      "lemma": "dekat",
+      "status": "unlisted"
+    },
+    {
+      "id": "pintu",
+      "lemma": "pintu",
+      "status": "listed",
+      "class": "noun"
+    },
+    {
+      "id": "bilik",
+      "lemma": "bilik",
+      "status": "unlisted"
+    },
+    {
+      "id": "tidur",
+      "lemma": "tidur",
+      "status": "listed",
+      "class": "verb"
+    },
+    {
+      "id": "balik",
+      "lemma": "balik",
+      "status": "unlisted"
+    },
+    {
+      "id": "jumpa",
+      "lemma": "jumpa",
+      "status": "listed"
+    },
+    {
+      "id": "tapi",
+      "lemma": "tapi",
+      "status": "unlisted"
+    },
+    {
+      "id": "dah",
+      "lemma": "dah",
+      "status": "unlisted"
+    },
+    {
+      "id": "saja",
+      "lemma": "saja",
+      "status": "unlisted"
+    },
+    {
+      "id": "macam",
+      "lemma": "macam",
+      "status": "listed"
+    },
+    {
+      "id": "duit",
+      "lemma": "duit",
+      "status": "unlisted"
     }
   ]
 }

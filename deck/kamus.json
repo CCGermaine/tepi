@@ -556,6 +556,206 @@
       "id": "tak",
       "lemma": "tak",
       "status": "headword"
+    },
+    {
+      "id": "bekerja",
+      "lemma": "bekerja",
+      "status": "derivative"
+    },
+    {
+      "id": "pekerja",
+      "lemma": "pekerja",
+      "status": "derivative"
+    },
+    {
+      "id": "pekerjaan",
+      "lemma": "pekerjaan",
+      "status": "derivative"
+    },
+    {
+      "id": "cakap",
+      "lemma": "cakap",
+      "status": "headword"
+    },
+    {
+      "id": "bercakap",
+      "lemma": "bercakap",
+      "status": "derivative"
+    },
+    {
+      "id": "percakapan",
+      "lemma": "percakapan",
+      "status": "derivative"
+    },
+    {
+      "id": "bayar",
+      "lemma": "bayar",
+      "status": "headword"
+    },
+    {
+      "id": "membayar",
+      "lemma": "membayar",
+      "status": "derivative"
+    },
+    {
+      "id": "bayaran",
+      "lemma": "bayaran",
+      "status": "derivative"
+    },
+    {
+      "id": "masak",
+      "lemma": "masak",
+      "status": "headword"
+    },
+    {
+      "id": "memasak",
+      "lemma": "memasak",
+      "status": "derivative"
+    },
+    {
+      "id": "masakan",
+      "lemma": "masakan",
+      "status": "headword"
+    },
+    {
+      "id": "membaca",
+      "lemma": "membaca",
+      "status": "derivative"
+    },
+    {
+      "id": "pembaca",
+      "lemma": "pembaca",
+      "status": "derivative"
+    },
+    {
+      "id": "bacaan",
+      "lemma": "bacaan",
+      "status": "derivative"
+    },
+    {
+      "id": "teh",
+      "lemma": "teh",
+      "status": "headword"
+    },
+    {
+      "id": "ais",
+      "lemma": "ais",
+      "status": "headword"
+    },
+    {
+      "id": "pedas",
+      "lemma": "pedas",
+      "status": "headword"
+    },
+    {
+      "id": "manis",
+      "lemma": "manis",
+      "status": "headword"
+    },
+    {
+      "id": "sedap",
+      "lemma": "sedap",
+      "status": "headword"
+    },
+    {
+      "id": "pinggan",
+      "lemma": "pinggan",
+      "status": "headword"
+    },
+    {
+      "id": "cawan",
+      "lemma": "cawan",
+      "status": "headword"
+    },
+    {
+      "id": "sudu",
+      "lemma": "sudu",
+      "status": "headword"
+    },
+    {
+      "id": "bil",
+      "lemma": "bil",
+      "status": "headword"
+    },
+    {
+      "id": "bungkus",
+      "lemma": "bungkus",
+      "status": "headword"
+    },
+    {
+      "id": "kanan",
+      "lemma": "kanan",
+      "status": "headword"
+    },
+    {
+      "id": "kiri",
+      "lemma": "kiri",
+      "status": "headword"
+    },
+    {
+      "id": "lurus",
+      "lemma": "lurus",
+      "status": "headword"
+    },
+    {
+      "id": "jauh",
+      "lemma": "jauh",
+      "status": "headword"
+    },
+    {
+      "id": "dekat",
+      "lemma": "dekat",
+      "status": "headword"
+    },
+    {
+      "id": "pintu",
+      "lemma": "pintu",
+      "status": "headword"
+    },
+    {
+      "id": "bilik",
+      "lemma": "bilik",
+      "status": "headword"
+    },
+    {
+      "id": "tidur",
+      "lemma": "tidur",
+      "status": "headword"
+    },
+    {
+      "id": "balik",
+      "lemma": "balik",
+      "status": "headword"
+    },
+    {
+      "id": "jumpa",
+      "lemma": "jumpa",
+      "status": "headword"
+    },
+    {
+      "id": "tapi",
+      "lemma": "tapi",
+      "status": "headword"
+    },
+    {
+      "id": "dah",
+      "lemma": "dah",
+      "status": "headword"
+    },
+    {
+      "id": "saja",
+      "lemma": "saja",
+      "status": "headword"
+    },
+    {
+      "id": "macam",
+      "lemma": "macam",
+      "status": "headword"
+    },
+    {
+      "id": "duit",
+      "lemma": "duit",
+      "status": "headword"
     }
   ]
 }

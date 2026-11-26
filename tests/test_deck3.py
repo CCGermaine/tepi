@@ -5,7 +5,8 @@ import unittest
 from pathlib import Path
 
 import _guard  # noqa: F401  -- patch load_config before tepi binds it
-from tepi.deck import load_deck
+from tepi.deck import load_curriculum, load_deck
+from tepi.kamus import MISSING, load_attestation
 from tepi.sentence import tokens as _tokens, unknown as _unknown
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +65,17 @@ class Deck3ContentTest(unittest.TestCase):
                 problems.append(f"{entry.id}: {', '.join(unk)}")
             known.add(entry.lemma)
         self.assertEqual(problems, [])
+
+    def test_every_deck_three_lemma_is_attested(self):
+        deck = load_curriculum(ROOT)
+        saved = load_attestation(ROOT / "deck" / "kamus.json")
+        rows = saved["words"]
+        self.assertEqual(
+            [(row["id"], row["lemma"]) for row in rows],
+            [(entry.id, entry.lemma) for entry in deck.entries],
+        )
+        for row in rows:
+            self.assertNotEqual(row["status"], MISSING)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ Worktree: `/tmp/tepi-upgrade`, branch `tepi-upgrade` (based on `main` at `a8122d
 - Bar label stays quiet (`lemma` in word mode; blanked cloze or English cue in Level 2 review modes so the bar does not spoil the answer).
 - Upgraded popup card with mode + daily counter (`cur/total`), rung dots (`● ● ● ○ ○`), register badge, `sentenceGloss`, `note`, keyboard shortcuts (`1`/`2`/`3`/`Esc`), and a quiet `Open Tepi Web →` link.
 
-## Pending Your Explicit Approval
-1. **DBP Attestation for Deck 3:** Per `AGENTS.md` Hard Rule 4, `tepi check --deck-file deck/words-3.json` and `tepi thesaurus --deck-file deck/words-3.json` were **not** run. Once you say yes, we can run them to attest all 40 Deck 3 lemmas in `deck/kamus.json` and `deck/tesaurus.json`.
-2. **Merge & Rescan:** Merging `tepi-upgrade` into `main` in `~/Work/tepi` and running `omarchy-shell shell rescanPlugins` to activate the polished chip.
-3. **Vault Sync:** Updating `Projects/Tepi.md` in your Obsidian vault to reflect Phase 4, Deck 3, Level 2 prompts, and Tepi Web.
+## DBP Attestation (Deck 3)
+- `tepi check --deck-file deck/words-3.json`: **40 / 40 attested** (`29 headword · 11 derivative · 0 missing`), merged into `deck/kamus.json` (151 total).
+- `tepi thesaurus --deck-file deck/words-3.json`: **40 / 40 checked** (`12 listed · 28 unlisted`), merged into `deck/tesaurus.json` (151 total).
+- `tests/test_deck3.py` and `tests/test_tesaurus.py` enforce full 151-word attestation coverage.
