@@ -1,9 +1,12 @@
 import argparse
 import json
 import os
+import socket
 import sqlite3
+import subprocess
 import sys
 import time
+import webbrowser
 from datetime import date
 from pathlib import Path
 
@@ -53,6 +56,8 @@ def main(argv: list[str] | None = None) -> int:
         return _thesaurus(args)
     if args.cmd == "cousins":
         return _cousins(args)
+    if args.cmd == "web":
+        return _web(args)
     try:
         session = _session()
     except TepiError as err:
@@ -239,6 +244,10 @@ def _parser() -> argparse.ArgumentParser:
     import_cmd.add_argument("path", type=Path, help="Path to the snapshot JSON file")
     import_cmd.add_argument("--replace", action="store_true", help="Replace existing progress in the database")
     import_cmd.add_argument("--json", action="store_true")
+    web_cmd = commands.add_parser("web", help="Start the local Tepi Web server if needed and open it")
+    web_cmd.add_argument("--port", type=int, default=8787, help="Local port to bind (default: 8787)")
+    web_cmd.add_argument("--no-open", action="store_true", help="Start/verify server without opening a browser")
+    web_cmd.add_argument("--json", action="store_true")
     return parser
 
 
@@ -314,6 +323,52 @@ def _thesaurus(args) -> int:
     except TepiError as err:
         print(err, file=sys.stderr)
         return 2
+
+
+def _port_open(host: str, port: int) -> bool:
+    try:
+        with socket.create_connection((host, port), timeout=0.25):
+            return True
+    except OSError:
+        return False
+
+
+def _web(args) -> int:
+    """Ensure the local static server is listening on 127.0.0.1 and open Tepi Web.
+
+    Never opens the SQLite progress database.
+    """
+    host = "127.0.0.1"
+    port = args.port
+    url = f"http://{host}:{port}/web/"
+    started = False
+    pid = None
+    if not _port_open(host, port):
+        proc = subprocess.Popen(
+            [sys.executable, "-m", "http.server", str(port), "--bind", host, "--directory", str(ROOT)],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        pid = proc.pid
+        started = True
+        deadline = time.monotonic() + 2.5
+        while time.monotonic() < deadline:
+            if _port_open(host, port):
+                break
+            if proc.poll() is not None:
+                print(f"Could not start Tepi Web on {host}:{port}.", file=sys.stderr)
+                return 1
+            time.sleep(0.05)
+        else:
+            print(f"Timed out waiting for Tepi Web on {host}:{port}.", file=sys.stderr)
+            return 1
+    if not args.no_open:
+        webbrowser.open(url)
+    payload = {"url": url, "started": started, "pid": pid}
+    _emit(payload if args.json else f"{url}\n", args.json)
+    return 0
 
 
 def _cousins(args) -> int:

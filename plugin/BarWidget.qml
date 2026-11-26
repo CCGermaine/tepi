@@ -13,7 +13,6 @@ BarWidget {
   moduleName: "manny.tepi"
 
   readonly property string tepiBin: "/home/manny/.local/bin/tepi"
-  readonly property string tepiWebUrl: "http://127.0.0.1:8787/web/"
   readonly property color barInk: bar ? bar.barForeground : Color.foreground
   readonly property color popupInk: bar ? bar.foreground : Color.foreground
   readonly property string inkFont: bar && bar.fontFamily ? bar.fontFamily : Style.font.family
@@ -327,6 +326,11 @@ BarWidget {
     }
   }
 
+  Process {
+    id: webProc
+    command: [root.tepiBin, "web"]
+  }
+
   IpcHandler {
     target: "manny.tepi"
 
@@ -540,17 +544,13 @@ BarWidget {
         }
       }
 
-      Text {
-        textFormat: Text.PlainText
-        text: "Open Tepi Web →"
-        color: Qt.darker(root.popupInk, 1.55)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.caption
-
-        MouseArea {
-          anchors.fill: parent
-          cursorShape: Qt.PointingHandCursor
-          onClicked: Qt.openUrlExternally(root.tepiWebUrl)
+      Button {
+        text: "Open Web"
+        foreground: root.popupInk
+        enabled: !webProc.running
+        opacity: enabled ? 1 : 0.4
+        onClicked: {
+          if (!webProc.running) webProc.running = true
         }
       }
     }
