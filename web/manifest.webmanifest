@@ -1,0 +1,17 @@
+{
+  "name": "Tepi — Bahasa Melayu",
+  "short_name": "Tepi",
+  "description": "Calm daily Bahasa Melayu learning — words, root families, and sentences.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111315",
+  "theme_color": "#111315",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

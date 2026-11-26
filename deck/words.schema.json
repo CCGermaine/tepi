@@ -17,13 +17,16 @@
     "word": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "lemma", "root", "gloss", "sentence", "register", "requires"],
+      "required": ["id", "lemma", "root", "gloss", "sentence", "sentenceGloss", "register", "requires"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "lemma": { "type": "string", "minLength": 1 },
         "root": { "type": "string", "minLength": 1 },
         "gloss": { "type": "string", "minLength": 1 },
         "sentence": { "type": "string", "minLength": 1 },
+        "sentenceGloss": { "type": "string", "minLength": 1 },
+        "cloze": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 },
         "register": { "enum": ["neutral", "casual", "formal"] },
         "requires": {
           "type": "array",

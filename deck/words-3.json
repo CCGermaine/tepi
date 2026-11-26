@@ -1,0 +1,432 @@
+{
+  "variety": "ms-MY",
+  "orthography": "standard-malaysian",
+  "speech": "peninsular",
+  "words": [
+    {
+      "id": "bekerja",
+      "lemma": "bekerja",
+      "root": "kerja",
+      "gloss": "to work (active verb)",
+      "sentence": "Saya bekerja di pejabat.",
+      "sentenceGloss": "I work at the office.",
+      "note": "ber- + kerja → bekerja ('r' drops before 'k').",
+      "register": "neutral",
+      "requires": ["kerja", "saya", "di", "pejabat"]
+    },
+    {
+      "id": "pekerja",
+      "lemma": "pekerja",
+      "root": "kerja",
+      "gloss": "worker; employee",
+      "sentence": "Saya pekerja di pejabat ini.",
+      "sentenceGloss": "I am a worker at this office.",
+      "note": "pe- + kerja → person who works.",
+      "register": "neutral",
+      "requires": ["kerja", "saya", "di", "pejabat", "ini"]
+    },
+    {
+      "id": "pekerjaan",
+      "lemma": "pekerjaan",
+      "root": "kerja",
+      "gloss": "occupation; job",
+      "sentence": "Pekerjaan saya baik.",
+      "sentenceGloss": "My job is good.",
+      "note": "pe-...-an + kerja → occupation.",
+      "register": "neutral",
+      "requires": ["kerja", "saya", "baik"]
+    },
+    {
+      "id": "cakap",
+      "lemma": "cakap",
+      "root": "cakap",
+      "gloss": "speak; talk (root)",
+      "sentence": "Saya mahu cakap dengan awak.",
+      "sentenceGloss": "I want to talk with you.",
+      "note": "Root 'cakap' — base for bercakap, percakapan.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "awak"]
+    },
+    {
+      "id": "bercakap",
+      "lemma": "bercakap",
+      "root": "cakap",
+      "gloss": "to speak; converse",
+      "sentence": "Saya bercakap dengan ibu.",
+      "sentenceGloss": "I am speaking with my mother.",
+      "note": "ber- + cakap → intransitive verb 'to speak'.",
+      "register": "neutral",
+      "requires": ["cakap", "saya", "ibu"]
+    },
+    {
+      "id": "percakapan",
+      "lemma": "percakapan",
+      "root": "cakap",
+      "gloss": "conversation",
+      "sentence": "Percakapan ini baik.",
+      "sentenceGloss": "This conversation is good.",
+      "note": "per-...-an + cakap → conversation.",
+      "register": "neutral",
+      "requires": ["cakap", "ini", "baik"]
+    },
+    {
+      "id": "bayar",
+      "lemma": "bayar",
+      "root": "bayar",
+      "gloss": "pay (root)",
+      "sentence": "Saya mahu bayar sekarang.",
+      "sentenceGloss": "I want to pay now.",
+      "note": "Root 'bayar' — base for membayar, bayaran.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "sekarang"]
+    },
+    {
+      "id": "membayar",
+      "lemma": "membayar",
+      "root": "bayar",
+      "gloss": "to pay (active verb)",
+      "sentence": "Saya membayar di kedai.",
+      "sentenceGloss": "I pay at the shop.",
+      "note": "meN- + bayar → active verb 'to pay'.",
+      "register": "neutral",
+      "requires": ["bayar", "saya", "di", "kedai"]
+    },
+    {
+      "id": "bayaran",
+      "lemma": "bayaran",
+      "root": "bayar",
+      "gloss": "payment; fee",
+      "sentence": "Ini bayaran kopi.",
+      "sentenceGloss": "This is the payment for the coffee.",
+      "note": "bayar + -an → payment.",
+      "register": "neutral",
+      "requires": ["bayar", "ini", "kopi"]
+    },
+    {
+      "id": "masak",
+      "lemma": "masak",
+      "root": "masak",
+      "gloss": "cook (root)",
+      "sentence": "Saya mahu masak nasi.",
+      "sentenceGloss": "I want to cook rice.",
+      "note": "Root 'masak' — base for memasak, masakan.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "nasi"]
+    },
+    {
+      "id": "memasak",
+      "lemma": "memasak",
+      "root": "masak",
+      "gloss": "to cook (active verb)",
+      "sentence": "Ibu memasak di rumah.",
+      "sentenceGloss": "Mother is cooking at home.",
+      "note": "meN- + masak → active verb 'to cook'.",
+      "register": "neutral",
+      "requires": ["masak", "ibu", "di", "rumah"]
+    },
+    {
+      "id": "masakan",
+      "lemma": "masakan",
+      "root": "masak",
+      "gloss": "cooking; dish",
+      "sentence": "Masakan ibu baik.",
+      "sentenceGloss": "Mother's cooking is good.",
+      "note": "masak + -an → dish / cuisine.",
+      "register": "neutral",
+      "requires": ["masak", "ibu", "baik"]
+    },
+    {
+      "id": "membaca",
+      "lemma": "membaca",
+      "root": "baca",
+      "gloss": "to read (active verb)",
+      "sentence": "Saya membaca buku di rumah.",
+      "sentenceGloss": "I read a book at home.",
+      "note": "meN- + baca → active verb 'to read'.",
+      "register": "neutral",
+      "requires": ["baca", "saya", "buku", "di", "rumah"]
+    },
+    {
+      "id": "pembaca",
+      "lemma": "pembaca",
+      "root": "baca",
+      "gloss": "reader",
+      "sentence": "Saya pembaca buku.",
+      "sentenceGloss": "I am a book reader.",
+      "note": "peN- + baca → person who reads.",
+      "register": "neutral",
+      "requires": ["baca", "saya", "buku"]
+    },
+    {
+      "id": "bacaan",
+      "lemma": "bacaan",
+      "root": "baca",
+      "gloss": "reading material",
+      "sentence": "Ini bacaan saya.",
+      "sentenceGloss": "This is my reading material.",
+      "note": "baca + -an → reading material.",
+      "register": "neutral",
+      "requires": ["baca", "ini", "saya"]
+    },
+    {
+      "id": "teh",
+      "lemma": "teh",
+      "root": "teh",
+      "gloss": "tea",
+      "sentence": "Saya mahu teh panas.",
+      "sentenceGloss": "I want hot tea.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "panas"]
+    },
+    {
+      "id": "ais",
+      "lemma": "ais",
+      "root": "ais",
+      "gloss": "ice",
+      "sentence": "Saya mahu teh ais.",
+      "sentenceGloss": "I want iced tea.",
+      "note": "At a kopitiam, 'teh ais' or 'kopi ais' is standard.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "teh"]
+    },
+    {
+      "id": "pedas",
+      "lemma": "pedas",
+      "root": "pedas",
+      "gloss": "spicy",
+      "sentence": "Masakan ini pedas.",
+      "sentenceGloss": "This dish is spicy.",
+      "register": "neutral",
+      "requires": ["masakan", "ini"]
+    },
+    {
+      "id": "manis",
+      "lemma": "manis",
+      "root": "manis",
+      "gloss": "sweet",
+      "sentence": "Teh ini manis.",
+      "sentenceGloss": "This tea is sweet.",
+      "register": "neutral",
+      "requires": ["teh", "ini"]
+    },
+    {
+      "id": "sedap",
+      "lemma": "sedap",
+      "root": "sedap",
+      "gloss": "delicious; tasty",
+      "sentence": "Nasi ini sedap.",
+      "sentenceGloss": "This rice is delicious.",
+      "note": "One of the warmest compliments you can give at any meal.",
+      "register": "neutral",
+      "requires": ["nasi", "ini"]
+    },
+    {
+      "id": "pinggan",
+      "lemma": "pinggan",
+      "root": "pinggan",
+      "gloss": "plate",
+      "sentence": "Pinggan di meja.",
+      "sentenceGloss": "The plate is on the table.",
+      "register": "neutral",
+      "requires": ["di", "meja"]
+    },
+    {
+      "id": "cawan",
+      "lemma": "cawan",
+      "root": "cawan",
+      "gloss": "cup",
+      "sentence": "Kopi dalam cawan ini.",
+      "sentenceGloss": "The coffee is in this cup.",
+      "register": "neutral",
+      "requires": ["kopi", "ini"]
+    },
+    {
+      "id": "sudu",
+      "lemma": "sudu",
+      "root": "sudu",
+      "gloss": "spoon",
+      "sentence": "Saya perlu sudu.",
+      "sentenceGloss": "I need a spoon.",
+      "register": "neutral",
+      "requires": ["saya", "perlu"]
+    },
+    {
+      "id": "bil",
+      "lemma": "bil",
+      "root": "bil",
+      "gloss": "bill; check",
+      "sentence": "Tolong bil, terima kasih.",
+      "sentenceGloss": "The bill please, thank you.",
+      "register": "neutral",
+      "requires": ["tolong", "terima-kasih"]
+    },
+    {
+      "id": "bungkus",
+      "lemma": "bungkus",
+      "root": "bungkus",
+      "gloss": "wrap; takeaway",
+      "sentence": "Saya mahu bungkus nasi ini.",
+      "sentenceGloss": "I want this rice to go.",
+      "note": "In Malaysia, 'bungkus' (or 'tapau') means takeaway.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "nasi", "ini"]
+    },
+    {
+      "id": "kanan",
+      "lemma": "kanan",
+      "root": "kanan",
+      "gloss": "right (direction)",
+      "sentence": "Kedai di kanan jalan.",
+      "sentenceGloss": "The shop is on the right side of the road.",
+      "register": "neutral",
+      "requires": ["kedai", "di", "jalan"]
+    },
+    {
+      "id": "kiri",
+      "lemma": "kiri",
+      "root": "kiri",
+      "gloss": "left (direction)",
+      "sentence": "Rumah saya di kiri.",
+      "sentenceGloss": "My house is on the left.",
+      "register": "neutral",
+      "requires": ["rumah", "saya", "di"]
+    },
+    {
+      "id": "lurus",
+      "lemma": "lurus",
+      "root": "lurus",
+      "gloss": "straight",
+      "sentence": "Jalan ini lurus.",
+      "sentenceGloss": "This road is straight.",
+      "register": "neutral",
+      "requires": ["jalan", "ini"]
+    },
+    {
+      "id": "jauh",
+      "lemma": "jauh",
+      "root": "jauh",
+      "gloss": "far",
+      "sentence": "Pejabat saya jauh dari rumah.",
+      "sentenceGloss": "My office is far from home.",
+      "register": "neutral",
+      "requires": ["pejabat", "saya", "dari", "rumah"]
+    },
+    {
+      "id": "dekat",
+      "lemma": "dekat",
+      "root": "dekat",
+      "gloss": "near; close",
+      "sentence": "Kedai itu dekat rumah saya.",
+      "sentenceGloss": "That shop is near my house.",
+      "note": "In casual Peninsular speech, 'dekat' is also used like 'at' ('dekat rumah').",
+      "register": "neutral",
+      "requires": ["kedai", "rumah", "saya"]
+    },
+    {
+      "id": "pintu",
+      "lemma": "pintu",
+      "root": "pintu",
+      "gloss": "door",
+      "sentence": "Tolong buka pintu.",
+      "sentenceGloss": "Please open the door.",
+      "register": "neutral",
+      "requires": ["tolong", "buka"]
+    },
+    {
+      "id": "bilik",
+      "lemma": "bilik",
+      "root": "bilik",
+      "gloss": "room",
+      "sentence": "Bilik ini sejuk.",
+      "sentenceGloss": "This room is cool.",
+      "register": "neutral",
+      "requires": ["ini", "sejuk"]
+    },
+    {
+      "id": "tidur",
+      "lemma": "tidur",
+      "root": "tidur",
+      "gloss": "sleep",
+      "sentence": "Saya penat, saya mahu tidur.",
+      "sentenceGloss": "I am tired, I want to sleep.",
+      "register": "neutral",
+      "requires": ["saya", "penat", "mahu"]
+    },
+    {
+      "id": "balik",
+      "lemma": "balik",
+      "root": "balik",
+      "gloss": "go back; return home",
+      "sentence": "Saya mahu balik ke rumah.",
+      "sentenceGloss": "I want to go back home.",
+      "register": "neutral",
+      "requires": ["saya", "mahu", "ke", "rumah"]
+    },
+    {
+      "id": "jumpa",
+      "lemma": "jumpa",
+      "root": "jumpa",
+      "gloss": "meet; see",
+      "sentence": "Jumpa esok.",
+      "sentenceGloss": "See you tomorrow.",
+      "note": "'Jumpa nanti' (see you later) and 'Jumpa esok' are everyday farewells.",
+      "register": "neutral",
+      "requires": ["esok"]
+    },
+    {
+      "id": "tapi",
+      "lemma": "tapi",
+      "root": "tapi",
+      "gloss": "but",
+      "sentence": "Saya lapar tapi sibuk.",
+      "sentenceGloss": "I am hungry but busy.",
+      "note": "Everyday spoken form of 'tetapi'.",
+      "register": "casual",
+      "requires": ["saya", "lapar", "sibuk"]
+    },
+    {
+      "id": "dah",
+      "lemma": "dah",
+      "root": "dah",
+      "gloss": "already",
+      "sentence": "Saya dah makan nasi.",
+      "sentenceGloss": "I have already eaten rice.",
+      "note": "Casual Peninsular shortening of 'sudah'.",
+      "register": "casual",
+      "requires": ["saya", "makan", "nasi"]
+    },
+    {
+      "id": "saja",
+      "lemma": "saja",
+      "root": "saja",
+      "gloss": "just; only",
+      "sentence": "Saya mahu air saja.",
+      "sentenceGloss": "I just want water.",
+      "note": "Everyday Peninsular shortening of 'sahaja'.",
+      "register": "casual",
+      "requires": ["saya", "mahu", "air"]
+    },
+    {
+      "id": "macam",
+      "lemma": "macam",
+      "root": "macam",
+      "gloss": "like; sort of",
+      "sentence": "Kopi ini macam teh.",
+      "sentenceGloss": "This coffee is like tea.",
+      "note": "Very common in spoken Peninsular Malay ('macam ini' = like this).",
+      "register": "casual",
+      "requires": ["kopi", "ini", "teh"]
+    },
+    {
+      "id": "duit",
+      "lemma": "duit",
+      "root": "duit",
+      "gloss": "money",
+      "sentence": "Saya ada duit untuk bayar.",
+      "sentenceGloss": "I have money to pay.",
+      "note": "Everyday spoken word for money (neutral/formal is 'wang').",
+      "register": "casual",
+      "requires": ["saya", "ada", "bayar"]
+    }
+  ]
+}

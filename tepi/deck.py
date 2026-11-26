@@ -18,6 +18,9 @@ class Entry:
     register: str
     requires: tuple[str, ...]
     index: int
+    sentence_gloss: str = ""
+    cloze: str | None = None
+    note: str | None = None
 
 
 @dataclass(frozen=True)
@@ -75,6 +78,9 @@ def _read_deck(path: Path) -> Deck:
                 register=_text(item, "register", index),
                 requires=tuple(requires),
                 index=index,
+                sentence_gloss=_optional_text(item, "sentenceGloss", index) or "",
+                cloze=_optional_text(item, "cloze", index),
+                note=_optional_text(item, "note", index),
             )
         )
         seen[word_id] = index
@@ -226,6 +232,16 @@ def _text(item: dict, key: str, index: int) -> str:
     if not isinstance(value, str) or not value.strip():
         label = item.get("id") or f"word {index + 1}"
         raise TepiError(f"{label} is missing {key}.")
+    return value
+
+
+def _optional_text(item: dict, key: str, index: int) -> str | None:
+    if key not in item or item[key] is None:
+        return None
+    value = item[key]
+    if not isinstance(value, str) or not value.strip():
+        label = item.get("id") or f"word {index + 1}"
+        raise TepiError(f"{label} has an invalid {key}.")
     return value
 
 

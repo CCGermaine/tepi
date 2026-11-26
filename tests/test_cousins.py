@@ -53,11 +53,26 @@ class CousinsEngineTest(unittest.TestCase):
         deck = load_curriculum(ROOT)
         families = cousin_families(deck)
         by_root = {family.root: family for family in families}
-        self.assertEqual(len(deck.entries), 111)
-        self.assertEqual(set(by_root), {"komputer", "ajar", "jalan", "beli", "main", "cuci"})
+        self.assertEqual(len(deck.entries), 151)
+        expected_roots = [
+            "kerja",
+            "komputer",
+            "baca",
+            "ajar",
+            "jalan",
+            "beli",
+            "main",
+            "cuci",
+            "cakap",
+            "bayar",
+            "masak",
+        ]
+        self.assertEqual(set(by_root), set(expected_roots))
         self.assertEqual(len(by_root["komputer"].members), 2)
-        for root in ("ajar", "jalan", "beli", "main", "cuci"):
+        for root in ("kerja", "baca", "ajar", "jalan", "beli", "main", "cuci"):
             self.assertEqual(len(by_root[root].members), 4)
+        for root in ("cakap", "bayar", "masak"):
+            self.assertEqual(len(by_root[root].members), 3)
         for family in families:
             self.assertTrue(all(member.root == family.root for member in family.members))
         # A root with one word has no cousins and is not a family.
@@ -71,7 +86,10 @@ class CousinsEngineTest(unittest.TestCase):
         families = cousin_families(deck)
         first_indexes = [family.members[0].index for family in families]
         self.assertEqual(first_indexes, sorted(first_indexes))
-        self.assertEqual([family.root for family in families], ["komputer", "ajar", "jalan", "beli", "main", "cuci"])
+        self.assertEqual(
+            [family.root for family in families],
+            ["kerja", "komputer", "baca", "ajar", "jalan", "beli", "main", "cuci", "cakap", "bayar", "masak"],
+        )
         for family in families:
             indexes = [member.index for member in family.members]
             self.assertEqual(indexes, sorted(indexes))
@@ -102,7 +120,10 @@ class CousinsCommandTest(unittest.TestCase):
         done = _run(["cousins", "--json"], self.env)
         self.assertEqual(done.returncode, 0, done.stderr)
         families = json.loads(done.stdout)["families"]
-        self.assertEqual([family["root"] for family in families], ["komputer", "ajar", "jalan", "beli", "main", "cuci"])
+        self.assertEqual(
+            [family["root"] for family in families],
+            ["kerja", "komputer", "baca", "ajar", "jalan", "beli", "main", "cuci", "cakap", "bayar", "masak"],
+        )
         text = _run(["cousins"], self.env)
         self.assertEqual(text.returncode, 0, text.stderr)
         self.assertIn("ajar", text.stdout)

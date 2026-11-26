@@ -14,6 +14,7 @@ from tepi.engine import (
     Rated,
     Session,
     attested_settled,
+    card_prompt,
     cousin_families,
     cousins_of,
     prompt_sentence,
@@ -79,6 +80,25 @@ def main(argv: list[str] | None = None) -> int:
                 usable = len(attested_settled(learned.settled, attestation))
                 prompt = prompt_sentence(learned.settled, attestation, args.about)
             _emit(prompt_payload(prompt, usable) if args.json else _format_prompt(prompt, usable), args.json)
+        elif args.cmd == "export":
+            snapshot = session.export_snapshot()
+            text = json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n"
+            if args.out:
+                args.out.parent.mkdir(parents=True, exist_ok=True)
+                args.out.write_text(text, encoding="utf-8")
+            else:
+                print(text, end="")
+        elif args.cmd == "import":
+            try:
+                raw = json.loads(args.path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as err:
+                raise TepiError(f"Could not read snapshot at {args.path}.") from err
+            word_count, event_count = session.import_snapshot(raw, replace=args.replace)
+            payload = {"importedWords": word_count, "importedEvents": event_count}
+            _emit(
+                payload if args.json else f"Imported {word_count} words and {event_count} events.\n",
+                args.json,
+            )
         else:
             raise TepiError("Unknown command.")
     except TepiError as err:
@@ -94,12 +114,17 @@ def main(argv: list[str] | None = None) -> int:
 
 def card_payload(card: Presentation, deck=None) -> dict:
     show = card.revealed or card.mode == "rest"
+    prompt_mode, cloze = card_prompt(card)
     cousins = cousins_of(deck, card.entry) if deck is not None and card.entry is not None else ()
-    word = None if card.entry is None else _word(card.entry, show, cousins)
+    word = None if card.entry is None else _word(card.entry, show, cousins, prompt_mode)
     return {
         "date": card.date.isoformat(),
         "mode": card.mode,
         "revealed": card.revealed,
+        "promptMode": prompt_mode,
+        "cloze": cloze,
+        "intervalIndex": card.interval_index,
+        "ladderLength": card.ladder_length,
         "word": word,
         "plan": {"reviews": list(card.plan.reviews), "new": list(card.plan.new)},
         "remaining": {"reviews": card.reviews_remaining, "new": card.new_remaining},
@@ -208,6 +233,12 @@ def _parser() -> argparse.ArgumentParser:
     cousins = commands.add_parser("cousins", help="Show the root family of a word, or every family")
     cousins.add_argument("id", nargs="?", help="A deck id. Without it, every family is shown.")
     cousins.add_argument("--json", action="store_true")
+    export_cmd = commands.add_parser("export", help="Export progress as a portable JSON snapshot")
+    export_cmd.add_argument("--out", type=Path, help="Write JSON to this file instead of stdout")
+    import_cmd = commands.add_parser("import", help="Import a tepi-progress-v1 JSON snapshot")
+    import_cmd.add_argument("path", type=Path, help="Path to the snapshot JSON file")
+    import_cmd.add_argument("--replace", action="store_true", help="Replace existing progress in the database")
+    import_cmd.add_argument("--json", action="store_true")
     return parser
 
 
@@ -420,9 +451,24 @@ def _emit(payload, as_json: bool) -> None:
 def _format_today(card: Presentation) -> str:
     if card.entry is None:
         return "The deck has nothing to show.\n"
-    lines = [_heading(card), "", card.entry.lemma]
+    prompt_mode, cloze = card_prompt(card)
+    lines = [_heading(card), ""]
+    if not (card.revealed or card.mode == "rest") and prompt_mode == "cloze" and cloze:
+        lines.append(cloze)
+        if card.entry.sentence_gloss:
+            lines.append(card.entry.sentence_gloss)
+    elif not (card.revealed or card.mode == "rest") and prompt_mode == "reverse":
+        lines.append(card.entry.sentence_gloss or card.entry.gloss)
+        if card.entry.sentence_gloss:
+            lines.append(f"({card.entry.gloss})")
+    else:
+        lines.append(card.entry.lemma)
     if card.revealed or card.mode == "rest":
         lines.extend((card.entry.gloss, card.entry.sentence))
+        if card.entry.sentence_gloss:
+            lines.append(card.entry.sentence_gloss)
+        if card.entry.note:
+            lines.append(card.entry.note)
     lines.append("")
     lines.append(f"reviews left {card.reviews_remaining}  ·  new left {card.new_remaining}")
     hint = _hint(card)
@@ -434,7 +480,12 @@ def _format_today(card: Presentation) -> str:
 def _format_revealed(card: Presentation) -> str:
     if card.entry is None:
         return "Nothing to reveal.\n"
-    lines = [card.entry.lemma, card.entry.gloss, card.entry.sentence, ""]
+    lines = [card.entry.lemma, card.entry.gloss, card.entry.sentence]
+    if card.entry.sentence_gloss:
+        lines.append(card.entry.sentence_gloss)
+    if card.entry.note:
+        lines.append(card.entry.note)
+    lines.append("")
     if card.mode == "new":
         lines.append("New today.")
     elif card.mode == "review":
@@ -502,14 +553,18 @@ def _hint(card: Presentation) -> str:
     return ""
 
 
-def _word(entry, show: bool, cousins=()) -> dict:
+def _word(entry, show: bool, cousins=(), prompt_mode: str = "word") -> dict:
+    show_gloss = show or prompt_mode == "reverse"
+    show_sentence_gloss = show or prompt_mode in ("cloze", "reverse")
     return {
         "id": entry.id,
         "lemma": entry.lemma,
         "root": entry.root,
         "register": entry.register,
-        "gloss": entry.gloss if show else None,
+        "gloss": entry.gloss if show_gloss else None,
         "sentence": entry.sentence if show else None,
+        "sentenceGloss": (entry.sentence_gloss or None) if show_sentence_gloss else None,
+        "note": entry.note if show else None,
         "cousins": list(cousins),
     }
 

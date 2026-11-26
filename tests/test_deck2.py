@@ -29,12 +29,18 @@ class Deck2ContentTest(unittest.TestCase):
         self.assertEqual(raw["orthography"], "standard-malaysian")
         self.assertEqual(raw["speech"], "peninsular")
         self.assertIsInstance(raw["words"], list)
-        fields = {"id", "lemma", "root", "gloss", "sentence", "register", "requires"}
+        required_fields = {"id", "lemma", "root", "gloss", "sentence", "sentenceGloss", "register", "requires"}
+        optional_fields = {"cloze", "note"}
         for word in raw["words"]:
-            self.assertEqual(set(word), fields)
-            for key in ("id", "lemma", "root", "gloss", "sentence"):
+            self.assertTrue(required_fields.issubset(set(word)))
+            self.assertTrue(set(word).issubset(required_fields | optional_fields))
+            for key in ("id", "lemma", "root", "gloss", "sentence", "sentenceGloss"):
                 self.assertIsInstance(word[key], str)
                 self.assertTrue(word[key].strip())
+            for key in optional_fields:
+                if key in word:
+                    self.assertIsInstance(word[key], str)
+                    self.assertTrue(word[key].strip())
             self.assertIn(word["register"], ("neutral", "casual", "formal"))
             self.assertIsInstance(word["requires"], list)
             for req in word["requires"]:

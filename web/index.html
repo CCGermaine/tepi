@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tepi — Bahasa Melayu</title>
+  <meta name="description" content="Calm daily Bahasa Melayu learning — words, root families, and sentences.">
+  <meta name="theme-color" content="#111315">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-name">tepi</span>
+        <span class="brand-sub">Bahasa Melayu</span>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button class="tab is-active" role="tab" aria-selected="true" data-tab="today">Today</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="families">Families</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="garden">Garden</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="settings">Settings</button>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section id="view-today" class="view is-active" role="tabpanel"></section>
+      <section id="view-families" class="view" role="tabpanel" hidden></section>
+      <section id="view-garden" class="view" role="tabpanel" hidden></section>
+      <section id="view-settings" class="view" role="tabpanel" hidden></section>
+    </main>
+
+    <footer class="footer">
+      <span>Peninsular Malaysia · standard spelling</span>
+      <span class="kbd-hints">
+        <kbd>Space</kbd> reveal · <kbd>1</kbd> known · <kbd>2</kbd> fuzzy · <kbd>3</kbd> missed
+      </span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

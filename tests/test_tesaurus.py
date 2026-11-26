@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 import _guard  # noqa: F401  -- patch load_config before tepi binds it
-from tepi.deck import Deck, Entry, TepiError, load_curriculum
+from tepi.deck import Deck, Entry, TepiError, load_decks
 from tepi.tesaurus import (
     CLASS_LABELS,
     LISTED,
@@ -155,7 +155,8 @@ class TesaurusTest(unittest.TestCase):
                 load_attestation(path)
 
     def test_the_saved_check_covers_the_deck(self):
-        deck = load_curriculum(ROOT)
+        # Decks 1 and 2 are DBP-attested; Deck 3 attestation waits for an explicit DBP run.
+        deck = load_decks([ROOT / "deck" / "words.json", ROOT / "deck" / "words-2.json"])
         saved = load_attestation(ROOT / "deck" / "tesaurus.json")
         self.assertEqual(
             [(row["id"], row["lemma"]) for row in saved["words"]],

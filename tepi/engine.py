@@ -5,9 +5,10 @@ from datetime import date, datetime, timedelta
 from tepi.db import connect
 from tepi.deck import Config, Deck, Entry, TepiError
 from tepi.kamus import MISSING
-from tepi.sentence import tokens, unknown
+from tepi.sentence import make_cloze, tokens, unknown
 
 RATINGS = ("known", "fuzzy", "missed")
+EXPORT_FORMAT = "tepi-progress-v1"
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,28 @@ class Presentation:
     plan: Plan
     reviews_remaining: int
     new_remaining: int
+    interval_index: int = 0
+    ladder_length: int = 5
+
+
+def card_prompt(card: Presentation) -> tuple[str, str | None]:
+    """Return (prompt_mode, cloze_text) for a presentation.
+
+    - New / rest cards and review rungs 0-2 use `word` (BM -> EN).
+    - Review rungs 3-4 use `cloze` when a fill-in-the-blank sentence can be
+      formed, otherwise fall back to `reverse`.
+    - Review rung 5+ uses `reverse` (EN -> BM).
+    """
+    if card.mode != "review" or card.entry is None:
+        return "word", None
+    if card.interval_index <= 2:
+        return "word", None
+    if card.interval_index <= 4:
+        cloze = make_cloze(card.entry.sentence, card.entry.lemma, card.entry.cloze)
+        if cloze is not None:
+            return "cloze", cloze
+        return "reverse", None
+    return "reverse", None
 
 
 @dataclass(frozen=True)
@@ -225,6 +248,8 @@ class Session:
             card.plan,
             card.reviews_remaining,
             card.new_remaining,
+            card.interval_index,
+            card.ladder_length,
         )
 
     def rate(self, rating: str) -> Rated:
@@ -335,6 +360,13 @@ class Session:
 
     def _card(self, plan, word_id, mode, revealed, reviews_left, new_left) -> Presentation:
         entry = self.deck.entry(word_id) if word_id else None
+        interval_index = 0
+        if entry is not None:
+            row = self.conn.execute(
+                "SELECT interval_index FROM progress WHERE word_id = ?", (entry.id,)
+            ).fetchone()
+            if row is not None:
+                interval_index = int(row["interval_index"])
         return Presentation(
             self.today,
             "empty" if entry is None else mode,
@@ -343,7 +375,113 @@ class Session:
             plan,
             len(reviews_left),
             len(new_left),
+            interval_index,
+            len(self.config.known_intervals),
         )
+
+    def export_snapshot(self) -> dict:
+        """Return a portable JSON-serializable snapshot of all progress."""
+        progress = [
+            {
+                "wordId": row["word_id"],
+                "introducedOn": row["introduced_on"],
+                "due": row["due"],
+                "intervalIndex": int(row["interval_index"]),
+                "state": row["state"],
+                "deckIndex": int(row["deck_index"]),
+            }
+            for row in self.conn.execute("SELECT * FROM progress ORDER BY deck_index, word_id")
+        ]
+        events = [
+            {
+                "ts": row["ts"],
+                "day": row["day"],
+                "wordId": row["word_id"],
+                "kind": row["kind"],
+            }
+            for row in self.conn.execute("SELECT ts, day, word_id, kind FROM events ORDER BY id")
+        ]
+        plans = [
+            {
+                "day": row["day"],
+                "reviews": json.loads(row["reviews"]),
+                "introduced": json.loads(row["introduced"]),
+                "catchUp": bool(row["catch_up"]),
+            }
+            for row in self.conn.execute("SELECT day, reviews, introduced, catch_up FROM plans ORDER BY day")
+        ]
+        return {
+            "format": EXPORT_FORMAT,
+            "exportedAt": _now(),
+            "config": {
+                "newPerDay": self.config.new_per_day,
+                "reviewCap": self.config.review_cap,
+                "catchUpReviewCap": self.config.catch_up_review_cap,
+                "catchUp": self.config.catch_up,
+                "knownIntervals": list(self.config.known_intervals),
+                "fuzzyDays": self.config.fuzzy_days,
+                "missedDays": self.config.missed_days,
+            },
+            "progress": progress,
+            "events": events,
+            "plans": plans,
+        }
+
+    def import_snapshot(self, payload: dict, *, replace: bool = False) -> tuple[int, int]:
+        """Load a `tepi-progress-v1` snapshot into this database.
+
+        Refuses to overwrite a non-empty database unless `replace=True`.
+        Returns (progress_count, event_count).
+        """
+        if not isinstance(payload, dict) or payload.get("format") != EXPORT_FORMAT:
+            raise TepiError(f"Expected a {EXPORT_FORMAT} snapshot.")
+        progress_rows = payload.get("progress")
+        event_rows = payload.get("events", [])
+        plan_rows = payload.get("plans", [])
+        if not isinstance(progress_rows, list) or not isinstance(event_rows, list) or not isinstance(plan_rows, list):
+            raise TepiError("Snapshot progress, events, and plans must be lists.")
+        existing = self.conn.execute("SELECT COUNT(*) FROM progress").fetchone()[0]
+        if existing and not replace:
+            raise TepiError("Progress database is not empty. Pass --replace to overwrite it.")
+        with self.conn:
+            if replace:
+                self.conn.execute("DELETE FROM events")
+                self.conn.execute("DELETE FROM plans")
+                self.conn.execute("DELETE FROM progress")
+            for row in progress_rows:
+                word_id = row["wordId"]
+                entry = self.deck.by_id.get(word_id)
+                deck_index = int(row.get("deckIndex", entry.index if entry else 0))
+                self.conn.execute(
+                    """
+                    INSERT INTO progress (word_id, introduced_on, due, interval_index, state, deck_index)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        word_id,
+                        row["introducedOn"],
+                        row.get("due"),
+                        int(row["intervalIndex"]),
+                        row["state"],
+                        deck_index,
+                    ),
+                )
+            for row in event_rows:
+                self.conn.execute(
+                    "INSERT INTO events (ts, day, word_id, kind) VALUES (?, ?, ?, ?)",
+                    (row.get("ts") or f"{row['day']}T00:00:00+00:00", row["day"], row["wordId"], row["kind"]),
+                )
+            for row in plan_rows:
+                self.conn.execute(
+                    "INSERT INTO plans (day, reviews, introduced, catch_up) VALUES (?, ?, ?, ?)",
+                    (
+                        row["day"],
+                        json.dumps(row.get("reviews", [])),
+                        json.dumps(row.get("introduced", [])),
+                        int(bool(row.get("catchUp", False))),
+                    ),
+                )
+        return len(progress_rows), len(event_rows)
 
     def _progress(self, word_id: str):
         row = self.conn.execute("SELECT * FROM progress WHERE word_id = ?", (word_id,)).fetchone()

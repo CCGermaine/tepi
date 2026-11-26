@@ -42,14 +42,37 @@ FUNCTION_WORDS = frozenset(
 
 _TOKEN = re.compile(r"[^\w\s-]+", re.UNICODE)
 
-# Derived forms deck 2 sentences actually use. Any other meN- or ber- shape stays unknown.
+# Derived forms deck 2+ sentences actually use. Any other meN- or ber- shape stays unknown.
 _ACTIVE_FORMS = {
     "ajar": frozenset({"mengajar"}),
     "jalan": frozenset({"berjalan"}),
     "beli": frozenset({"membeli"}),
     "main": frozenset({"bermain"}),
     "cuci": frozenset({"mencuci"}),
+    "kerja": frozenset({"bekerja"}),
+    "cakap": frozenset({"bercakap"}),
+    "bayar": frozenset({"membayar"}),
+    "masak": frozenset({"memasak"}),
+    "tidur": frozenset({"tertidur"}),
 }
+
+
+def make_cloze(sentence: str, lemma: str, override: str | None = None) -> str | None:
+    """Return a fill-in-the-blank version of `sentence` with `lemma` blanked out.
+
+    Returns None when the sentence has fewer than two tokens or does not contain
+    the target lemma (or one of its known active forms).
+    """
+    if override and override.strip():
+        return override.strip()
+    if len(tokens(sentence)) < 2:
+        return None
+    candidates = [lemma, *sorted(_ACTIVE_FORMS.get(lemma.casefold(), ()))]
+    for target in candidates:
+        pattern = re.compile(r"(?<!\w)" + re.escape(target) + r"(?!\w)", re.IGNORECASE | re.UNICODE)
+        if pattern.search(sentence):
+            return pattern.sub("___", sentence, count=1)
+    return None
 
 
 def tokens(sentence: str) -> list[str]:

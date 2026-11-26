@@ -87,7 +87,8 @@ class DeckLoadTest(unittest.TestCase):
         self.assertEqual(ids[:4], ["selamat", "pagi", "saya", "mahu"])
         self.assertEqual(ids[67:72], ["tunggu", "sebentar", "nanti", "tadi", "ajar"])
         self.assertEqual(ids[72], "belajar")
-        self.assertEqual(len(ids), 111)
+        self.assertEqual(ids[111], "bekerja")
+        self.assertEqual(len(ids), 151)
 
     def test_numbered_deck_files_follow_words_json_by_number(self):
         # Breaks if words-10.json sorts ahead of words-2.json, or the schema is loaded.
@@ -101,7 +102,7 @@ class DeckLoadTest(unittest.TestCase):
         )
         self.assertEqual(
             [path.name for path in deck_paths(ROOT / "deck")],
-            ["words.json", "words-2.json"],
+            ["words.json", "words-2.json", "words-3.json"],
         )
 
     def test_new_words_finish_deck_one_before_deck_two(self):
@@ -292,7 +293,7 @@ class DeckCheckTest(unittest.TestCase):
         self.assertGreaterEqual(len(asked), 72, asked[-1] if asked else asked)
         self.assertEqual(asked[70], "tadi")
         self.assertEqual(asked[71], "ajar")
-        self.assertEqual(len(asked), 111)
+        self.assertEqual(len(asked), 151)
         saved = json.loads(dest.read_text(encoding="utf-8"))
         self.assertEqual([row["lemma"] for row in saved["words"][67:72]], ["tunggu", "sebentar", "nanti", "tadi", "ajar"])
 
@@ -389,10 +390,10 @@ class DeckCheckTest(unittest.TestCase):
         self.assertGreaterEqual(len(asked), 72, asked[-1] if asked else asked)
         self.assertEqual(asked[70], "tadi")
         self.assertEqual(asked[71], "ajar")
-        self.assertEqual(len(asked), 111)
+        self.assertEqual(len(asked), 151)
         saved = json.loads(dest.read_text(encoding="utf-8"))
         self.assertEqual(saved["words"][71]["lemma"], "ajar")
-        self.assertEqual(len(saved["words"]), 111)
+        self.assertEqual(len(saved["words"]), 151)
 
     def test_thesaurus_deck_file_asks_that_file_and_keeps_the_other_rows(self):
         import tepi.cli as cli

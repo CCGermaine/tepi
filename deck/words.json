@@ -9,6 +9,8 @@
       "root": "selamat",
       "gloss": "safe; well",
       "sentence": "Selamat.",
+      "sentenceGloss": "Safe / well.",
+      "note": "Also the greeting opener in 'Selamat pagi', 'Selamat petang', 'Selamat malam'.",
       "register": "neutral",
       "requires": []
     },
@@ -18,8 +20,11 @@
       "root": "pagi",
       "gloss": "morning",
       "sentence": "Selamat pagi.",
+      "sentenceGloss": "Good morning.",
       "register": "neutral",
-      "requires": ["selamat"]
+      "requires": [
+        "selamat"
+      ]
     },
     {
       "id": "saya",
@@ -27,6 +32,8 @@
       "root": "saya",
       "gloss": "I",
       "sentence": "Saya.",
+      "sentenceGloss": "I / me.",
+      "note": "Polite neutral pronoun; works in almost every situation.",
       "register": "neutral",
       "requires": []
     },
@@ -36,8 +43,12 @@
       "root": "mahu",
       "gloss": "want",
       "sentence": "Saya mahu.",
+      "sentenceGloss": "I want.",
+      "note": "Neutral 'want'; casual Peninsular speech often uses 'nak'.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "air",
@@ -45,8 +56,12 @@
       "root": "air",
       "gloss": "water",
       "sentence": "Saya mahu air.",
+      "sentenceGloss": "I want water.",
       "register": "neutral",
-      "requires": ["saya", "mahu"]
+      "requires": [
+        "saya",
+        "mahu"
+      ]
     },
     {
       "id": "kopi",
@@ -54,8 +69,12 @@
       "root": "kopi",
       "gloss": "coffee",
       "sentence": "Saya mahu kopi.",
+      "sentenceGloss": "I want coffee.",
       "register": "neutral",
-      "requires": ["saya", "mahu"]
+      "requires": [
+        "saya",
+        "mahu"
+      ]
     },
     {
       "id": "minum",
@@ -63,8 +82,13 @@
       "root": "minum",
       "gloss": "drink",
       "sentence": "Saya mahu minum air.",
+      "sentenceGloss": "I want to drink water.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "air"]
+      "requires": [
+        "saya",
+        "mahu",
+        "air"
+      ]
     },
     {
       "id": "tidak",
@@ -72,8 +96,14 @@
       "root": "tidak",
       "gloss": "not, before a verb",
       "sentence": "Saya tidak mahu kopi.",
+      "sentenceGloss": "I do not want coffee.",
+      "note": "Negates verbs and adjectives; casual speech often uses 'tak'.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "kopi"]
+      "requires": [
+        "saya",
+        "mahu",
+        "kopi"
+      ]
     },
     {
       "id": "sudah",
@@ -81,8 +111,14 @@
       "root": "sudah",
       "gloss": "already",
       "sentence": "Saya sudah minum air.",
+      "sentenceGloss": "I have already drunk water.",
+      "note": "Marks completed action; casual speech often shortens to 'dah'.",
       "register": "neutral",
-      "requires": ["saya", "minum", "air"]
+      "requires": [
+        "saya",
+        "minum",
+        "air"
+      ]
     },
     {
       "id": "belum",
@@ -90,8 +126,13 @@
       "root": "belum",
       "gloss": "not yet",
       "sentence": "Saya belum minum kopi.",
+      "sentenceGloss": "I have not drunk coffee yet.",
       "register": "neutral",
-      "requires": ["saya", "minum", "kopi"]
+      "requires": [
+        "saya",
+        "minum",
+        "kopi"
+      ]
     },
     {
       "id": "makan",
@@ -99,8 +140,12 @@
       "root": "makan",
       "gloss": "eat",
       "sentence": "Saya mahu makan.",
+      "sentenceGloss": "I want to eat.",
       "register": "neutral",
-      "requires": ["saya", "mahu"]
+      "requires": [
+        "saya",
+        "mahu"
+      ]
     },
     {
       "id": "roti",
@@ -108,8 +153,13 @@
       "root": "roti",
       "gloss": "bread",
       "sentence": "Saya mahu makan roti.",
+      "sentenceGloss": "I want to eat bread.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "makan"]
+      "requires": [
+        "saya",
+        "mahu",
+        "makan"
+      ]
     },
     {
       "id": "nasi",
@@ -117,8 +167,13 @@
       "root": "nasi",
       "gloss": "rice",
       "sentence": "Saya mahu makan nasi.",
+      "sentenceGloss": "I want to eat rice.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "makan"]
+      "requires": [
+        "saya",
+        "mahu",
+        "makan"
+      ]
     },
     {
       "id": "lapar",
@@ -126,8 +181,11 @@
       "root": "lapar",
       "gloss": "hungry",
       "sentence": "Saya lapar.",
+      "sentenceGloss": "I am hungry.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "dahaga",
@@ -135,8 +193,11 @@
       "root": "dahaga",
       "gloss": "thirsty",
       "sentence": "Saya dahaga.",
+      "sentenceGloss": "I am thirsty.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "baik",
@@ -144,8 +205,11 @@
       "root": "baik",
       "gloss": "fine; good",
       "sentence": "Saya baik.",
+      "sentenceGloss": "I am fine.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "apa",
@@ -153,6 +217,7 @@
       "root": "apa",
       "gloss": "what",
       "sentence": "Apa?",
+      "sentenceGloss": "What?",
       "register": "neutral",
       "requires": []
     },
@@ -162,8 +227,11 @@
       "root": "ini",
       "gloss": "this",
       "sentence": "Apa ini?",
+      "sentenceGloss": "What is this?",
       "register": "neutral",
-      "requires": ["apa"]
+      "requires": [
+        "apa"
+      ]
     },
     {
       "id": "bukan",
@@ -171,8 +239,13 @@
       "root": "bukan",
       "gloss": "not, before a noun",
       "sentence": "Ini bukan kopi.",
+      "sentenceGloss": "This is not coffee.",
+      "note": "Negates nouns (unlike 'tidak', which negates verbs/adjectives).",
       "register": "neutral",
-      "requires": ["ini", "kopi"]
+      "requires": [
+        "ini",
+        "kopi"
+      ]
     },
     {
       "id": "ada",
@@ -180,8 +253,12 @@
       "root": "ada",
       "gloss": "have; there is",
       "sentence": "Saya ada kopi.",
+      "sentenceGloss": "I have coffee.",
       "register": "neutral",
-      "requires": ["saya", "kopi"]
+      "requires": [
+        "saya",
+        "kopi"
+      ]
     },
     {
       "id": "dan",
@@ -189,8 +266,14 @@
       "root": "dan",
       "gloss": "and",
       "sentence": "Saya mahu air dan kopi.",
+      "sentenceGloss": "I want water and coffee.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "air", "kopi"]
+      "requires": [
+        "saya",
+        "mahu",
+        "air",
+        "kopi"
+      ]
     },
     {
       "id": "juga",
@@ -198,8 +281,13 @@
       "root": "juga",
       "gloss": "also",
       "sentence": "Saya mahu air juga.",
+      "sentenceGloss": "I want water too.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "air"]
+      "requires": [
+        "saya",
+        "mahu",
+        "air"
+      ]
     },
     {
       "id": "sekarang",
@@ -207,8 +295,13 @@
       "root": "sekarang",
       "gloss": "now",
       "sentence": "Saya mahu minum sekarang.",
+      "sentenceGloss": "I want to drink now.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "minum"]
+      "requires": [
+        "saya",
+        "mahu",
+        "minum"
+      ]
     },
     {
       "id": "khabar",
@@ -216,8 +309,12 @@
       "root": "khabar",
       "gloss": "news",
       "sentence": "Apa khabar?",
+      "sentenceGloss": "How are you?",
+      "note": "Literally 'What news?' — the standard Malay greeting.",
       "register": "neutral",
-      "requires": ["apa"]
+      "requires": [
+        "apa"
+      ]
     },
     {
       "id": "ya",
@@ -225,8 +322,12 @@
       "root": "ya",
       "gloss": "yes",
       "sentence": "Ya, saya baik.",
+      "sentenceGloss": "Yes, I am fine.",
       "register": "neutral",
-      "requires": ["saya", "baik"]
+      "requires": [
+        "saya",
+        "baik"
+      ]
     },
     {
       "id": "awak",
@@ -234,8 +335,13 @@
       "root": "awak",
       "gloss": "you",
       "sentence": "Awak mahu kopi?",
+      "sentenceGloss": "Do you want coffee?",
+      "note": "Friendly neutral 'you' among peers.",
       "register": "neutral",
-      "requires": ["mahu", "kopi"]
+      "requires": [
+        "mahu",
+        "kopi"
+      ]
     },
     {
       "id": "tolong",
@@ -243,8 +349,11 @@
       "root": "tolong",
       "gloss": "please; help",
       "sentence": "Tolong saya.",
+      "sentenceGloss": "Help me / please help me.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "terima-kasih",
@@ -252,6 +361,7 @@
       "root": "terima",
       "gloss": "thank you",
       "sentence": "Terima kasih.",
+      "sentenceGloss": "Thank you.",
       "register": "neutral",
       "requires": []
     },
@@ -261,6 +371,7 @@
       "root": "sama",
       "gloss": "you're welcome",
       "sentence": "Sama-sama.",
+      "sentenceGloss": "You're welcome.",
       "register": "neutral",
       "requires": []
     },
@@ -270,8 +381,12 @@
       "root": "nama",
       "gloss": "name",
       "sentence": "Apa nama awak?",
+      "sentenceGloss": "What is your name?",
       "register": "neutral",
-      "requires": ["apa", "awak"]
+      "requires": [
+        "apa",
+        "awak"
+      ]
     },
     {
       "id": "hari",
@@ -279,8 +394,12 @@
       "root": "hari",
       "gloss": "day",
       "sentence": "Apa hari ini?",
+      "sentenceGloss": "What day is today?",
       "register": "neutral",
-      "requires": ["apa", "ini"]
+      "requires": [
+        "apa",
+        "ini"
+      ]
     },
     {
       "id": "esok",
@@ -288,8 +407,14 @@
       "root": "esok",
       "gloss": "tomorrow",
       "sentence": "Esok saya mahu makan nasi.",
+      "sentenceGloss": "Tomorrow I want to eat rice.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "makan", "nasi"]
+      "requires": [
+        "saya",
+        "mahu",
+        "makan",
+        "nasi"
+      ]
     },
     {
       "id": "semalam",
@@ -297,8 +422,14 @@
       "root": "semalam",
       "gloss": "yesterday; last night",
       "sentence": "Saya makan nasi semalam.",
+      "sentenceGloss": "I ate rice yesterday.",
+      "note": "In Peninsular Malay, 'semalam' can mean 'yesterday' or 'last night'.",
       "register": "neutral",
-      "requires": ["saya", "makan", "nasi"]
+      "requires": [
+        "saya",
+        "makan",
+        "nasi"
+      ]
     },
     {
       "id": "bangun",
@@ -306,8 +437,12 @@
       "root": "bangun",
       "gloss": "get up",
       "sentence": "Saya sudah bangun.",
+      "sentenceGloss": "I have already woken up.",
       "register": "neutral",
-      "requires": ["saya", "sudah"]
+      "requires": [
+        "saya",
+        "sudah"
+      ]
     },
     {
       "id": "mandi",
@@ -315,8 +450,12 @@
       "root": "mandi",
       "gloss": "bathe",
       "sentence": "Saya belum mandi.",
+      "sentenceGloss": "I have not showered yet.",
       "register": "neutral",
-      "requires": ["saya", "belum"]
+      "requires": [
+        "saya",
+        "belum"
+      ]
     },
     {
       "id": "rumah",
@@ -324,8 +463,11 @@
       "root": "rumah",
       "gloss": "house",
       "sentence": "Ini rumah.",
+      "sentenceGloss": "This is a house.",
       "register": "neutral",
-      "requires": ["ini"]
+      "requires": [
+        "ini"
+      ]
     },
     {
       "id": "di",
@@ -333,8 +475,12 @@
       "root": "di",
       "gloss": "at; in",
       "sentence": "Saya di rumah.",
+      "sentenceGloss": "I am at home.",
       "register": "neutral",
-      "requires": ["saya", "rumah"]
+      "requires": [
+        "saya",
+        "rumah"
+      ]
     },
     {
       "id": "pergi",
@@ -342,8 +488,12 @@
       "root": "pergi",
       "gloss": "go",
       "sentence": "Saya mahu pergi.",
+      "sentenceGloss": "I want to go.",
       "register": "neutral",
-      "requires": ["saya", "mahu"]
+      "requires": [
+        "saya",
+        "mahu"
+      ]
     },
     {
       "id": "kerja",
@@ -351,8 +501,12 @@
       "root": "kerja",
       "gloss": "work",
       "sentence": "Saya ada kerja.",
+      "sentenceGloss": "I have work.",
       "register": "neutral",
-      "requires": ["saya", "ada"]
+      "requires": [
+        "saya",
+        "ada"
+      ]
     },
     {
       "id": "pejabat",
@@ -360,8 +514,12 @@
       "root": "jabat",
       "gloss": "office",
       "sentence": "Ini pejabat.",
+      "sentenceGloss": "This is an office.",
+      "note": "Derived from root 'jabat' with pe- prefix.",
       "register": "neutral",
-      "requires": ["ini"]
+      "requires": [
+        "ini"
+      ]
     },
     {
       "id": "ke",
@@ -369,8 +527,13 @@
       "root": "ke",
       "gloss": "to",
       "sentence": "Saya pergi ke pejabat.",
+      "sentenceGloss": "I am going to the office.",
       "register": "neutral",
-      "requires": ["saya", "pergi", "pejabat"]
+      "requires": [
+        "saya",
+        "pergi",
+        "pejabat"
+      ]
     },
     {
       "id": "dari",
@@ -378,8 +541,13 @@
       "root": "dari",
       "gloss": "from",
       "sentence": "Saya pergi dari rumah.",
+      "sentenceGloss": "I am going from home.",
       "register": "neutral",
-      "requires": ["saya", "pergi", "rumah"]
+      "requires": [
+        "saya",
+        "pergi",
+        "rumah"
+      ]
     },
     {
       "id": "komputer",
@@ -387,8 +555,12 @@
       "root": "komputer",
       "gloss": "computer",
       "sentence": "Saya ada komputer.",
+      "sentenceGloss": "I have a computer.",
       "register": "neutral",
-      "requires": ["saya", "ada"]
+      "requires": [
+        "saya",
+        "ada"
+      ]
     },
     {
       "id": "komputer-riba",
@@ -396,8 +568,13 @@
       "root": "komputer",
       "gloss": "laptop",
       "sentence": "Ini komputer riba.",
+      "sentenceGloss": "This is a laptop.",
+      "note": "Literally 'lap computer'.",
       "register": "neutral",
-      "requires": ["ini", "komputer"]
+      "requires": [
+        "ini",
+        "komputer"
+      ]
     },
     {
       "id": "skrin",
@@ -405,8 +582,11 @@
       "root": "skrin",
       "gloss": "screen",
       "sentence": "Ini skrin.",
+      "sentenceGloss": "This is a screen.",
       "register": "neutral",
-      "requires": ["ini"]
+      "requires": [
+        "ini"
+      ]
     },
     {
       "id": "buka",
@@ -414,8 +594,13 @@
       "root": "buka",
       "gloss": "open",
       "sentence": "Saya buka komputer.",
+      "sentenceGloss": "I open the computer.",
+      "note": "Plain verb form; formal active form is 'membuka'.",
       "register": "neutral",
-      "requires": ["saya", "komputer"]
+      "requires": [
+        "saya",
+        "komputer"
+      ]
     },
     {
       "id": "e-mel",
@@ -423,8 +608,12 @@
       "root": "e-mel",
       "gloss": "email",
       "sentence": "Saya ada e-mel.",
+      "sentenceGloss": "I have email.",
       "register": "neutral",
-      "requires": ["saya", "ada"]
+      "requires": [
+        "saya",
+        "ada"
+      ]
     },
     {
       "id": "baca",
@@ -432,8 +621,13 @@
       "root": "baca",
       "gloss": "read",
       "sentence": "Saya mahu baca e-mel.",
+      "sentenceGloss": "I want to read email.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "e-mel"]
+      "requires": [
+        "saya",
+        "mahu",
+        "e-mel"
+      ]
     },
     {
       "id": "tulis",
@@ -441,8 +635,13 @@
       "root": "tulis",
       "gloss": "write",
       "sentence": "Saya mahu tulis e-mel.",
+      "sentenceGloss": "I want to write an email.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "e-mel"]
+      "requires": [
+        "saya",
+        "mahu",
+        "e-mel"
+      ]
     },
     {
       "id": "boleh",
@@ -450,8 +649,12 @@
       "root": "boleh",
       "gloss": "can",
       "sentence": "Saya boleh baca.",
+      "sentenceGloss": "I can read.",
       "register": "neutral",
-      "requires": ["saya", "baca"]
+      "requires": [
+        "saya",
+        "baca"
+      ]
     },
     {
       "id": "perlu",
@@ -459,8 +662,14 @@
       "root": "perlu",
       "gloss": "need",
       "sentence": "Saya perlu pergi ke pejabat.",
+      "sentenceGloss": "I need to go to the office.",
       "register": "neutral",
-      "requires": ["saya", "pergi", "ke", "pejabat"]
+      "requires": [
+        "saya",
+        "pergi",
+        "ke",
+        "pejabat"
+      ]
     },
     {
       "id": "penat",
@@ -468,8 +677,11 @@
       "root": "penat",
       "gloss": "tired",
       "sentence": "Saya penat.",
+      "sentenceGloss": "I am tired.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "sibuk",
@@ -477,8 +689,12 @@
       "root": "sibuk",
       "gloss": "busy",
       "sentence": "Saya sibuk sekarang.",
+      "sentenceGloss": "I am busy now.",
       "register": "neutral",
-      "requires": ["saya", "sekarang"]
+      "requires": [
+        "saya",
+        "sekarang"
+      ]
     },
     {
       "id": "meja",
@@ -486,8 +702,12 @@
       "root": "meja",
       "gloss": "table",
       "sentence": "Komputer di meja.",
+      "sentenceGloss": "The computer is on the table.",
       "register": "neutral",
-      "requires": ["komputer", "di"]
+      "requires": [
+        "komputer",
+        "di"
+      ]
     },
     {
       "id": "duduk",
@@ -495,8 +715,11 @@
       "root": "duduk",
       "gloss": "sit",
       "sentence": "Saya duduk.",
+      "sentenceGloss": "I sit.",
       "register": "neutral",
-      "requires": ["saya"]
+      "requires": [
+        "saya"
+      ]
     },
     {
       "id": "kerusi",
@@ -504,8 +727,13 @@
       "root": "kerusi",
       "gloss": "chair",
       "sentence": "Saya duduk di kerusi.",
+      "sentenceGloss": "I sit on a chair.",
       "register": "neutral",
-      "requires": ["saya", "duduk", "di"]
+      "requires": [
+        "saya",
+        "duduk",
+        "di"
+      ]
     },
     {
       "id": "panas",
@@ -513,8 +741,12 @@
       "root": "panas",
       "gloss": "hot",
       "sentence": "Kopi ini panas.",
+      "sentenceGloss": "This coffee is hot.",
       "register": "neutral",
-      "requires": ["kopi", "ini"]
+      "requires": [
+        "kopi",
+        "ini"
+      ]
     },
     {
       "id": "sejuk",
@@ -522,8 +754,12 @@
       "root": "sejuk",
       "gloss": "cold",
       "sentence": "Air ini sejuk.",
+      "sentenceGloss": "This water is cold.",
       "register": "neutral",
-      "requires": ["air", "ini"]
+      "requires": [
+        "air",
+        "ini"
+      ]
     },
     {
       "id": "gula",
@@ -531,8 +767,12 @@
       "root": "gula",
       "gloss": "sugar",
       "sentence": "Saya mahu gula.",
+      "sentenceGloss": "I want sugar.",
       "register": "neutral",
-      "requires": ["saya", "mahu"]
+      "requires": [
+        "saya",
+        "mahu"
+      ]
     },
     {
       "id": "susu",
@@ -540,8 +780,14 @@
       "root": "susu",
       "gloss": "milk",
       "sentence": "Saya mahu kopi dan susu.",
+      "sentenceGloss": "I want coffee and milk.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "kopi", "dan"]
+      "requires": [
+        "saya",
+        "mahu",
+        "kopi",
+        "dan"
+      ]
     },
     {
       "id": "sedikit",
@@ -549,8 +795,13 @@
       "root": "sedikit",
       "gloss": "a little",
       "sentence": "Saya mahu sedikit gula.",
+      "sentenceGloss": "I want a little sugar.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "gula"]
+      "requires": [
+        "saya",
+        "mahu",
+        "gula"
+      ]
     },
     {
       "id": "banyak",
@@ -558,8 +809,13 @@
       "root": "banyak",
       "gloss": "a lot",
       "sentence": "Saya ada banyak kerja.",
+      "sentenceGloss": "I have a lot of work.",
       "register": "neutral",
-      "requires": ["saya", "ada", "kerja"]
+      "requires": [
+        "saya",
+        "ada",
+        "kerja"
+      ]
     },
     {
       "id": "petang",
@@ -567,8 +823,12 @@
       "root": "petang",
       "gloss": "afternoon",
       "sentence": "Selamat petang.",
+      "sentenceGloss": "Good afternoon.",
+      "note": "Covers early afternoon until sunset.",
       "register": "neutral",
-      "requires": ["selamat"]
+      "requires": [
+        "selamat"
+      ]
     },
     {
       "id": "malam",
@@ -576,8 +836,11 @@
       "root": "malam",
       "gloss": "night",
       "sentence": "Selamat malam.",
+      "sentenceGloss": "Good night / good evening.",
       "register": "neutral",
-      "requires": ["selamat"]
+      "requires": [
+        "selamat"
+      ]
     },
     {
       "id": "tengah-hari",
@@ -585,8 +848,12 @@
       "root": "tengah",
       "gloss": "midday",
       "sentence": "Selamat tengah hari.",
+      "sentenceGloss": "Good midday.",
       "register": "neutral",
-      "requires": ["selamat", "hari"]
+      "requires": [
+        "selamat",
+        "hari"
+      ]
     },
     {
       "id": "siap",
@@ -594,8 +861,12 @@
       "root": "siap",
       "gloss": "ready; done",
       "sentence": "Saya sudah siap.",
+      "sentenceGloss": "I am ready.",
       "register": "neutral",
-      "requires": ["saya", "sudah"]
+      "requires": [
+        "saya",
+        "sudah"
+      ]
     },
     {
       "id": "mula",
@@ -603,8 +874,13 @@
       "root": "mula",
       "gloss": "start",
       "sentence": "Saya mahu mula kerja.",
+      "sentenceGloss": "I want to start work.",
       "register": "neutral",
-      "requires": ["saya", "mahu", "kerja"]
+      "requires": [
+        "saya",
+        "mahu",
+        "kerja"
+      ]
     },
     {
       "id": "tunggu",
@@ -612,8 +888,12 @@
       "root": "tunggu",
       "gloss": "wait",
       "sentence": "Saya tunggu awak.",
+      "sentenceGloss": "I am waiting for you.",
       "register": "neutral",
-      "requires": ["saya", "awak"]
+      "requires": [
+        "saya",
+        "awak"
+      ]
     },
     {
       "id": "sebentar",
@@ -621,8 +901,12 @@
       "root": "bentar",
       "gloss": "a moment",
       "sentence": "Tunggu sebentar.",
+      "sentenceGloss": "Wait a moment.",
+      "note": "Derived from root 'bentar' with se- ('one').",
       "register": "neutral",
-      "requires": ["tunggu"]
+      "requires": [
+        "tunggu"
+      ]
     },
     {
       "id": "nanti",
@@ -630,8 +914,12 @@
       "root": "nanti",
       "gloss": "later",
       "sentence": "Saya makan nanti.",
+      "sentenceGloss": "I will eat later.",
       "register": "neutral",
-      "requires": ["saya", "makan"]
+      "requires": [
+        "saya",
+        "makan"
+      ]
     },
     {
       "id": "tadi",
@@ -639,8 +927,13 @@
       "root": "tadi",
       "gloss": "earlier",
       "sentence": "Saya minum kopi tadi.",
+      "sentenceGloss": "I drank coffee earlier.",
       "register": "neutral",
-      "requires": ["saya", "minum", "kopi"]
+      "requires": [
+        "saya",
+        "minum",
+        "kopi"
+      ]
     }
   ]
 }

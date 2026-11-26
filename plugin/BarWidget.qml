@@ -5,14 +5,15 @@ import Quickshell.Hyprland
 import qs.Ui
 import qs.Commons
 
-// The bar shows one lemma. The command owns the day plan, the log, and the
-// schedule. A new word's next `today` is the following word, so while the
-// popup is open the chip holds the card it already fetched.
+// The bar shows one quiet cue (lemma for word mode, blanked cloze or English
+// cue for Level 2 rungs so the bar does not spoil the answer). The command owns
+// the day plan, the log, and the schedule.
 BarWidget {
   id: root
   moduleName: "manny.tepi"
 
   readonly property string tepiBin: "/home/manny/.local/bin/tepi"
+  readonly property string tepiWebUrl: "http://127.0.0.1:8787/web/"
   readonly property color barInk: bar ? bar.barForeground : Color.foreground
   readonly property color popupInk: bar ? bar.foreground : Color.foreground
   readonly property string inkFont: bar && bar.fontFamily ? bar.fontFamily : Style.font.family
@@ -34,24 +35,49 @@ BarWidget {
   property string jobErr: ""
 
   readonly property string mode: card && card.mode ? String(card.mode) : ""
+  readonly property string promptMode: card && card.promptMode ? String(card.promptMode) : "word"
   readonly property string lemma: card && card.word && card.word.lemma ? String(card.word.lemma) : ""
+  readonly property string barLabel: {
+    if (!lemma) return ""
+    if (mode === "review" && card.revealed !== true) {
+      if (promptMode === "cloze" && card.cloze) return String(card.cloze)
+      if (promptMode === "reverse" && card.word && card.word.gloss) return String(card.word.gloss)
+    }
+    return lemma
+  }
   readonly property bool hasWord: lemma !== ""
   readonly property bool resting: mode === "rest"
   readonly property string tooltip: {
     if (mode === "new") return "New today"
-    if (mode === "review") return "Review"
+    if (mode === "review") {
+      if (promptMode === "cloze") return "Sentence cloze"
+      if (promptMode === "reverse") return "Recall Bahasa Melayu"
+      return "Review"
+    }
     if (mode === "rest") return "Resting"
     return ""
   }
   readonly property string faceMode: face && face.mode ? String(face.mode) : ""
+  readonly property string facePromptMode: face && face.promptMode ? String(face.promptMode) : "word"
   readonly property string faceLemma: face && face.lemma ? String(face.lemma) : ""
+  readonly property string faceRegister: face && face.register ? String(face.register) : "neutral"
   readonly property string faceGloss: face && face.gloss ? String(face.gloss) : ""
   readonly property string faceSentence: face && face.sentence ? String(face.sentence) : ""
+  readonly property string faceSentenceGloss: face && face.sentenceGloss ? String(face.sentenceGloss) : ""
+  readonly property string faceNote: face && face.note ? String(face.note) : ""
   readonly property var faceCousins: face && face.cousins ? face.cousins : []
+  readonly property int faceRung: face && typeof face.intervalIndex === "number" ? face.intervalIndex : 0
+  readonly property int faceLadder: face && typeof face.ladderLength === "number" ? face.ladderLength : 5
+  readonly property string faceCounter: face && face.counter ? String(face.counter) : ""
+  readonly property string rungDots: {
+    var out = ""
+    for (var i = 0; i < faceLadder; i++) {
+      out += (i < faceRung ? "●" : "○")
+      if (i + 1 < faceLadder) out += " "
+    }
+    return out
+  }
   readonly property string cousinsCaption: faceCousins.length > 0 ? "cousins: " + faceCousins.join(", ") : ""
-  // Read-only workspace signal: the focused monitor's active workspace, the
-  // same Quickshell.Hyprland read the shell's own Workspaces widget uses. Its
-  // name becomes the --about hint. No dispatch, no new dependency.
   readonly property var activeWorkspace: {
     var monitor = Hyprland.focusedMonitor
     return monitor && monitor.activeWorkspace ? monitor.activeWorkspace : null
@@ -62,7 +88,11 @@ BarWidget {
     if (rated && rateNote) return rateNote
     if (statusLine) return statusLine
     if (faceMode === "new") return "New today"
-    if (faceMode === "review") return "Review"
+    if (faceMode === "review") {
+      if (facePromptMode === "cloze") return "Sentence cloze"
+      if (facePromptMode === "reverse") return "Recall Malay"
+      return "Review"
+    }
     if (faceMode === "rest") return "Resting"
     return ""
   }
@@ -149,15 +179,32 @@ BarWidget {
     tepiProc.running = true
   }
 
+  function counterFor(payload) {
+    if (!payload || !payload.plan || !payload.remaining) return ""
+    var total = (payload.plan.reviews ? payload.plan.reviews.length : 0) + (payload.plan.new ? payload.plan.new.length : 0)
+    if (total <= 0) return ""
+    var left = (payload.remaining.reviews || 0) + (payload.remaining.new || 0)
+    var done = Math.max(0, total - left)
+    var cur = payload.mode === "rest" ? total : Math.min(done + 1, total)
+    return cur + "/" + total
+  }
+
   function faceFrom(payload) {
     var word = payload && payload.word ? payload.word : null
     if (!word || !word.lemma) return null
     return {
       lemma: String(word.lemma),
+      register: word.register ? String(word.register) : "neutral",
       gloss: word.gloss ? String(word.gloss) : "",
       sentence: word.sentence ? String(word.sentence) : "",
+      sentenceGloss: word.sentenceGloss ? String(word.sentenceGloss) : "",
+      note: word.note ? String(word.note) : "",
       cousins: word.cousins ? word.cousins.map(String) : [],
-      mode: String(payload.mode || "")
+      mode: String(payload.mode || ""),
+      promptMode: payload.promptMode ? String(payload.promptMode) : "word",
+      intervalIndex: typeof payload.intervalIndex === "number" ? payload.intervalIndex : 0,
+      ladderLength: typeof payload.ladderLength === "number" ? payload.ladderLength : 5,
+      counter: counterFor(payload)
     }
   }
 
@@ -208,10 +255,17 @@ BarWidget {
       if (payload.word) {
         face = {
           lemma: String(payload.word.lemma || faceLemma),
+          register: payload.word.register ? String(payload.word.register) : faceRegister,
           gloss: payload.word.gloss ? String(payload.word.gloss) : "",
           sentence: payload.word.sentence ? String(payload.word.sentence) : "",
+          sentenceGloss: payload.word.sentenceGloss ? String(payload.word.sentenceGloss) : "",
+          note: payload.word.note ? String(payload.word.note) : "",
           cousins: payload.word.cousins ? payload.word.cousins.map(String) : [],
-          mode: "review"
+          mode: "review",
+          promptMode: facePromptMode,
+          intervalIndex: typeof payload.intervalIndex === "number" ? payload.intervalIndex : faceRung,
+          ladderLength: faceLadder,
+          counter: faceCounter
         }
       }
     }
@@ -290,7 +344,7 @@ BarWidget {
     id: lemmaLabel
     anchors.centerIn: parent
     textFormat: Text.PlainText
-    text: root.lemma
+    text: root.barLabel
     color: root.resting ? Qt.darker(root.barInk, 1.45) : root.barInk
     font.family: root.inkFont
     font.pixelSize: Style.font.body
@@ -318,23 +372,76 @@ BarWidget {
     owner: root
     open: root.popupOpen
     triggerMode: "click"
-    contentWidth: popup.fittedContentWidth(Style.space(300))
+    contentWidth: popup.fittedContentWidth(Style.space(320))
     contentHeight: popup.fittedContentHeight(column.implicitHeight)
 
     Column {
       id: column
       width: parent.width
       spacing: Style.space(8)
+      focus: root.popupOpen
 
-      Text {
+      Keys.onPressed: function(event) {
+        if (event.key === Qt.Key_Escape) {
+          root.dismiss()
+          event.accepted = true
+        } else if (root.showRatings && event.key === Qt.Key_1) {
+          root.rate("known")
+          event.accepted = true
+        } else if (root.showRatings && event.key === Qt.Key_2) {
+          root.rate("fuzzy")
+          event.accepted = true
+        } else if (root.showRatings && event.key === Qt.Key_3) {
+          root.rate("missed")
+          event.accepted = true
+        }
+      }
+
+      Row {
         width: column.width
-        textFormat: Text.PlainText
-        text: root.faceLemma
-        color: root.popupInk
-        font.family: root.inkFont
-        font.pixelSize: Style.font.subtitle
-        font.bold: true
-        wrapMode: Text.WordWrap
+        spacing: Style.space(8)
+
+        Text {
+          textFormat: Text.PlainText
+          text: root.caption + (root.faceCounter ? ("  ·  " + root.faceCounter) : "")
+          color: Qt.darker(root.popupInk, 1.55)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+        }
+
+        Item { width: Style.space(4); height: 1 }
+
+        Text {
+          textFormat: Text.PlainText
+          text: root.rungDots
+          color: Qt.darker(root.popupInk, 1.35)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+        }
+      }
+
+      Row {
+        width: column.width
+        spacing: Style.space(6)
+
+        Text {
+          textFormat: Text.PlainText
+          text: root.faceLemma
+          color: root.popupInk
+          font.family: root.inkFont
+          font.pixelSize: Style.font.subtitle
+          font.bold: true
+        }
+
+        Text {
+          visible: root.faceRegister !== "neutral"
+          anchors.baseline: parent.children[0].baseline
+          textFormat: Text.PlainText
+          text: "(" + root.faceRegister + ")"
+          color: Qt.darker(root.popupInk, 1.5)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+        }
       }
 
       Text {
@@ -364,9 +471,32 @@ BarWidget {
         visible: text !== ""
         textFormat: Text.PlainText
         text: root.faceSentence
-        color: Qt.darker(root.popupInk, 1.35)
+        color: Qt.darker(root.popupInk, 1.25)
         font.family: root.inkFont
         font.pixelSize: Style.font.bodySmall
+        wrapMode: Text.WordWrap
+      }
+
+      Text {
+        width: column.width
+        visible: text !== ""
+        textFormat: Text.PlainText
+        text: root.faceSentenceGloss
+        color: Qt.darker(root.popupInk, 1.5)
+        font.family: root.inkFont
+        font.pixelSize: Style.font.caption
+        wrapMode: Text.WordWrap
+      }
+
+      Text {
+        width: column.width
+        visible: text !== ""
+        textFormat: Text.PlainText
+        text: root.faceNote
+        color: Qt.darker(root.popupInk, 1.55)
+        font.family: root.inkFont
+        font.pixelSize: Style.font.caption
+        font.italic: true
         wrapMode: Text.WordWrap
       }
 
@@ -382,42 +512,45 @@ BarWidget {
         wrapMode: Text.WordWrap
       }
 
-      Text {
-        width: column.width
-        visible: text !== ""
-        textFormat: Text.PlainText
-        text: root.caption
-        color: Qt.darker(root.popupInk, 1.55)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.caption
-        wrapMode: Text.WordWrap
-      }
-
       Row {
         visible: root.showRatings
         height: visible ? implicitHeight : 0
         spacing: Style.space(6)
 
         Button {
-          text: "Known"
+          text: "Known (1)"
           foreground: root.popupInk
           enabled: !root.ratingBusy
           opacity: enabled ? 1 : 0.4
           onClicked: root.rate("known")
         }
         Button {
-          text: "Fuzzy"
+          text: "Fuzzy (2)"
           foreground: root.popupInk
           enabled: !root.ratingBusy
           opacity: enabled ? 1 : 0.4
           onClicked: root.rate("fuzzy")
         }
         Button {
-          text: "Missed"
+          text: "Missed (3)"
           foreground: root.popupInk
           enabled: !root.ratingBusy
           opacity: enabled ? 1 : 0.4
           onClicked: root.rate("missed")
+        }
+      }
+
+      Text {
+        textFormat: Text.PlainText
+        text: "Open Tepi Web →"
+        color: Qt.darker(root.popupInk, 1.55)
+        font.family: root.inkFont
+        font.pixelSize: Style.font.caption
+
+        MouseArea {
+          anchors.fill: parent
+          cursorShape: Qt.PointingHandCursor
+          onClicked: Qt.openUrlExternally(root.tepiWebUrl)
         }
       }
     }

@@ -9,6 +9,8 @@
       "root": "ajar",
       "gloss": "teach",
       "sentence": "Saya mahu mengajar.",
+      "sentenceGloss": "I want to teach.",
+      "note": "Root 'ajar' — base for mengajar, belajar, pelajar, pelajaran.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -21,6 +23,8 @@
       "root": "ajar",
       "gloss": "learn",
       "sentence": "Saya mahu belajar.",
+      "sentenceGloss": "I want to learn.",
+      "note": "ber- + ajar → belajar (irregular 'l' instead of 'r').",
       "register": "neutral",
       "requires": [
         "ajar",
@@ -34,6 +38,8 @@
       "root": "ajar",
       "gloss": "student",
       "sentence": "Saya pelajar.",
+      "sentenceGloss": "I am a student.",
+      "note": "pe- + ajar → person who learns.",
       "register": "neutral",
       "requires": [
         "ajar",
@@ -46,6 +52,8 @@
       "root": "ajar",
       "gloss": "lesson",
       "sentence": "Ini pelajaran.",
+      "sentenceGloss": "This is a lesson.",
+      "note": "pe-...-an + ajar → the thing taught/learned.",
       "register": "neutral",
       "requires": [
         "ajar",
@@ -58,6 +66,8 @@
       "root": "jalan",
       "gloss": "road",
       "sentence": "Ini jalan.",
+      "sentenceGloss": "This is a road.",
+      "note": "Root 'jalan' — base for berjalan, perjalanan, jalanan.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -69,6 +79,8 @@
       "root": "jalan",
       "gloss": "walk",
       "sentence": "Saya berjalan.",
+      "sentenceGloss": "I am walking.",
+      "note": "ber- + jalan → intransitive verb 'to walk'.",
       "register": "neutral",
       "requires": [
         "jalan",
@@ -81,6 +93,8 @@
       "root": "jalan",
       "gloss": "journey",
       "sentence": "Perjalanan ke rumah.",
+      "sentenceGloss": "A journey home.",
+      "note": "per-...-an + jalan → noun 'journey'.",
       "register": "neutral",
       "requires": [
         "jalan",
@@ -94,6 +108,8 @@
       "root": "jalan",
       "gloss": "streets",
       "sentence": "Jalanan sibuk.",
+      "sentenceGloss": "The streets are busy.",
+      "note": "jalan + -an → streets.",
       "register": "neutral",
       "requires": [
         "jalan",
@@ -106,6 +122,8 @@
       "root": "beli",
       "gloss": "buy (root)",
       "sentence": "Saya mahu beli.",
+      "sentenceGloss": "I want to buy.",
+      "note": "Root 'beli' — casual/plain form; formal active is 'membeli'.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -118,6 +136,8 @@
       "root": "beli",
       "gloss": "to buy, purchase (active verb)",
       "sentence": "Saya mahu membeli.",
+      "sentenceGloss": "I want to buy.",
+      "note": "meN- + beli → active verb 'to buy'.",
       "register": "neutral",
       "requires": [
         "beli",
@@ -131,6 +151,8 @@
       "root": "beli",
       "gloss": "buyer",
       "sentence": "Saya pembeli.",
+      "sentenceGloss": "I am a buyer.",
+      "note": "peN- + beli → person who buys.",
       "register": "neutral",
       "requires": [
         "beli",
@@ -143,6 +165,8 @@
       "root": "beli",
       "gloss": "purchase",
       "sentence": "Belian saya banyak.",
+      "sentenceGloss": "My purchases are many.",
+      "note": "beli + -an → purchase / item bought.",
       "register": "neutral",
       "requires": [
         "beli",
@@ -156,6 +180,8 @@
       "root": "main",
       "gloss": "play (root)",
       "sentence": "Saya mahu main.",
+      "sentenceGloss": "I want to play.",
+      "note": "Root 'main' — base for bermain, permainan, pemain.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -168,6 +194,8 @@
       "root": "main",
       "gloss": "to play (active verb)",
       "sentence": "Saya bermain.",
+      "sentenceGloss": "I am playing.",
+      "note": "ber- + main → active verb 'to play'.",
       "register": "neutral",
       "requires": [
         "main",
@@ -180,6 +208,8 @@
       "root": "main",
       "gloss": "game",
       "sentence": "Ini permainan.",
+      "sentenceGloss": "This is a game.",
+      "note": "per-...-an + main → game.",
       "register": "neutral",
       "requires": [
         "main",
@@ -192,6 +222,8 @@
       "root": "main",
       "gloss": "player",
       "sentence": "Saya pemain.",
+      "sentenceGloss": "I am a player.",
+      "note": "pe- + main → person who plays.",
       "register": "neutral",
       "requires": [
         "main",
@@ -204,6 +236,8 @@
       "root": "cuci",
       "gloss": "wash (root)",
       "sentence": "Saya mahu cuci.",
+      "sentenceGloss": "I want to wash.",
+      "note": "Root 'cuci' — base for mencuci, pencuci, cucian.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -216,6 +250,7 @@
       "root": "baju",
       "gloss": "shirt, top",
       "sentence": "Ini baju.",
+      "sentenceGloss": "This is a shirt.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -227,6 +262,8 @@
       "root": "cuci",
       "gloss": "to wash (active verb)",
       "sentence": "Saya mencuci baju.",
+      "sentenceGloss": "I am washing clothes.",
+      "note": "meN- + cuci → active verb 'to wash'.",
       "register": "neutral",
       "requires": [
         "cuci",
@@ -240,6 +277,8 @@
       "root": "cuci",
       "gloss": "cleanser, detergent",
       "sentence": "Ini pencuci.",
+      "sentenceGloss": "This is detergent.",
+      "note": "peN- + cuci → cleanser / detergent.",
       "register": "neutral",
       "requires": [
         "cuci",
@@ -252,6 +291,8 @@
       "root": "cuci",
       "gloss": "laundry",
       "sentence": "Ini cucian.",
+      "sentenceGloss": "This is laundry.",
+      "note": "cuci + -an → laundry.",
       "register": "neutral",
       "requires": [
         "cuci",
@@ -264,6 +305,7 @@
       "root": "buku",
       "gloss": "book",
       "sentence": "Saya mahu baca buku.",
+      "sentenceGloss": "I want to read a book.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -277,6 +319,7 @@
       "root": "kereta",
       "gloss": "car",
       "sentence": "Ini kereta.",
+      "sentenceGloss": "This is a car.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -288,6 +331,7 @@
       "root": "bas",
       "gloss": "bus",
       "sentence": "Ini bas.",
+      "sentenceGloss": "This is a bus.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -299,6 +343,7 @@
       "root": "kedai",
       "gloss": "shop",
       "sentence": "Saya pergi ke kedai.",
+      "sentenceGloss": "I am going to the shop.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -312,6 +357,7 @@
       "root": "harga",
       "gloss": "price",
       "sentence": "Ini harga baju.",
+      "sentenceGloss": "This is the price of the shirt.",
       "register": "neutral",
       "requires": [
         "baju",
@@ -325,6 +371,8 @@
       "root": "wang",
       "gloss": "money",
       "sentence": "Saya ada wang.",
+      "sentenceGloss": "I have money.",
+      "note": "Neutral/formal 'money'; everyday speech often uses 'duit'.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -337,6 +385,7 @@
       "root": "ibu",
       "gloss": "mother",
       "sentence": "Ini ibu saya.",
+      "sentenceGloss": "This is my mother.",
       "register": "neutral",
       "requires": [
         "ini",
@@ -349,6 +398,7 @@
       "root": "ayah",
       "gloss": "father",
       "sentence": "Ini ayah saya.",
+      "sentenceGloss": "This is my father.",
       "register": "neutral",
       "requires": [
         "ini",
@@ -361,6 +411,7 @@
       "root": "anak",
       "gloss": "child",
       "sentence": "Ini anak saya.",
+      "sentenceGloss": "This is my child.",
       "register": "neutral",
       "requires": [
         "ini",
@@ -373,6 +424,7 @@
       "root": "sekolah",
       "gloss": "school",
       "sentence": "Saya pergi ke sekolah.",
+      "sentenceGloss": "I am going to school.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -386,6 +438,7 @@
       "root": "guru",
       "gloss": "teacher",
       "sentence": "Ini guru.",
+      "sentenceGloss": "This is a teacher.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -397,6 +450,7 @@
       "root": "sakit",
       "gloss": "ill",
       "sentence": "Saya sakit.",
+      "sentenceGloss": "I am ill.",
       "register": "neutral",
       "requires": [
         "saya"
@@ -408,6 +462,7 @@
       "root": "ubat",
       "gloss": "medicine",
       "sentence": "Saya mahu ubat.",
+      "sentenceGloss": "I want medicine.",
       "register": "neutral",
       "requires": [
         "saya",
@@ -420,6 +475,7 @@
       "root": "hujan",
       "gloss": "rain",
       "sentence": "Hari ini hujan.",
+      "sentenceGloss": "Today it is raining.",
       "register": "neutral",
       "requires": [
         "hari",
@@ -432,6 +488,7 @@
       "root": "minggu",
       "gloss": "week",
       "sentence": "Minggu ini saya sibuk.",
+      "sentenceGloss": "This week I am busy.",
       "register": "neutral",
       "requires": [
         "ini",
@@ -445,6 +502,7 @@
       "root": "kasut",
       "gloss": "shoe",
       "sentence": "Ini kasut.",
+      "sentenceGloss": "This is a shoe.",
       "register": "neutral",
       "requires": [
         "ini"
@@ -456,6 +514,8 @@
       "root": "tengok",
       "gloss": "look",
       "sentence": "Saya mahu tengok.",
+      "sentenceGloss": "I want to look.",
+      "note": "Everyday casual Peninsular word for 'look / watch'.",
       "register": "casual",
       "requires": [
         "saya",
@@ -468,6 +528,8 @@
       "root": "nak",
       "gloss": "want",
       "sentence": "Saya nak air.",
+      "sentenceGloss": "I want water.",
+      "note": "Casual Peninsular shortening of 'hendak' / 'mahu'.",
       "register": "casual",
       "requires": [
         "saya",
@@ -480,6 +542,8 @@
       "root": "tak",
       "gloss": "not",
       "sentence": "Saya tak mahu.",
+      "sentenceGloss": "I don't want to.",
+      "note": "Casual Peninsular shortening of 'tidak'.",
       "register": "casual",
       "requires": [
         "saya",

@@ -10,6 +10,8 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | --- | --- |
 | `deck/words.json` | Deck 1. Teaching order starts here. |
 | `deck/words-2.json` | Deck 2. Taught after every word in deck 1. |
+| `deck/words-3.json` | Deck 3. Everyday Peninsular Malaysia life, casual pairs, and five root families. |
+| `deck/index.json` | Deck manifest for Tepi Web. |
 | `deck/words.schema.json` | The deck contract. Every `deck/words*.json` file matches it. |
 | `deck/kamus.json` | The last spelling check. One status per deck word. |
 | `dictionary/kamus-dewan-perdana.json` | Which dictionary that check asks. |
@@ -17,6 +19,7 @@ Peninsular Malaysia, standard Malaysian spelling. No audio.
 | `dictionary/tesaurus-bahasa-melayu-dewan.json` | Which thesaurus that check asks. |
 | `config.json` | Daily caps and the recall ladder. |
 | `tepi/` | The `tepi` command. |
+| `web/` | Tepi Web — zero-dependency offline PWA consuming `deck/*.json`. |
 | `plugin/` | The `manny.tepi` bar widget. Linked from `~/.config/omarchy/plugins/manny.tepi`. |
 | `~/.local/share/tepi/tepi.sqlite` | Progress. Created on the first real day, never committed. |
 
@@ -137,6 +140,26 @@ Every lemma in this deck has a row in `deck/kamus.json` from the last `tepi chec
 ## Second deck
 
 `deck/words-2.json` is the next 40 words: errands, family, and five root families (`ajar`, `jalan`, `beli`, `main`, `cuci`). The base form is the word whose lemma is the root, and it comes before the derived forms. A derived form requires that base. Most of the register is `neutral`. `tengok`, `nak`, and `tak` are `casual`. New words still arrive at `newPerDay`, and only once every earlier word has been introduced.
+
+## Third deck
+
+`deck/words-3.json` adds 40 everyday Peninsular Malaysia words: kopitiam & dining, getting around, casual/neutral pairs (`tapi`, `dah`, `saja`, `macam`, `duit`), and five root families (`kerja`, `cakap`, `bayar`, `masak`, `baca`). Every entry across all three decks carries `sentenceGloss` (plus optional `cloze` and `note`) to support Level 2 prompts:
+
+- **Rungs 0–2:** single word (`BM → EN`).
+- **Rungs 3–4:** sentence cloze (fill-in-the-blank in Malay with English hint).
+- **Rung 5:** reverse sentence recall (`EN → BM`).
+
+## Tepi Web (PWA)
+
+`web/` is a zero-dependency static Progressive Web App (Vanilla HTML/CSS/ES Modules) with four tabs (**Today**, **Families**, **Garden**, **Settings**), keyboard shortcuts (`Space`, `1`/`2`/`3`), optional `ms-MY` browser speech synthesis, and JSON backup compatible with `tepi export` and `tepi import`.
+
+Preview locally from the repo root:
+
+```
+python3 -m http.server 8787
+```
+
+Then open `http://127.0.0.1:8787/web/`.
 
 ## Build order
 
