@@ -4,6 +4,21 @@ A Bahasa Melayu edge chip for this Omarchy laptop. One quiet word on the bar, tw
 
 Peninsular Malaysia, standard Malaysian spelling. No audio.
 
+## Tepi Web (Use & Install)
+
+Open **[https://ccgermaine.github.io/tepi/](https://ccgermaine.github.io/tepi/)** in any browser—no account or download needed. Your progress is saved automatically in your browser and works offline after the first visit.
+
+**Install it like an app:**
+- **iPhone / iPad (Safari):** Tap **Share** (the square with an arrow), then **Add to Home Screen**.
+- **Android (Chrome):** Tap the **⋮** menu, then **Install app** (or **Add to Home screen**).
+- **Computer (Chrome / Edge):** Click the **Install** icon on the right side of the address bar.
+
+**How to use it each day:**
+1. Look at the **Bahasa Malaysia** word and example sentence.
+2. Tap **Reveal meaning** to check the English translation and root-family cousins.
+3. Rate how well you knew it (**Known**, **Fuzzy**, or **Missed**), then tap **Next word**.
+4. *(Optional)* Use **Settings → Export JSON snapshot** anytime to back up your progress.
+
 ## Layout
 
 | Path | What it is |

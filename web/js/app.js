@@ -369,6 +369,19 @@ function renderSettings() {
     </div>
 
     <div class="settings-card">
+      <h3>How to Install &amp; Use</h3>
+      <p class="section-sub" style="margin-bottom:10px;">
+        <strong>Install as an app (works offline):</strong><br>
+        • <strong>iPhone / iPad (Safari):</strong> Tap the <strong>Share</strong> button, then <strong>Add to Home Screen</strong>.<br>
+        • <strong>Android (Chrome):</strong> Tap the <strong>⋮</strong> menu, then <strong>Install app</strong> (or <strong>Add to Home screen</strong>).<br>
+        • <strong>Computer (Chrome / Edge):</strong> Click the <strong>Install</strong> icon in the address bar.
+      </p>
+      <p class="section-sub" style="margin-bottom:0;">
+        <strong>Daily review:</strong> Read the Bahasa Malaysia word and sentence, tap <strong>Reveal meaning</strong>, choose <strong>Known</strong>, <strong>Fuzzy</strong>, or <strong>Missed</strong>, then tap <strong>Next word</strong>. Your progress is saved automatically in your browser.
+      </p>
+    </div>
+
+    <div class="settings-card">
       <h3>Backup &amp; CLI Sync</h3>
       <p class="section-sub" style="margin-bottom:10px;">
         Compatible with <code>tepi export</code> and <code>tepi import</code> (<code>tepi-progress-v1</code>).
