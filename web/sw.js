@@ -1,4 +1,4 @@
-const CACHE = "tepi-web-v4";
+const CACHE = "tepi-web-v5";
 const SHELL = [
   "./",
   "./index.html",

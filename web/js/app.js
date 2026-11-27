@@ -59,7 +59,7 @@ function detectMalayVoice() {
       voices.find((v) => v.lang.toLowerCase() === "ms-my") ||
       voices.find((v) => v.lang.toLowerCase().startsWith("ms")) ||
       null;
-    if (activeTab === "today") renderToday();
+    if (activeTab === "today" && entries.length) renderToday();
   };
   pick();
   window.speechSynthesis.onvoiceschanged = pick;
@@ -528,12 +528,12 @@ document.addEventListener("keydown", (ev) => {
 
 async function boot() {
   applyTheme();
-  detectMalayVoice();
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   }
   try {
     entries = await loadCurriculum();
+    detectMalayVoice();
     renderToday();
   } catch (err) {
     $("#view-today").innerHTML = `<div class="card"><div class="card-front"><p class="prompt-hint">${escapeHtml(err.message)}</p></div></div>`;
