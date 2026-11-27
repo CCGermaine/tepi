@@ -23,6 +23,7 @@ let prefs = loadPrefs();
 let activeTab = "today";
 let lastRated = null;
 let heldNewCard = null;
+let revealedWordId = null;
 let malayVoice = null;
 
 function $(sel) { return document.querySelector(sel); }
@@ -109,7 +110,7 @@ function rungDots(index, total) {
 function renderToday() {
   const container = $("#view-today");
   const today = localIsoDate();
-  const card = heldNewCard || getPresentation(state, entries, prefs.config, today);
+  const card = heldNewCard || lastRated?.card || getPresentation(state, entries, prefs.config, today);
   saveState(state);
 
   if (!card.entry) {
@@ -119,7 +120,7 @@ function renderToday() {
 
   const entry = card.entry;
   const cousins = cousinsOf(entries, entry);
-  const showBack = card.revealed || card.mode === "rest" || Boolean(lastRated);
+  const showBack = card.mode === "rest" || Boolean(lastRated) || Boolean(heldNewCard) || (card.mode === "review" && revealedWordId === entry.id);
   const totalToday = card.plan.reviews.length + card.plan.introduced.length;
   const doneToday = totalToday - card.reviewsRemaining - card.newRemaining;
   const counterText = totalToday > 0 ? `${Math.min(doneToday + (card.mode === "rest" ? 0 : 1), totalToday)} / ${totalToday}` : "Resting";
@@ -147,6 +148,7 @@ function renderToday() {
     frontHtml = `
       <div class="prompt-kicker">${card.mode === "new" ? "Meet a new word" : "Bahasa Melayu"}</div>
       <h1 class="lemma-hero">${escapeHtml(entry.lemma)}</h1>
+      ${!showBack && entry.sentence ? `<p class="prompt-hint">${escapeHtml(entry.sentence)}</p>` : ""}
     `;
   }
 
@@ -401,29 +403,37 @@ function switchTab(tab, highlightRoot = null) {
 }
 
 function handleReveal() {
+  if (lastRated || heldNewCard) return;
   const today = localIsoDate();
   const card = getPresentation(state, entries, prefs.config, today);
-  if (!card.entry || card.revealed) return;
-  const revealed = revealCurrent(state, entries, prefs.config, today);
+  if (!card.entry) return;
+  if (card.mode === "review" && revealedWordId === card.entry.id) return;
+  const revealed = card.revealed ? card : revealCurrent(state, entries, prefs.config, today);
   saveState(state);
   if (card.mode === "new") {
     heldNewCard = revealed;
+  } else if (card.mode === "review") {
+    revealedWordId = card.entry.id;
   }
   renderToday();
 }
 
 function handleRate(rating) {
+  if (lastRated || heldNewCard) return;
   const today = localIsoDate();
+  const card = getPresentation(state, entries, prefs.config, today);
+  if (!card.entry || card.mode !== "review" || revealedWordId !== card.entry.id) return;
   const res = rateCurrent(state, entries, prefs.config, today, rating);
   if (!res) return;
   saveState(state);
-  lastRated = res;
+  lastRated = { ...res, card: { ...card, revealed: true, intervalIndex: res.intervalIndex } };
   renderToday();
 }
 
 function handleNext() {
   lastRated = null;
   heldNewCard = null;
+  revealedWordId = null;
   renderToday();
 }
 
@@ -467,6 +477,7 @@ document.addEventListener("change", async (ev) => {
       }
       lastRated = null;
       heldNewCard = null;
+      revealedWordId = null;
       showToast(`Imported ${state.progress.length} words.`);
       switchTab("today");
     } catch (err) {

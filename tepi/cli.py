@@ -610,6 +610,7 @@ def _hint(card: Presentation) -> str:
 
 def _word(entry, show: bool, cousins=(), prompt_mode: str = "word") -> dict:
     show_gloss = show or prompt_mode == "reverse"
+    show_sentence = show or prompt_mode == "word"
     show_sentence_gloss = show or prompt_mode in ("cloze", "reverse")
     return {
         "id": entry.id,
@@ -617,7 +618,7 @@ def _word(entry, show: bool, cousins=(), prompt_mode: str = "word") -> dict:
         "root": entry.root,
         "register": entry.register,
         "gloss": entry.gloss if show_gloss else None,
-        "sentence": entry.sentence if show else None,
+        "sentence": entry.sentence if show_sentence else None,
         "sentenceGloss": (entry.sentence_gloss or None) if show_sentence_gloss else None,
         "note": entry.note if show else None,
         "cousins": list(cousins),

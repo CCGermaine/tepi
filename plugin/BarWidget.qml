@@ -21,6 +21,9 @@ BarWidget {
   property var face: null
   property bool popupOpen: false
   property bool wantPopup: false
+  property bool faceRevealed: false
+  property bool revealBusy: false
+  property bool advancing: false
   property bool rated: false
   property bool ratingBusy: false
   property string rateNote: ""
@@ -58,6 +61,7 @@ BarWidget {
   }
   readonly property string faceMode: face && face.mode ? String(face.mode) : ""
   readonly property string facePromptMode: face && face.promptMode ? String(face.promptMode) : "word"
+  readonly property string faceCloze: face && face.cloze ? String(face.cloze) : ""
   readonly property string faceLemma: face && face.lemma ? String(face.lemma) : ""
   readonly property string faceRegister: face && face.register ? String(face.register) : "neutral"
   readonly property string faceGloss: face && face.gloss ? String(face.gloss) : ""
@@ -82,7 +86,9 @@ BarWidget {
     return monitor && monitor.activeWorkspace ? monitor.activeWorkspace : null
   }
   readonly property string workspaceHint: activeWorkspace && activeWorkspace.name ? String(activeWorkspace.name) : ""
-  readonly property bool showRatings: faceMode === "review" && !rated
+  readonly property bool showReveal: !faceRevealed && (faceMode === "review" || faceMode === "new")
+  readonly property bool showRatings: faceRevealed && faceMode === "review" && !rated
+  readonly property bool showNext: rated || (faceRevealed && faceMode === "new")
   readonly property string caption: {
     if (rated && rateNote) return rateNote
     if (statusLine) return statusLine
@@ -111,21 +117,31 @@ BarWidget {
     promptSentence = ""
     rated = false
     rateNote = ""
-    var needsReveal = (mode === "new" || mode === "review") && card.revealed !== true
-    if (needsReveal) {
-      wantPopup = true
-      request("reveal", "")
-      return
-    }
+    advancing = false
     var next = faceFrom(card)
     if (!next) return
     face = next
+    faceRevealed = (next.mode === "rest" || next.mode === "empty")
     popupOpen = true
-    requestPrompt()
+    if (faceRevealed) requestPrompt()
+  }
+
+  function reveal() {
+    if (faceRevealed || revealBusy) return
+    statusLine = ""
+    request("reveal", "")
+  }
+
+  function nextWord() {
+    if (advancing) return
+    advancing = true
+    statusLine = ""
+    request("today", "")
   }
 
   function dismiss() {
     wantPopup = false
+    advancing = false
     popupOpen = false
     refresh()
   }
@@ -167,6 +183,7 @@ BarWidget {
     jobOut = ""
     jobErr = ""
     if (kind === "rate") ratingBusy = true
+    if (kind === "reveal") revealBusy = true
     var command = [tepiBin]
     if (kind === "rate") command.push("rate", rating, "--json")
     else if (kind === "prompt") {
@@ -201,6 +218,7 @@ BarWidget {
       cousins: word.cousins ? word.cousins.map(String) : [],
       mode: String(payload.mode || ""),
       promptMode: payload.promptMode ? String(payload.promptMode) : "word",
+      cloze: payload.cloze ? String(payload.cloze) : "",
       intervalIndex: typeof payload.intervalIndex === "number" ? payload.intervalIndex : 0,
       ladderLength: typeof payload.ladderLength === "number" ? payload.ladderLength : 5,
       counter: counterFor(payload)
@@ -214,6 +232,7 @@ BarWidget {
     jobOut = ""
     jobErr = ""
     ratingBusy = false
+    revealBusy = false
     var payload = null
     if (exitCode === 0 && text) {
       try {
@@ -225,6 +244,7 @@ BarWidget {
     if (!payload) {
       console.warn("tepi:", err || (kind + " failed"))
       if (kind === "reveal") wantPopup = false
+      if (kind === "today") advancing = false
       if (kind === "rate") statusLine = "That rating did not save."
       return
     }
@@ -233,17 +253,38 @@ BarWidget {
       return
     }
     if (kind === "today") {
-      if ((payload.word && payload.word.lemma) || payload.mode === "empty") card = payload
+      if ((payload.word && payload.word.lemma) || payload.mode === "empty") {
+        card = payload
+        if (advancing) {
+          advancing = false
+          var next = faceFrom(payload)
+          if (next) {
+            face = next
+            faceRevealed = (next.mode === "rest" || next.mode === "empty")
+            rated = false
+            rateNote = ""
+            promptSentence = ""
+            statusLine = ""
+            if (faceRevealed) requestPrompt()
+          }
+        }
+      } else {
+        advancing = false
+      }
       return
     }
     if (kind === "reveal") {
       var revealed = faceFrom(payload)
-      if (wantPopup && revealed) {
+      if (revealed) {
         face = revealed
+        faceRevealed = true
         rated = false
         rateNote = ""
         promptSentence = ""
-        popupOpen = true
+        if (wantPopup) {
+          wantPopup = false
+          popupOpen = true
+        }
         requestPrompt()
       }
       return
@@ -389,6 +430,10 @@ BarWidget {
         if (event.key === Qt.Key_Escape) {
           root.dismiss()
           event.accepted = true
+        } else if (event.key === Qt.Key_Space) {
+          if (root.showReveal) root.reveal()
+          else if (root.showNext) root.nextWord()
+          event.accepted = true
         } else if (root.showRatings && event.key === Qt.Key_1) {
           root.rate("known")
           event.accepted = true
@@ -429,16 +474,18 @@ BarWidget {
         spacing: Style.space(6)
 
         Text {
+          width: !root.faceRevealed && root.facePromptMode === "cloze" && root.faceCloze !== "" ? column.width : implicitWidth
           textFormat: Text.PlainText
-          text: root.faceLemma
+          text: (!root.faceRevealed && root.facePromptMode === "cloze" && root.faceCloze !== "") ? root.faceCloze : root.faceLemma
           color: root.popupInk
           font.family: root.inkFont
           font.pixelSize: Style.font.subtitle
           font.bold: true
+          wrapMode: Text.WordWrap
         }
 
         Text {
-          visible: root.faceRegister !== "neutral"
+          visible: root.faceRevealed && root.faceRegister !== "neutral"
           anchors.baseline: parent.children[0].baseline
           textFormat: Text.PlainText
           text: "(" + root.faceRegister + ")"
@@ -450,7 +497,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: root.faceRevealed && text !== ""
         textFormat: Text.PlainText
         text: root.cousinsCaption
         color: Qt.darker(root.popupInk, 1.55)
@@ -461,7 +508,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: root.faceRevealed && text !== ""
         textFormat: Text.PlainText
         text: root.faceGloss
         color: root.popupInk
@@ -472,7 +519,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: text !== "" && (root.faceRevealed || root.facePromptMode !== "cloze" || root.faceCloze === "")
         textFormat: Text.PlainText
         text: root.faceSentence
         color: Qt.darker(root.popupInk, 1.25)
@@ -483,7 +530,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: root.faceRevealed && text !== ""
         textFormat: Text.PlainText
         text: root.faceSentenceGloss
         color: Qt.darker(root.popupInk, 1.5)
@@ -494,7 +541,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: root.faceRevealed && text !== ""
         textFormat: Text.PlainText
         text: root.faceNote
         color: Qt.darker(root.popupInk, 1.55)
@@ -506,7 +553,7 @@ BarWidget {
 
       Text {
         width: column.width
-        visible: text !== ""
+        visible: root.faceRevealed && text !== ""
         textFormat: Text.PlainText
         text: root.promptSentence
         color: Qt.darker(root.popupInk, 1.45)
@@ -514,6 +561,16 @@ BarWidget {
         font.pixelSize: Style.font.bodySmall
         font.italic: true
         wrapMode: Text.WordWrap
+      }
+
+      Button {
+        visible: root.showReveal
+        height: visible ? implicitHeight : 0
+        text: "Reveal"
+        foreground: root.popupInk
+        enabled: !root.revealBusy
+        opacity: enabled ? 1 : 0.4
+        onClicked: root.reveal()
       }
 
       Row {
@@ -542,6 +599,16 @@ BarWidget {
           opacity: enabled ? 1 : 0.4
           onClicked: root.rate("missed")
         }
+      }
+
+      Button {
+        visible: root.showNext
+        height: visible ? implicitHeight : 0
+        text: "Next word"
+        foreground: root.popupInk
+        enabled: !root.advancing
+        opacity: enabled ? 1 : 0.4
+        onClicked: root.nextWord()
       }
 
       Button {
