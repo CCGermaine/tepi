@@ -115,8 +115,20 @@ export function settledPromptSentence(entries, progressMap) {
 }
 
 export function ensurePlan(state, entries, config, today) {
-  const existing = state.plans.find((p) => p.day === today);
-  if (existing) return existing;
+  if (!entries.length) {
+    return { day: today, reviews: [], introduced: [], catchUp: false };
+  }
+  const existingIdx = state.plans.findIndex((p) => p.day === today);
+  if (existingIdx !== -1) {
+    const existing = state.plans[existingIdx];
+    const poisonedEmpty =
+      existing.reviews.length === 0 &&
+      existing.introduced.length === 0 &&
+      state.progress.length === 0 &&
+      config.newPerDay > 0;
+    if (!poisonedEmpty) return existing;
+    state.plans.splice(existingIdx, 1);
+  }
 
   const progressMap = new Map(state.progress.map((r) => [r.wordId, r]));
   const dueRows = state.progress
