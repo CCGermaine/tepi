@@ -102,8 +102,30 @@ class Level2PromptTest(unittest.TestCase):
             self.assertIsNone(payload["word"]["sentenceGloss"])
             session.close()
 
-    def test_rungs_three_and_four_use_cloze_and_expose_sentence_gloss(self):
+    def test_rung_three_uses_whole_sentence_reading(self):
         session = self._session_at_rung("air", 3)
+        self.addCleanup(session.close)
+        card = session.presentation()
+        mode, cloze = card_prompt(card)
+        self.assertEqual(mode, "sentence")
+        self.assertIsNone(cloze)
+        payload = card_payload(card, session.deck)
+        self.assertEqual(payload["promptMode"], "sentence")
+        self.assertIsNone(payload["cloze"])
+        self.assertEqual(payload["word"]["sentence"], "Saya mahu air.")
+        self.assertIsNone(payload["word"]["gloss"])
+        self.assertIsNone(payload["word"]["sentenceGloss"])
+
+    def test_single_token_sentence_at_rung_three_falls_back_to_word(self):
+        session = self._session_at_rung("saya", 3)
+        self.addCleanup(session.close)
+        card = session.presentation()
+        mode, cloze = card_prompt(card)
+        self.assertEqual(mode, "word")
+        self.assertIsNone(cloze)
+
+    def test_rung_four_uses_guided_cloze_with_gloss_and_sentence_gloss(self):
+        session = self._session_at_rung("air", 4)
         self.addCleanup(session.close)
         card = session.presentation()
         mode, cloze = card_prompt(card)
@@ -112,13 +134,13 @@ class Level2PromptTest(unittest.TestCase):
         payload = card_payload(card, session.deck)
         self.assertEqual(payload["promptMode"], "cloze")
         self.assertEqual(payload["cloze"], "Saya mahu ___.")
-        self.assertEqual(payload["intervalIndex"], 3)
+        self.assertEqual(payload["intervalIndex"], 4)
         self.assertEqual(payload["ladderLength"], 5)
-        self.assertIsNone(payload["word"]["gloss"])
+        self.assertEqual(payload["word"]["gloss"], "water")
         self.assertEqual(payload["word"]["sentenceGloss"], "I want water.")
 
-    def test_single_token_sentence_at_rung_three_falls_back_to_reverse(self):
-        session = self._session_at_rung("saya", 3)
+    def test_single_token_sentence_at_rung_four_falls_back_to_reverse(self):
+        session = self._session_at_rung("saya", 4)
         self.addCleanup(session.close)
         card = session.presentation()
         mode, cloze = card_prompt(card)

@@ -508,14 +508,17 @@ def _format_today(card: Presentation) -> str:
         return "The deck has nothing to show.\n"
     prompt_mode, cloze = card_prompt(card)
     lines = [_heading(card), ""]
-    if not (card.revealed or card.mode == "rest") and prompt_mode == "cloze" and cloze:
+    if not (card.revealed or card.mode == "rest") and prompt_mode == "sentence":
+        lines.append(card.entry.sentence)
+    elif not (card.revealed or card.mode == "rest") and prompt_mode == "cloze" and cloze:
         lines.append(cloze)
         if card.entry.sentence_gloss:
             lines.append(card.entry.sentence_gloss)
+        lines.append(f"({card.entry.gloss} · {card.entry.register})")
     elif not (card.revealed or card.mode == "rest") and prompt_mode == "reverse":
         lines.append(card.entry.sentence_gloss or card.entry.gloss)
         if card.entry.sentence_gloss:
-            lines.append(f"({card.entry.gloss})")
+            lines.append(f"({card.entry.gloss} · {card.entry.register})")
     else:
         lines.append(card.entry.lemma)
     if card.revealed or card.mode == "rest":
@@ -609,8 +612,8 @@ def _hint(card: Presentation) -> str:
 
 
 def _word(entry, show: bool, cousins=(), prompt_mode: str = "word") -> dict:
-    show_gloss = show or prompt_mode == "reverse"
-    show_sentence = show or prompt_mode == "word"
+    show_gloss = show or prompt_mode in ("cloze", "reverse")
+    show_sentence = show or prompt_mode in ("word", "sentence")
     show_sentence_gloss = show or prompt_mode in ("cloze", "reverse")
     return {
         "id": entry.id,

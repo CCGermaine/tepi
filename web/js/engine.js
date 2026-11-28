@@ -74,7 +74,11 @@ export function makeCloze(sentence, lemma, override = null) {
 export function cardPrompt(entry, mode, intervalIndex) {
   if (mode !== "review" || !entry) return { promptMode: "word", cloze: null };
   if (intervalIndex <= 2) return { promptMode: "word", cloze: null };
-  if (intervalIndex <= 4) {
+  if (intervalIndex === 3) {
+    if (tokenize(entry.sentence).length >= 2) return { promptMode: "sentence", cloze: null };
+    return { promptMode: "word", cloze: null };
+  }
+  if (intervalIndex === 4) {
     const cloze = makeCloze(entry.sentence, entry.lemma, entry.cloze || null);
     if (cloze) return { promptMode: "cloze", cloze };
     return { promptMode: "reverse", cloze: null };

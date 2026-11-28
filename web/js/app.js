@@ -127,22 +127,33 @@ function renderToday() {
 
   const modeLabel =
     card.mode === "new" ? "New today" :
-    card.mode === "review" ? (card.promptMode === "cloze" ? "Sentence cloze" : card.promptMode === "reverse" ? "Recall Malay" : "Review") :
+    card.mode === "review" ? (
+      card.promptMode === "sentence" ? "Read sentence" :
+      card.promptMode === "cloze" ? "Guided cloze" :
+      card.promptMode === "reverse" ? "Recall Malay" :
+      "Review"
+    ) :
     "Resting";
 
   let frontHtml = "";
-  if (!showBack && card.promptMode === "cloze" && card.cloze) {
+  if (!showBack && card.promptMode === "sentence") {
+    frontHtml = `
+      <div class="prompt-kicker">Read &amp; understand</div>
+      <p class="sentence-hero">${escapeHtml(entry.sentence)}</p>
+    `;
+  } else if (!showBack && card.promptMode === "cloze" && card.cloze) {
     const highlighted = escapeHtml(card.cloze).replace("___", `<span class="cloze-blank">___</span>`);
     frontHtml = `
       <div class="prompt-kicker">Fill in the blank</div>
       <p class="sentence-hero">${highlighted}</p>
       ${entry.sentenceGloss ? `<p class="prompt-hint">${escapeHtml(entry.sentenceGloss)}</p>` : ""}
+      <p class="prompt-hint" style="font-size:0.86rem;opacity:0.85;">Missing: <strong>${escapeHtml(entry.gloss)}</strong> · ${escapeHtml(entry.register)}</p>
     `;
   } else if (!showBack && card.promptMode === "reverse") {
     frontHtml = `
       <div class="prompt-kicker">Say in Bahasa Melayu</div>
       <p class="sentence-hero">${escapeHtml(entry.sentenceGloss || entry.gloss)}</p>
-      ${entry.sentenceGloss ? `<p class="prompt-hint">Key word: ${escapeHtml(entry.gloss)}</p>` : ""}
+      <p class="prompt-hint" style="font-size:0.86rem;opacity:0.85;">Key word: <strong>${escapeHtml(entry.gloss)}</strong> · ${escapeHtml(entry.register)}</p>
     `;
   } else {
     frontHtml = `
@@ -152,8 +163,8 @@ function renderToday() {
     `;
   }
 
-  const listenBtn = (malayVoice && prefs.audio && (showBack || card.promptMode === "word"))
-    ? `<button class="listen-btn" data-action="listen" data-text="${escapeHtml(showBack ? entry.sentence : entry.lemma)}">Listen (ms-MY)</button>`
+  const listenBtn = (malayVoice && prefs.audio && (showBack || card.promptMode === "word" || card.promptMode === "sentence"))
+    ? `<button class="listen-btn" data-action="listen" data-text="${escapeHtml(showBack || card.promptMode === "sentence" ? entry.sentence : entry.lemma)}">Listen (ms-MY)</button>`
     : "";
 
   const backHtml = showBack ? `

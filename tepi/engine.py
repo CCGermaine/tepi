@@ -36,15 +36,21 @@ def card_prompt(card: Presentation) -> tuple[str, str | None]:
     """Return (prompt_mode, cloze_text) for a presentation.
 
     - New / rest cards and review rungs 0-2 use `word` (BM -> EN).
-    - Review rungs 3-4 use `cloze` when a fill-in-the-blank sentence can be
-      formed, otherwise fall back to `reverse`.
+    - Review rung 3 uses `sentence` (whole-sentence BM -> EN reading) when the
+      sentence has at least two tokens, otherwise falls back to `word`.
+    - Review rung 4 uses `cloze` (guided fill-in-the-blank with English meaning
+      and register cue) when a cloze can be formed, otherwise `reverse`.
     - Review rung 5+ uses `reverse` (EN -> BM).
     """
     if card.mode != "review" or card.entry is None:
         return "word", None
     if card.interval_index <= 2:
         return "word", None
-    if card.interval_index <= 4:
+    if card.interval_index == 3:
+        if len(tokens(card.entry.sentence)) >= 2:
+            return "sentence", None
+        return "word", None
+    if card.interval_index == 4:
         cloze = make_cloze(card.entry.sentence, card.entry.lemma, card.entry.cloze)
         if cloze is not None:
             return "cloze", cloze

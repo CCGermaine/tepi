@@ -5,9 +5,9 @@ import Quickshell.Hyprland
 import qs.Ui
 import qs.Commons
 
-// The bar shows one quiet cue (lemma for word mode, blanked cloze or English
-// cue for Level 2 rungs so the bar does not spoil the answer). The command owns
-// the day plan, the log, and the schedule.
+// The bar shows one quiet cue. For Level 2 review modes (sentence, cloze,
+// reverse), clicking the chip opens the unambiguous question first with a
+// Reveal button so you can think before seeing the answer.
 BarWidget {
   id: root
   moduleName: "manny.tepi"
@@ -19,13 +19,12 @@ BarWidget {
 
   property var card: null
   property var face: null
+  property bool faceRevealed: true
   property bool popupOpen: false
   property bool wantPopup: false
-  property bool faceRevealed: false
-  property bool revealBusy: false
-  property bool advancing: false
   property bool rated: false
   property bool ratingBusy: false
+  property bool revealBusy: false
   property string rateNote: ""
   property string statusLine: ""
   property string promptSentence: ""
@@ -36,14 +35,28 @@ BarWidget {
   property string jobOut: ""
   property string jobErr: ""
 
+  function shortGloss(text) {
+    if (!text) return ""
+    var s = String(text)
+    var semi = s.indexOf(";")
+    if (semi > 0) s = s.slice(0, semi)
+    var comma = s.indexOf(",")
+    if (comma > 0) s = s.slice(0, comma)
+    return s.trim()
+  }
+
   readonly property string mode: card && card.mode ? String(card.mode) : ""
   readonly property string promptMode: card && card.promptMode ? String(card.promptMode) : "word"
   readonly property string lemma: card && card.word && card.word.lemma ? String(card.word.lemma) : ""
   readonly property string barLabel: {
     if (!lemma) return ""
     if (mode === "review" && card.revealed !== true) {
-      if (promptMode === "cloze" && card.cloze) return String(card.cloze)
-      if (promptMode === "reverse" && card.word && card.word.gloss) return String(card.word.gloss)
+      if (promptMode === "sentence" && card.word && card.word.sentence) return String(card.word.sentence)
+      if (promptMode === "cloze" && card.cloze) {
+        var hint = card.word && card.word.gloss ? shortGloss(card.word.gloss) : ""
+        return hint ? (String(card.cloze) + " (" + hint + ")") : String(card.cloze)
+      }
+      if (promptMode === "reverse" && card.word && card.word.gloss) return shortGloss(card.word.gloss)
     }
     return lemma
   }
@@ -52,7 +65,8 @@ BarWidget {
   readonly property string tooltip: {
     if (mode === "new") return "New today"
     if (mode === "review") {
-      if (promptMode === "cloze") return "Sentence cloze"
+      if (promptMode === "sentence") return "Read the sentence"
+      if (promptMode === "cloze") return "Guided cloze"
       if (promptMode === "reverse") return "Recall Bahasa Melayu"
       return "Review"
     }
@@ -86,15 +100,15 @@ BarWidget {
     return monitor && monitor.activeWorkspace ? monitor.activeWorkspace : null
   }
   readonly property string workspaceHint: activeWorkspace && activeWorkspace.name ? String(activeWorkspace.name) : ""
-  readonly property bool showReveal: !faceRevealed && (faceMode === "review" || faceMode === "new")
-  readonly property bool showRatings: faceRevealed && faceMode === "review" && !rated
-  readonly property bool showNext: rated || (faceRevealed && faceMode === "new")
+  readonly property bool showRevealButton: faceMode === "review" && !faceRevealed && !rated
+  readonly property bool showRatings: faceMode === "review" && faceRevealed && !rated
   readonly property string caption: {
     if (rated && rateNote) return rateNote
     if (statusLine) return statusLine
     if (faceMode === "new") return "New today"
     if (faceMode === "review") {
-      if (facePromptMode === "cloze") return "Sentence cloze"
+      if (facePromptMode === "sentence") return "Read sentence"
+      if (facePromptMode === "cloze") return "Guided cloze"
       if (facePromptMode === "reverse") return "Recall Malay"
       return "Review"
     }
@@ -117,37 +131,44 @@ BarWidget {
     promptSentence = ""
     rated = false
     rateNote = ""
-    advancing = false
+    var isLevel2Review = mode === "review" && promptMode !== "word" && card.revealed !== true
+    if (isLevel2Review) {
+      var unrevealed = faceFrom(card)
+      if (!unrevealed) return
+      face = unrevealed
+      faceRevealed = false
+      popupOpen = true
+      return
+    }
+    var needsReveal = (mode === "new" || mode === "review") && card.revealed !== true
+    if (needsReveal) {
+      wantPopup = true
+      request("reveal", "")
+      return
+    }
     var next = faceFrom(card)
     if (!next) return
     face = next
-    faceRevealed = (next.mode === "rest" || next.mode === "empty")
+    faceRevealed = true
     popupOpen = true
-    if (faceRevealed) requestPrompt()
+    requestPrompt()
   }
 
-  function reveal() {
+  function revealInPopup() {
     if (faceRevealed || revealBusy) return
-    statusLine = ""
+    revealBusy = true
+    wantPopup = true
     request("reveal", "")
-  }
-
-  function nextWord() {
-    if (advancing) return
-    advancing = true
-    statusLine = ""
-    request("today", "")
   }
 
   function dismiss() {
     wantPopup = false
-    advancing = false
     popupOpen = false
     refresh()
   }
 
   function rate(rating) {
-    if (rated || ratingBusy || faceMode !== "review") return
+    if (rated || ratingBusy || !faceRevealed || faceMode !== "review") return
     statusLine = ""
     request("rate", rating)
   }
@@ -183,7 +204,6 @@ BarWidget {
     jobOut = ""
     jobErr = ""
     if (kind === "rate") ratingBusy = true
-    if (kind === "reveal") revealBusy = true
     var command = [tepiBin]
     if (kind === "rate") command.push("rate", rating, "--json")
     else if (kind === "prompt") {
@@ -244,7 +264,6 @@ BarWidget {
     if (!payload) {
       console.warn("tepi:", err || (kind + " failed"))
       if (kind === "reveal") wantPopup = false
-      if (kind === "today") advancing = false
       if (kind === "rate") statusLine = "That rating did not save."
       return
     }
@@ -253,44 +272,26 @@ BarWidget {
       return
     }
     if (kind === "today") {
-      if ((payload.word && payload.word.lemma) || payload.mode === "empty") {
-        card = payload
-        if (advancing) {
-          advancing = false
-          var next = faceFrom(payload)
-          if (next) {
-            face = next
-            faceRevealed = (next.mode === "rest" || next.mode === "empty")
-            rated = false
-            rateNote = ""
-            promptSentence = ""
-            statusLine = ""
-            if (faceRevealed) requestPrompt()
-          }
-        }
-      } else {
-        advancing = false
-      }
+      if ((payload.word && payload.word.lemma) || payload.mode === "empty") card = payload
       return
     }
     if (kind === "reveal") {
       var revealed = faceFrom(payload)
-      if (revealed) {
+      if ((wantPopup || popupOpen) && revealed) {
         face = revealed
         faceRevealed = true
         rated = false
         rateNote = ""
         promptSentence = ""
-        if (wantPopup) {
-          wantPopup = false
-          popupOpen = true
-        }
+        popupOpen = true
+        wantPopup = false
         requestPrompt()
       }
       return
     }
     if (kind === "rate") {
       rated = true
+      faceRevealed = true
       rateNote = payload.state === "settled" ? "Settled" : (payload.due ? ("Due " + payload.due) : "Recorded")
       if (payload.word) {
         face = {
@@ -303,6 +304,7 @@ BarWidget {
           cousins: payload.word.cousins ? payload.word.cousins.map(String) : [],
           mode: "review",
           promptMode: facePromptMode,
+          cloze: faceCloze,
           intervalIndex: typeof payload.intervalIndex === "number" ? payload.intervalIndex : faceRung,
           ladderLength: faceLadder,
           counter: faceCounter
@@ -417,7 +419,7 @@ BarWidget {
     owner: root
     open: root.popupOpen
     triggerMode: "click"
-    contentWidth: popup.fittedContentWidth(Style.space(320))
+    contentWidth: popup.fittedContentWidth(Style.space(340))
     contentHeight: popup.fittedContentHeight(column.implicitHeight)
 
     Column {
@@ -430,9 +432,8 @@ BarWidget {
         if (event.key === Qt.Key_Escape) {
           root.dismiss()
           event.accepted = true
-        } else if (event.key === Qt.Key_Space) {
-          if (root.showReveal) root.reveal()
-          else if (root.showNext) root.nextWord()
+        } else if (root.showRevealButton && event.key === Qt.Key_Space) {
+          root.revealInPopup()
           event.accepted = true
         } else if (root.showRatings && event.key === Qt.Key_1) {
           root.rate("known")
@@ -469,14 +470,20 @@ BarWidget {
         }
       }
 
-      Row {
+      // Unrevealed Level 2 Question View (sentence / guided cloze / reverse)
+      Column {
+        visible: !root.faceRevealed
         width: column.width
         spacing: Style.space(6)
 
         Text {
-          width: !root.faceRevealed && root.facePromptMode === "cloze" && root.faceCloze !== "" ? column.width : implicitWidth
+          width: parent.width
           textFormat: Text.PlainText
-          text: (!root.faceRevealed && root.facePromptMode === "cloze" && root.faceCloze !== "") ? root.faceCloze : root.faceLemma
+          text: {
+            if (root.facePromptMode === "sentence") return root.faceSentence
+            if (root.facePromptMode === "cloze") return root.faceCloze
+            return root.faceSentenceGloss || root.faceGloss
+          }
           color: root.popupInk
           font.family: root.inkFont
           font.pixelSize: Style.font.subtitle
@@ -485,130 +492,161 @@ BarWidget {
         }
 
         Text {
-          visible: root.faceRevealed && root.faceRegister !== "neutral"
-          anchors.baseline: parent.children[0].baseline
+          width: parent.width
+          visible: root.facePromptMode === "cloze" && root.faceSentenceGloss !== ""
           textFormat: Text.PlainText
-          text: "(" + root.faceRegister + ")"
+          text: root.faceSentenceGloss
+          color: Qt.darker(root.popupInk, 1.25)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.body
+          wrapMode: Text.WordWrap
+        }
+
+        Text {
+          width: parent.width
+          visible: (root.facePromptMode === "cloze" || root.facePromptMode === "reverse") && root.faceGloss !== ""
+          textFormat: Text.PlainText
+          text: (root.facePromptMode === "cloze" ? "Missing: " : "Key word: ") + root.faceGloss + "  ·  " + root.faceRegister
+          color: Qt.darker(root.popupInk, 1.45)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+          wrapMode: Text.WordWrap
+        }
+
+        Button {
+          text: "Reveal (Space)"
+          foreground: root.popupInk
+          enabled: !root.revealBusy
+          opacity: enabled ? 1 : 0.4
+          onClicked: root.revealInPopup()
+        }
+      }
+
+      // Revealed Answer View
+      Column {
+        visible: root.faceRevealed
+        width: column.width
+        spacing: Style.space(8)
+
+        Row {
+          width: parent.width
+          spacing: Style.space(6)
+
+          Text {
+            textFormat: Text.PlainText
+            text: root.faceLemma
+            color: root.popupInk
+            font.family: root.inkFont
+            font.pixelSize: Style.font.subtitle
+            font.bold: true
+          }
+
+          Text {
+            visible: root.faceRegister !== "neutral"
+            anchors.baseline: parent.children[0].baseline
+            textFormat: Text.PlainText
+            text: "(" + root.faceRegister + ")"
+            color: Qt.darker(root.popupInk, 1.5)
+            font.family: root.inkFont
+            font.pixelSize: Style.font.caption
+          }
+        }
+
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.cousinsCaption
+          color: Qt.darker(root.popupInk, 1.55)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+          wrapMode: Text.WordWrap
+        }
+
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.faceGloss
+          color: root.popupInk
+          font.family: root.inkFont
+          font.pixelSize: Style.font.body
+          wrapMode: Text.WordWrap
+        }
+
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.faceSentence
+          color: Qt.darker(root.popupInk, 1.25)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.bodySmall
+          wrapMode: Text.WordWrap
+        }
+
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.faceSentenceGloss
           color: Qt.darker(root.popupInk, 1.5)
           font.family: root.inkFont
           font.pixelSize: Style.font.caption
+          wrapMode: Text.WordWrap
         }
-      }
 
-      Text {
-        width: column.width
-        visible: root.faceRevealed && text !== ""
-        textFormat: Text.PlainText
-        text: root.cousinsCaption
-        color: Qt.darker(root.popupInk, 1.55)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.caption
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        width: column.width
-        visible: root.faceRevealed && text !== ""
-        textFormat: Text.PlainText
-        text: root.faceGloss
-        color: root.popupInk
-        font.family: root.inkFont
-        font.pixelSize: Style.font.body
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        width: column.width
-        visible: text !== "" && (root.faceRevealed || root.facePromptMode !== "cloze" || root.faceCloze === "")
-        textFormat: Text.PlainText
-        text: root.faceSentence
-        color: Qt.darker(root.popupInk, 1.25)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.bodySmall
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        width: column.width
-        visible: root.faceRevealed && text !== ""
-        textFormat: Text.PlainText
-        text: root.faceSentenceGloss
-        color: Qt.darker(root.popupInk, 1.5)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.caption
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        width: column.width
-        visible: root.faceRevealed && text !== ""
-        textFormat: Text.PlainText
-        text: root.faceNote
-        color: Qt.darker(root.popupInk, 1.55)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.caption
-        font.italic: true
-        wrapMode: Text.WordWrap
-      }
-
-      Text {
-        width: column.width
-        visible: root.faceRevealed && text !== ""
-        textFormat: Text.PlainText
-        text: root.promptSentence
-        color: Qt.darker(root.popupInk, 1.45)
-        font.family: root.inkFont
-        font.pixelSize: Style.font.bodySmall
-        font.italic: true
-        wrapMode: Text.WordWrap
-      }
-
-      Button {
-        visible: root.showReveal
-        height: visible ? implicitHeight : 0
-        text: "Reveal"
-        foreground: root.popupInk
-        enabled: !root.revealBusy
-        opacity: enabled ? 1 : 0.4
-        onClicked: root.reveal()
-      }
-
-      Row {
-        visible: root.showRatings
-        height: visible ? implicitHeight : 0
-        spacing: Style.space(6)
-
-        Button {
-          text: "Known (1)"
-          foreground: root.popupInk
-          enabled: !root.ratingBusy
-          opacity: enabled ? 1 : 0.4
-          onClicked: root.rate("known")
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.faceNote
+          color: Qt.darker(root.popupInk, 1.55)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.caption
+          font.italic: true
+          wrapMode: Text.WordWrap
         }
-        Button {
-          text: "Fuzzy (2)"
-          foreground: root.popupInk
-          enabled: !root.ratingBusy
-          opacity: enabled ? 1 : 0.4
-          onClicked: root.rate("fuzzy")
-        }
-        Button {
-          text: "Missed (3)"
-          foreground: root.popupInk
-          enabled: !root.ratingBusy
-          opacity: enabled ? 1 : 0.4
-          onClicked: root.rate("missed")
-        }
-      }
 
-      Button {
-        visible: root.showNext
-        height: visible ? implicitHeight : 0
-        text: "Next word"
-        foreground: root.popupInk
-        enabled: !root.advancing
-        opacity: enabled ? 1 : 0.4
-        onClicked: root.nextWord()
+        Text {
+          width: parent.width
+          visible: text !== ""
+          textFormat: Text.PlainText
+          text: root.promptSentence
+          color: Qt.darker(root.popupInk, 1.45)
+          font.family: root.inkFont
+          font.pixelSize: Style.font.bodySmall
+          font.italic: true
+          wrapMode: Text.WordWrap
+        }
+
+        Row {
+          visible: root.showRatings
+          height: visible ? implicitHeight : 0
+          spacing: Style.space(6)
+
+          Button {
+            text: "Known (1)"
+            foreground: root.popupInk
+            enabled: !root.ratingBusy
+            opacity: enabled ? 1 : 0.4
+            onClicked: root.rate("known")
+          }
+          Button {
+            text: "Fuzzy (2)"
+            foreground: root.popupInk
+            enabled: !root.ratingBusy
+            opacity: enabled ? 1 : 0.4
+            onClicked: root.rate("fuzzy")
+          }
+          Button {
+            text: "Missed (3)"
+            foreground: root.popupInk
+            enabled: !root.ratingBusy
+            opacity: enabled ? 1 : 0.4
+            onClicked: root.rate("missed")
+          }
+        }
       }
 
       Button {
